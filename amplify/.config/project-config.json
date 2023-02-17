@@ -1,0 +1,17 @@
+{
+  "projectName": "squad",
+  "version": "3.1",
+  "frontend": "javascript",
+  "javascript": {
+    "framework": "react-native",
+    "config": {
+      "SourceDir": "./",
+      "DistributionDir": "/",
+      "BuildCommand": "npx expo start",
+      "StartCommand": "npx expo start"
+    }
+  },
+  "providers": [
+    "awscloudformation"
+  ]
+}

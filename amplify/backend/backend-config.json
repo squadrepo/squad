@@ -1,0 +1,101 @@
+{
+  "auth": {
+    "squade5ac28b5": {
+      "customAuth": false,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "serviceType": "imported"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_auth_squade5ac28b5_allowUnauthenticatedIdentities": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "squade5ac28b5"
+        }
+      ]
+    },
+    "AMPLIFY_auth_squade5ac28b5_authRoleArn": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "squade5ac28b5"
+        }
+      ]
+    },
+    "AMPLIFY_auth_squade5ac28b5_authRoleName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "squade5ac28b5"
+        }
+      ]
+    },
+    "AMPLIFY_auth_squade5ac28b5_identityPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "squade5ac28b5"
+        }
+      ]
+    },
+    "AMPLIFY_auth_squade5ac28b5_identityPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "squade5ac28b5"
+        }
+      ]
+    },
+    "AMPLIFY_auth_squade5ac28b5_nativeClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "squade5ac28b5"
+        }
+      ]
+    },
+    "AMPLIFY_auth_squade5ac28b5_unauthRoleArn": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "squade5ac28b5"
+        }
+      ]
+    },
+    "AMPLIFY_auth_squade5ac28b5_unauthRoleName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "squade5ac28b5"
+        }
+      ]
+    },
+    "AMPLIFY_auth_squade5ac28b5_userPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "squade5ac28b5"
+        }
+      ]
+    },
+    "AMPLIFY_auth_squade5ac28b5_userPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "squade5ac28b5"
+        }
+      ]
+    },
+    "AMPLIFY_auth_squade5ac28b5_webClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "squade5ac28b5"
+        }
+      ]
+    }
+  }
+}

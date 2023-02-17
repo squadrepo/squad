@@ -4,10 +4,15 @@ import { LoginScreen } from "./App/Screens/Login/login.screen";
 import { SignUpScreen } from "./App/Screens/SignUp/signup.screen";
 import { NavigationContainer, StackActions } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { withAuthenticator } from "aws-amplify-react-native";
+import Amplify from "@aws-amplify/core";
+import awsConfig from "./aws-exports";
+
+Amplify.configure(awsConfig);
 
 const Stack = createNativeStackNavigator();
 
-export default function App() {
+function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -20,3 +25,5 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+export default withAuthenticator(App);
