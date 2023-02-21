@@ -12,7 +12,7 @@ import {
 } from "react-native-paper";
 import { SafeAreaView, View, StyleSheet } from "react-native";
 
-export const Settings = () => {
+export const Settings = ({ navigation }) => {
   const [isSwitchOn, setIsSwitchOn] = React.useState(false);
 
   const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
@@ -26,7 +26,10 @@ export const Settings = () => {
       </Appbar.Header>
       <View style={styles.options}>
         <Menu.Item title="Password" />
-        <IconButton icon="dots-horizontal" />
+        <IconButton
+          icon="dots-horizontal"
+          onPress={() => navigation.navigate("Password")}
+        />
       </View>
       <View style={styles.options}>
         <Menu.Item title="University Exclusive" />
@@ -34,11 +37,17 @@ export const Settings = () => {
       </View>
       <View style={styles.options}>
         <Menu.Item title="Date Of Birth" />
-        <IconButton icon="dots-horizontal" />
+        <IconButton
+          icon="dots-horizontal"
+          onPress={() => navigation.navigate("Dob")}
+        />
       </View>
       <View style={styles.options}>
         <Menu.Item title="Change University Email" />
-        <IconButton icon="dots-horizontal" />
+        <IconButton
+          icon="dots-horizontal"
+          onPress={() => navigation.navigate("EmailChange")}
+        />
       </View>
     </View>
   );
