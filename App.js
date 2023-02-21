@@ -12,6 +12,20 @@ Amplify.configure(awsConfig);
 
 const Stack = createNativeStackNavigator();
 
+const signUpConfig = {
+  hiddenDefaults: ["phone_number"],
+  signUpFields: [
+    {
+      label: "Name",
+      key: "name",
+      required: true,
+      displayOrder: 1,
+      type: "name",
+      custom: false,
+    },
+  ],
+};
+
 function App() {
   return (
     <NavigationContainer>
@@ -26,4 +40,4 @@ function App() {
   );
 }
 
-export default withAuthenticator(App);
+export default withAuthenticator(App, { signUpConfig });
