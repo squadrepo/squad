@@ -5,16 +5,13 @@ import {
   Text,
   Appbar,
   Menu,
-  Divider,
   IconButton,
-  List,
   Switch,
 } from "react-native-paper";
-import { SafeAreaView, View, StyleSheet } from "react-native";
+import { SafeAreaView, View, StyleSheet, useRoute } from "react-native";
 
 export const Settings = ({ navigation }) => {
   const [isSwitchOn, setIsSwitchOn] = React.useState(false);
-
   const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
 
   return (

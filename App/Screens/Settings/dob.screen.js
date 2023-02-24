@@ -4,6 +4,11 @@ import { SafeAreaView, View, StyleSheet } from "react-native";
 import DatePicker from "@dietime/react-native-date-picker";
 
 export const Dob = ({ navigation }) => {
+  const done = () => {
+    console.log({ date });
+    navigation.navigate("Settings");
+  };
+
   const [date, setDate] = React.useState();
 
   return (
@@ -11,7 +16,9 @@ export const Dob = ({ navigation }) => {
       <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title="Date Of Birth" />
-        <Button textDecoration="underline">Done</Button>
+        <Button textDecoration="underline" onPress={done}>
+          Done
+        </Button>
       </Appbar.Header>
       <Text>{date ? date.toDateString() : "Select date..."}</Text>
       <SafeAreaView>
