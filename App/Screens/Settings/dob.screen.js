@@ -3,9 +3,9 @@ import { TextInput, Button, Text, Appbar } from "react-native-paper";
 import { SafeAreaView, View, StyleSheet } from "react-native";
 import DatePicker from "@dietime/react-native-date-picker";
 
-export const Dob = ({ navigation }) => {
+export const Dob = ({ navigation, route }) => {
   const done = () => {
-    console.log({ date });
+    route.params.setDOB({ date });
     navigation.navigate("Settings");
   };
 

@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import { TextInput, Button, Text, Appbar } from "react-native-paper";
 import { SafeAreaView, View, StyleSheet } from "react-native";
+import { useRoute } from "@react-navigation/core";
 
-export const Password = ({ navigation }) => {
+export const Password = ({ navigation, route }) => {
+  const [oldPwrd, setOldPwrd] = useState(route.params.oldPassword);
+  const [newPwrd, setNewPwrd] = useState(route.params.newPassword);
+  const [newPwrdAgain, setNewPwrdAgain] = useState(route.params.newPwrdAgain);
+
   const done = () => {
-    console.log({ oldPassword });
-    console.log({ newPassword });
-    console.log({ newPasswordAgain });
+    route.params.setOldPassword({ oldPwrd });
+    route.params.setNewPassword({ newPwrd });
+    route.params.setNewPasswordAgain({ newPwrdAgain });
     navigation.navigate("Settings");
   };
-
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [newPasswordAgain, setNewPasswordAgain] = useState("");
 
   return (
     <View>
@@ -27,17 +28,17 @@ export const Password = ({ navigation }) => {
         <TextInput
           label="Current password"
           secureTextEntry={true}
-          onChangeText={(text) => setOldPassword(text)}
+          onChangeText={(text) => setOldPwrd(text)}
         ></TextInput>
         <TextInput
           label="New password"
           secureTextEntry={true}
-          onChangeText={(text) => setNewPassword(text)}
+          onChangeText={(text) => setNewPwrd(text)}
         ></TextInput>
         <TextInput
           label="New password again"
           secureTextEntry={true}
-          onChangeText={(text) => setNewPasswordAgain(text)}
+          onChangeText={(text) => setNewPwrdAgain(text)}
         ></TextInput>
       </View>
     </View>

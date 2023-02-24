@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { TextInput, Button, Text, Appbar } from "react-native-paper";
 import { SafeAreaView, View, StyleSheet } from "react-native";
 
-export const EmailChange = ({ navigation }) => {
+export const EmailChange = ({ navigation, route }) => {
+  const [uniEmail, setUniEmail] = useState(route.params.uniEmail);
+
   const done = () => {
-    console.log({ uniEmail });
+    route.params.setUniEmail({ uniEmail });
     navigation.navigate("Settings");
   };
-
-  const [uniEmail, setUniEmail] = useState("");
 
   return (
     <View>

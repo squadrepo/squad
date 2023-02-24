@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextInput,
   Button,
@@ -11,8 +11,24 @@ import {
 import { SafeAreaView, View, StyleSheet, useRoute } from "react-native";
 
 export const Settings = ({ navigation }) => {
-  const [isSwitchOn, setIsSwitchOn] = React.useState(false);
+  const [isSwitchOn, setIsSwitchOn] = useState(false);
   const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
+
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordAgain, setNewPasswordAgain] = useState("");
+  const [dob, setDOB] = useState("");
+  const [uniEmail, setUniEmail] = useState("");
+
+  useEffect(() => {
+    console.log(oldPassword);
+    console.log(newPassword);
+    console.log(newPasswordAgain);
+    console.log(isSwitchOn);
+    console.log(dob);
+    console.log(uniEmail);
+    console.log(" ");
+  }, [oldPassword, newPassword, newPasswordAgain, isSwitchOn, dob, uniEmail]);
 
   return (
     <View>
@@ -25,7 +41,16 @@ export const Settings = ({ navigation }) => {
         <Menu.Item title="Password" />
         <IconButton
           icon="dots-horizontal"
-          onPress={() => navigation.navigate("Password")}
+          onPress={() =>
+            navigation.navigate("Password", {
+              oldPassword: oldPassword,
+              newPassword: newPassword,
+              newPasswordAgain: newPasswordAgain,
+              setOldPassword: setOldPassword,
+              setNewPassword: setNewPassword,
+              setNewPasswordAgain: setNewPasswordAgain,
+            })
+          }
         />
       </View>
       <View style={styles.options}>
@@ -36,14 +61,24 @@ export const Settings = ({ navigation }) => {
         <Menu.Item title="Date Of Birth" />
         <IconButton
           icon="dots-horizontal"
-          onPress={() => navigation.navigate("Dob")}
+          onPress={() =>
+            navigation.navigate("Dob", {
+              dob: dob,
+              setDOB: setDOB,
+            })
+          }
         />
       </View>
       <View style={styles.options}>
         <Menu.Item title="Change University Email" />
         <IconButton
           icon="dots-horizontal"
-          onPress={() => navigation.navigate("EmailChange")}
+          onPress={() =>
+            navigation.navigate("EmailChange", {
+              uniEmail: uniEmail,
+              setUniEmail: setUniEmail,
+            })
+          }
         />
       </View>
     </View>
