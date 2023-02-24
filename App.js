@@ -40,4 +40,4 @@ function App() {
   );
 }
 
-export default withAuthenticator(App, { signUpConfig });
+export default withAuthenticator(App, { signUpConfig, includeGreetings: true });
