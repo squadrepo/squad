@@ -7,8 +7,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { withAuthenticator } from "aws-amplify-react-native";
 import Amplify from "@aws-amplify/core";
 import awsConfig from "./aws-exports";
+import awsmobile from "./aws-exports";
 
-Amplify.configure(awsConfig);
+Amplify.configure({ awsConfig, ...awsmobile, Analytics: { disabled: true } });
 
 const Stack = createNativeStackNavigator();
 
