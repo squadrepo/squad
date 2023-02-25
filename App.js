@@ -12,6 +12,7 @@ import { withAuthenticator } from "aws-amplify-react-native";
 import Amplify from "@aws-amplify/core";
 import awsConfig from "./aws-exports";
 import awsmobile from "./aws-exports";
+import { Auth } from "aws-amplify";
 
 Amplify.configure({ awsConfig, ...awsmobile, Analytics: { disabled: true } });
 
@@ -34,10 +35,6 @@ const signUpConfig = {
 function App() {
   return (
     <NavigationContainer>
-      {/*<Stack.Navigator
-        initialRouteName="Login"
-        screenOptions={{ headerShown: false }}
-      >*/}
       <Stack.Navigator
         initialRouteName="Settings"
         screenOptions={{ headerShown: false }}

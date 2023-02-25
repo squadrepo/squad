@@ -9,6 +9,7 @@ import {
   Switch,
 } from "react-native-paper";
 import { SafeAreaView, View, StyleSheet, useRoute } from "react-native";
+import { Auth } from "@aws-amplify/auth";
 
 export const Settings = ({ navigation }) => {
   const [isSwitchOn, setIsSwitchOn] = useState(false);
@@ -20,6 +21,23 @@ export const Settings = ({ navigation }) => {
   const [dob, setDOB] = useState("");
   const [uniEmail, setUniEmail] = useState("");
 
+  async function getUserUUID() {
+    try {
+      // Get the current authenticated user
+      const currentUser = await Auth.currentAuthenticatedUser();
+
+      // Get the user's UUID
+      const userUUID = currentUser.attributes.sub;
+
+      console.log("User UUID:", userUUID);
+
+      return userUUID;
+    } catch (error) {
+      console.log("Error getting user UUID:", error);
+      throw error;
+    }
+  }
+
   useEffect(() => {
     console.log(oldPassword);
     console.log(newPassword);
@@ -27,6 +45,7 @@ export const Settings = ({ navigation }) => {
     console.log(isSwitchOn);
     console.log(dob);
     console.log(uniEmail);
+    console.log("User UUID:", getUserUUID());
     console.log(" ");
   }, [oldPassword, newPassword, newPasswordAgain, isSwitchOn, dob, uniEmail]);
 
