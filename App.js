@@ -54,5 +54,3 @@ function App() {
 }
 
 export default withAuthenticator(App, { signUpConfig, includeGreetings: true });
-//export default withAuthenticator(App);
-//export default App;
