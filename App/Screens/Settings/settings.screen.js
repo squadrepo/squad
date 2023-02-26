@@ -6,20 +6,27 @@ import {
   Appbar,
   Menu,
   IconButton,
-  Switch,
+  Switch
 } from "react-native-paper";
 import { SafeAreaView, View, StyleSheet, useRoute } from "react-native";
 import { Auth } from "@aws-amplify/auth";
+import axios from "axios";
 
 export const Settings = ({ navigation }) => {
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
 
+  {
+    /*Relevant settings states that may change based on users input */
+  }
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordAgain, setNewPasswordAgain] = useState("");
   const [dob, setDOB] = useState("");
   const [uniEmail, setUniEmail] = useState("");
+  const UUID = getUserUUID();
+  const baseUrl =
+    "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/account/editSettings";
 
   async function getUserUUID() {
     try {
@@ -49,12 +56,33 @@ export const Settings = ({ navigation }) => {
     console.log(" ");
   }, [oldPassword, newPassword, newPasswordAgain, isSwitchOn, dob, uniEmail]);
 
+  //API post
+  const saveSettings = async (event) => {
+    try {
+      const response = await axios.post(baseUrl, {
+        uid: UUID
+      });
+      console.log(response.status);
+    } catch (error) {
+      alert("An error has occurred");
+
+      if (error.response === undefined) {
+        throw error;
+      }
+      const { response } = error;
+      console.log(response.status);
+      console.log(response.data);
+    }
+  };
+
   return (
     <View>
       <Appbar.Header>
         <Appbar.BackAction />
         <Appbar.Content title="Settings" />
-        <Button textDecoration="underline">Save</Button>
+        <Button textDecoration="underline" onPress={saveSettings}>
+          Save
+        </Button>
       </Appbar.Header>
       <View style={styles.options}>
         <Menu.Item title="Password" />
@@ -67,7 +95,7 @@ export const Settings = ({ navigation }) => {
               newPasswordAgain: newPasswordAgain,
               setOldPassword: setOldPassword,
               setNewPassword: setNewPassword,
-              setNewPasswordAgain: setNewPasswordAgain,
+              setNewPasswordAgain: setNewPasswordAgain
             })
           }
         />
@@ -83,7 +111,7 @@ export const Settings = ({ navigation }) => {
           onPress={() =>
             navigation.navigate("Dob", {
               dob: dob,
-              setDOB: setDOB,
+              setDOB: setDOB
             })
           }
         />
@@ -95,7 +123,7 @@ export const Settings = ({ navigation }) => {
           onPress={() =>
             navigation.navigate("EmailChange", {
               uniEmail: uniEmail,
-              setUniEmail: setUniEmail,
+              setUniEmail: setUniEmail
             })
           }
         />
@@ -108,9 +136,9 @@ const styles = StyleSheet.create({
   options: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingRight: 10,
+    paddingRight: 10
   },
   toggle: {
-    paddingRight: 10,
-  },
+    paddingRight: 10
+  }
 });

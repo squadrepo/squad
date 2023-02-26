@@ -20,7 +20,7 @@ export const Dob = ({ navigation, route }) => {
           Done
         </Button>
       </Appbar.Header>
-      <Text>{date ? date.toDateString() : "Select date..."}</Text>
+      <Text>{date ? Math.floor(date.getTime() / 1000) : "Select date..."}</Text>
       <SafeAreaView>
         <DatePicker
           startYear={1990}
