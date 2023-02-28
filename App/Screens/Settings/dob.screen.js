@@ -1,12 +1,12 @@
-import * as React from "react";
-import { TextInput, Button, Text, Appbar } from "react-native-paper";
-import { SafeAreaView, View, StyleSheet } from "react-native";
-import DatePicker from "@dietime/react-native-date-picker";
+import * as React from 'react';
+import { TextInput, Button, Text, Appbar } from 'react-native-paper';
+import { SafeAreaView, View, StyleSheet } from 'react-native';
+import DatePicker from '@dietime/react-native-date-picker';
 
 export const Dob = ({ navigation, route }) => {
   const done = () => {
-    route.params.setDOB({ date });
-    navigation.navigate("Settings");
+    route.params.setDOB(date);
+    navigation.navigate('Settings');
   };
 
   const [date, setDate] = React.useState();
@@ -20,13 +20,13 @@ export const Dob = ({ navigation, route }) => {
           Done
         </Button>
       </Appbar.Header>
-      <Text>{date ? Math.floor(date.getTime() / 1000) : "Select date..."}</Text>
+      <Text>{date ? date.toDateString() : 'Select date...'}</Text>
       <SafeAreaView>
         <DatePicker
           startYear={1990}
-          value={date}
+          value={Math.floor(Date.parse(date) / 1000)}
           onChange={(value) => setDate(value)}
-          format="yyyy-mm-dd"
+          //format="yyyy-mm-dd"
         />
       </SafeAreaView>
     </View>

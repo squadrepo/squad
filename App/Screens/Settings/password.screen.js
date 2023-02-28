@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { TextInput, Button, Text, Appbar } from "react-native-paper";
-import { SafeAreaView, View, StyleSheet } from "react-native";
-import { useRoute } from "@react-navigation/core";
+import React, { useState } from 'react';
+import { TextInput, Button, Text, Appbar } from 'react-native-paper';
+import { SafeAreaView, View, StyleSheet } from 'react-native';
+import { useRoute } from '@react-navigation/core';
 
 export const Password = ({ navigation, route }) => {
   const [oldPwrd, setOldPwrd] = useState(route.params.oldPassword);
@@ -9,10 +9,10 @@ export const Password = ({ navigation, route }) => {
   const [newPwrdAgain, setNewPwrdAgain] = useState(route.params.newPwrdAgain);
 
   const done = () => {
-    route.params.setOldPassword({ oldPwrd });
-    route.params.setNewPassword({ newPwrd });
-    route.params.setNewPasswordAgain({ newPwrdAgain });
-    navigation.navigate("Settings");
+    route.params.setOldPassword(oldPwrd);
+    route.params.setNewPassword(newPwrd);
+    route.params.setNewPasswordAgain(newPwrdAgain);
+    navigation.navigate('Settings');
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   TextInput,
   Button,
@@ -7,10 +7,10 @@ import {
   Menu,
   IconButton,
   Switch
-} from "react-native-paper";
-import { SafeAreaView, View, StyleSheet, useRoute } from "react-native";
-import { Auth } from "@aws-amplify/auth";
-import axios from "axios";
+} from 'react-native-paper';
+import { SafeAreaView, View, StyleSheet, useRoute } from 'react-native';
+import { Auth } from '@aws-amplify/auth';
+import axios from 'axios';
 
 export const Settings = ({ navigation }) => {
   const [isSwitchOn, setIsSwitchOn] = useState(false);
@@ -19,15 +19,18 @@ export const Settings = ({ navigation }) => {
   {
     /*Relevant settings states that may change based on users input */
   }
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [newPasswordAgain, setNewPasswordAgain] = useState("");
-  const [dob, setDOB] = useState("");
-  const [uniEmail, setUniEmail] = useState("");
-  const UUID = getUserUUID();
-  const baseUrl =
-    "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/account/editSettings";
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newPasswordAgain, setNewPasswordAgain] = useState('');
+  const [dob, setDOB] = useState('');
+  const [uniEmail, setUniEmail] = useState('');
+  const [UUID, setUUID] = useState('');
+  const [userObject, setUserObject] = useState('');
 
+  const baseUrl =
+    'https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/account/editSettings';
+  const getUrl =
+    'https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/account/user?uid=';
   async function getUserUUID() {
     try {
       // Get the current authenticated user
@@ -36,11 +39,11 @@ export const Settings = ({ navigation }) => {
       // Get the user's UUID
       const userUUID = currentUser.attributes.sub;
 
-      console.log("User UUID:", userUUID);
+      console.log('User UUID:', userUUID);
 
       return userUUID;
     } catch (error) {
-      console.log("Error getting user UUID:", error);
+      console.log('Error getting user UUID:', error);
       throw error;
     }
   }
@@ -52,19 +55,49 @@ export const Settings = ({ navigation }) => {
     console.log(isSwitchOn);
     console.log(dob);
     console.log(uniEmail);
-    console.log("User UUID:", getUserUUID());
-    console.log(" ");
-  }, [oldPassword, newPassword, newPasswordAgain, isSwitchOn, dob, uniEmail]);
+    console.log(UUID);
+    console.log(' ');
+  }, [
+    oldPassword,
+    newPassword,
+    newPasswordAgain,
+    isSwitchOn,
+    dob,
+    uniEmail,
+    UUID
+  ]);
+
+  useEffect(() => {
+    const getUid = async () => {
+      try {
+        const UUID = await getUserUUID();
+        setUUID(UUID);
+
+        // Invoking get method to perform a GET request
+        axios.get(`${getUrl}${UUID}`).then((response) => {
+          setUserObject(response.data);
+          console.log(response.data);
+        });
+      } catch (error) {
+        if (error.response == undefined) throw error;
+        const { response } = errorObj;
+        return console.log(`${response.status}: ${response.data}`);
+      }
+    };
+    getUid();
+  }, []);
 
   //API post
   const saveSettings = async (event) => {
     try {
       const response = await axios.post(baseUrl, {
-        uid: UUID
+        uid: UUID,
+        email: uniEmail,
+        password: newPassword
       });
       console.log(response.status);
     } catch (error) {
-      alert("An error has occurred");
+      alert('An error has occurred');
 
       if (error.response === undefined) {
         throw error;
@@ -89,7 +122,7 @@ export const Settings = ({ navigation }) => {
         <IconButton
           icon="dots-horizontal"
           onPress={() =>
-            navigation.navigate("Password", {
+            navigation.navigate('Password', {
               oldPassword: oldPassword,
               newPassword: newPassword,
               newPasswordAgain: newPasswordAgain,
@@ -109,7 +142,7 @@ export const Settings = ({ navigation }) => {
         <IconButton
           icon="dots-horizontal"
           onPress={() =>
-            navigation.navigate("Dob", {
+            navigation.navigate('Dob', {
               dob: dob,
               setDOB: setDOB
             })
@@ -121,7 +154,7 @@ export const Settings = ({ navigation }) => {
         <IconButton
           icon="dots-horizontal"
           onPress={() =>
-            navigation.navigate("EmailChange", {
+            navigation.navigate('EmailChange', {
               uniEmail: uniEmail,
               setUniEmail: setUniEmail
             })
@@ -134,8 +167,8 @@ export const Settings = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   options: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     paddingRight: 10
   },
   toggle: {
