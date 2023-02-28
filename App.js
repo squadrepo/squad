@@ -12,6 +12,8 @@ import { withAuthenticator } from "aws-amplify-react-native";
 import Amplify from "@aws-amplify/core";
 import awsConfig from "./aws-exports";
 import awsmobile from "./aws-exports";
+import { Tabs } from "./App/Screens/Navigation/BottomBar";
+
 
 Amplify.configure({ awsConfig, ...awsmobile, Analytics: { disabled: true } });
 
@@ -33,15 +35,18 @@ const signUpConfig = {
 
 function App() {
   return (
+    <PaperProvider>
     <NavigationContainer>
       {/*<Stack.Navigator
         initialRouteName="Login"
         screenOptions={{ headerShown: false }}
       >*/}
       <Stack.Navigator
-        initialRouteName="Settings"
+
+        initialRouteName="Tabs"
         screenOptions={{ headerShown: false }}
       >
+        <Stack.Screen name="Tabs" component={Tabs} />
         <Stack.Screen name="Settings" component={Settings} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
@@ -50,7 +55,8 @@ function App() {
         <Stack.Screen name="EmailChange" component={EmailChange} />
       </Stack.Navigator>
     </NavigationContainer>
+    </PaperProvider>
   );
 }
 
-export default withAuthenticator(App, { signUpConfig, includeGreetings: true });
+export default withAuthenticator(App, { signUpConfig, includeGreetings: true});
