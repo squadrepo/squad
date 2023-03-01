@@ -54,10 +54,23 @@ export const Tabs = () => {
           icon="plus"
           style={{
             position: 'absolute',
-            bottom: 150,
-            right: 16,
+            bottom: 135,
+            left: 16,
             borderRadius:50
           }}
+          prop size = "medium"
+        />
+      </Portal>
+      <Portal>
+        <FAB
+          icon="message"
+          style={{
+            position: 'absolute',
+            bottom: 200,
+            left: 16,
+            borderRadius:50
+          }}
+          prop size = "medium"
         />
       </Portal>
         </React.Fragment>
