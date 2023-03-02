@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   TextInput,
   Button,
@@ -6,19 +6,47 @@ import {
   Appbar,
   Menu,
   IconButton,
-  Switch,
-} from "react-native-paper";
-import { SafeAreaView, View, StyleSheet, useRoute } from "react-native";
+  Switch
+} from 'react-native-paper';
+import { SafeAreaView, View, StyleSheet, useRoute } from 'react-native';
+import { Auth } from '@aws-amplify/auth';
+import axios from 'axios';
 
 export const Settings = ({ navigation }) => {
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
 
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [newPasswordAgain, setNewPasswordAgain] = useState("");
-  const [dob, setDOB] = useState("");
-  const [uniEmail, setUniEmail] = useState("");
+  {
+    /*Relevant settings states that may change based on users input */
+  }
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newPasswordAgain, setNewPasswordAgain] = useState('');
+  const [passwordChanged, setPasswordChanged] = useState(false);
+  const [dob, setDOB] = useState(new Date());
+  const [uniEmail, setUniEmail] = useState('');
+  const [UUID, setUUID] = useState('');
+
+  const baseUrl =
+    'https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/account/editSettings';
+  const getUrl =
+    'https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/account/user?uid=';
+  async function getUserUUID() {
+    try {
+      // Get the current authenticated user
+      const currentUser = await Auth.currentAuthenticatedUser();
+
+      // Get the user's UUID
+      const userUUID = currentUser.attributes.sub;
+
+      console.log('User UUID:', userUUID);
+
+      return userUUID;
+    } catch (error) {
+      console.log('Error getting user UUID:', error);
+      throw error;
+    }
+  }
 
   useEffect(() => {
     console.log(oldPassword);
@@ -27,28 +55,98 @@ export const Settings = ({ navigation }) => {
     console.log(isSwitchOn);
     console.log(dob);
     console.log(uniEmail);
-    console.log(" ");
-  }, [oldPassword, newPassword, newPasswordAgain, isSwitchOn, dob, uniEmail]);
+    console.log(UUID);
+    console.log(' ');
+  }, [
+    oldPassword,
+    newPassword,
+    newPasswordAgain,
+    isSwitchOn,
+    dob,
+    uniEmail,
+    UUID
+  ]);
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const UUID = await getUserUUID();
+        setUUID(UUID);
+
+        // Invoking get method to perform a GET request
+        axios.get(`${getUrl}${UUID}`).then((response) => {
+          //setUserObject(response.data);
+          setDOB(response.data.dob);
+          setIsSwitchOn(response.data.univExclExp);
+          setUniEmail(response.data.email);
+          console.log(response.data);
+        });
+      } catch (error) {
+        if (error.response == undefined) throw error;
+        const { response } = errorObj;
+        return console.log(`${response.status}: ${response.data}`);
+      }
+    };
+    getUser();
+  }, []);
+
+  //API post
+  //TODO: univExclExp is not saving
+  const saveSettings = async (event) => {
+    try {
+      if (passwordChanged) {
+        const response = await axios.post(baseUrl, {
+          uid: UUID,
+          dob: dob,
+          email: uniEmail,
+          univExclExp: isSwitchOn,
+          password: newPassword
+        });
+        console.log(response.status);
+      } else {
+        const response = await axios.post(baseUrl, {
+          uid: UUID,
+          dob: dob,
+          email: uniEmail,
+          univExcExp: isSwitchOn
+        });
+        console.log(response.status);
+      }
+    } catch (error) {
+      alert('An error has occurred');
+
+      if (error.response === undefined) {
+        throw error;
+      }
+      const { response } = error;
+      console.log(response.status);
+      console.log(response.data);
+    }
+  };
 
   return (
     <View>
       <Appbar.Header>
         <Appbar.BackAction />
         <Appbar.Content title="Settings" />
-        <Button textDecoration="underline">Save</Button>
+        <Button textDecoration="underline" onPress={saveSettings}>
+          Save
+        </Button>
       </Appbar.Header>
       <View style={styles.options}>
         <Menu.Item title="Password" />
         <IconButton
           icon="dots-horizontal"
           onPress={() =>
-            navigation.navigate("Password", {
+            navigation.navigate('Password', {
               oldPassword: oldPassword,
               newPassword: newPassword,
               newPasswordAgain: newPasswordAgain,
+              passwordChanged: passwordChanged,
+              setPasswordChanged: setPasswordChanged,
               setOldPassword: setOldPassword,
               setNewPassword: setNewPassword,
-              setNewPasswordAgain: setNewPasswordAgain,
+              setNewPasswordAgain: setNewPasswordAgain
             })
           }
         />
@@ -62,9 +160,9 @@ export const Settings = ({ navigation }) => {
         <IconButton
           icon="dots-horizontal"
           onPress={() =>
-            navigation.navigate("Dob", {
+            navigation.navigate('Dob', {
               dob: dob,
-              setDOB: setDOB,
+              setDOB: setDOB
             })
           }
         />
@@ -74,9 +172,9 @@ export const Settings = ({ navigation }) => {
         <IconButton
           icon="dots-horizontal"
           onPress={() =>
-            navigation.navigate("EmailChange", {
+            navigation.navigate('EmailChange', {
               uniEmail: uniEmail,
-              setUniEmail: setUniEmail,
+              setUniEmail: setUniEmail
             })
           }
         />
@@ -87,11 +185,11 @@ export const Settings = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   options: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingRight: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingRight: 10
   },
   toggle: {
-    paddingRight: 10,
-  },
+    paddingRight: 10
+  }
 });
