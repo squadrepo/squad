@@ -68,7 +68,7 @@ export const Settings = ({ navigation }) => {
   ]);
 
   useEffect(() => {
-    const getUid = async () => {
+    const getUser = async () => {
       try {
         const UUID = await getUserUUID();
         setUUID(UUID);
@@ -87,10 +87,11 @@ export const Settings = ({ navigation }) => {
         return console.log(`${response.status}: ${response.data}`);
       }
     };
-    getUid();
+    getUser();
   }, []);
 
   //API post
+  //TODO: univExclExp is not saving
   const saveSettings = async (event) => {
     try {
       if (passwordChanged) {
@@ -98,7 +99,7 @@ export const Settings = ({ navigation }) => {
           uid: UUID,
           dob: dob,
           email: uniEmail,
-          univExcExp: isSwitchOn,
+          univExclExp: isSwitchOn,
           password: newPassword
         });
         console.log(response.status);
