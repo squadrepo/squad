@@ -43,7 +43,10 @@ function App() {
   return (
     <PaperProvider>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator
+          screenOptions={{ headerShown: false }}
+          initialRouteName="Drawers"
+        >
           <Stack.Screen name="Drawers" component={MainDrawer} />
           <Stack.Screen name="Settings" component={Settings} />
           <Stack.Screen name="Login" component={LoginScreen} />

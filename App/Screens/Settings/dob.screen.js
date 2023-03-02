@@ -4,16 +4,16 @@ import { SafeAreaView, View, StyleSheet } from 'react-native';
 import DatePicker from '@dietime/react-native-date-picker';
 
 export const Dob = ({ navigation, route }) => {
-  const done = () => {
-    route.params.setDOB(date);
-    navigation.navigate('Settings');
-  };
-
   const [date, setDate] = React.useState(new Date());
 
   const convertDate = (dateObject) => {
     const newDate = Math.round(dateObject.getTime() / 1000);
     setDate(newDate);
+  };
+
+  const done = () => {
+    route.params.setDOB(date);
+    navigation.navigate('Settings');
   };
 
   return (

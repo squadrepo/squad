@@ -1,3 +1,9 @@
+// TODO: BUGS in settings pages ->
+// UnivExcl does not save upon post request
+// Dob is not updated nor does it save on post request
+// Back button does not go back to the landing page
+//
+
 import React, { useState, useEffect } from 'react';
 import {
   TextInput,
@@ -49,23 +55,13 @@ export const Settings = ({ navigation }) => {
   }
 
   useEffect(() => {
-    console.log(oldPassword);
     console.log(newPassword);
-    console.log(newPasswordAgain);
     console.log(isSwitchOn);
     console.log(dob);
     console.log(uniEmail);
     console.log(UUID);
     console.log(' ');
-  }, [
-    oldPassword,
-    newPassword,
-    newPasswordAgain,
-    isSwitchOn,
-    dob,
-    uniEmail,
-    UUID
-  ]);
+  }, [newPassword, isSwitchOn, dob, uniEmail, UUID]);
 
   useEffect(() => {
     const getUser = async () => {
@@ -103,6 +99,7 @@ export const Settings = ({ navigation }) => {
           password: newPassword
         });
         console.log(response.status);
+        alert('Settings saved successfuly.');
       } else {
         const response = await axios.post(baseUrl, {
           uid: UUID,
@@ -111,6 +108,7 @@ export const Settings = ({ navigation }) => {
           univExcExp: isSwitchOn
         });
         console.log(response.status);
+        alert('Settings saved successfuly.');
       }
     } catch (error) {
       alert('An error has occurred');
@@ -127,7 +125,7 @@ export const Settings = ({ navigation }) => {
   return (
     <View>
       <Appbar.Header>
-        <Appbar.BackAction />
+        <Appbar.BackAction onPress={() => navigation.navigate('Main')} />
         <Appbar.Content title="Settings" />
         <Button textDecoration="underline" onPress={saveSettings}>
           Save
