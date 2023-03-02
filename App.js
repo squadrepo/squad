@@ -20,6 +20,7 @@ import awsmobile from './aws-exports';
 import { MainDrawer } from './App/Screens/Navigation/Drawer';
 
 import { Auth } from 'aws-amplify';
+import { UserProvider } from './App/Context';
 
 Amplify.configure({ awsConfig, ...awsmobile, Analytics: { disabled: true } });
 
@@ -41,22 +42,24 @@ const signUpConfig = {
 
 function App() {
   return (
-    <PaperProvider>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{ headerShown: false }}
-          initialRouteName="Drawers"
-        >
-          <Stack.Screen name="Drawers" component={MainDrawer} />
-          <Stack.Screen name="Settings" component={Settings} />
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="SignUp" component={SignUpScreen} />
-          <Stack.Screen name="Password" component={Password} />
-          <Stack.Screen name="Dob" component={Dob} />
-          <Stack.Screen name="EmailChange" component={EmailChange} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+    <UserProvider>
+      <PaperProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{ headerShown: false }}
+            initialRouteName="Drawers"
+          >
+            <Stack.Screen name="Drawers" component={MainDrawer} />
+            <Stack.Screen name="Settings" component={Settings} />
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="SignUp" component={SignUpScreen} />
+            <Stack.Screen name="Password" component={Password} />
+            <Stack.Screen name="Dob" component={Dob} />
+            <Stack.Screen name="EmailChange" component={EmailChange} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </UserProvider>
   );
 }
 
