@@ -22,10 +22,10 @@ export const Settings = ({ navigation }) => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordAgain, setNewPasswordAgain] = useState('');
-  const [dob, setDOB] = useState('');
+  const [passwordChanged, setPasswordChanged] = useState(false);
+  const [dob, setDOB] = useState(new Date());
   const [uniEmail, setUniEmail] = useState('');
   const [UUID, setUUID] = useState('');
-  const [userObject, setUserObject] = useState('');
 
   const baseUrl =
     'https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/account/editSettings';
@@ -75,7 +75,10 @@ export const Settings = ({ navigation }) => {
 
         // Invoking get method to perform a GET request
         axios.get(`${getUrl}${UUID}`).then((response) => {
-          setUserObject(response.data);
+          //setUserObject(response.data);
+          setDOB(response.data.dob);
+          setIsSwitchOn(response.data.univExclExp);
+          setUniEmail(response.data.email);
           console.log(response.data);
         });
       } catch (error) {
@@ -90,12 +93,24 @@ export const Settings = ({ navigation }) => {
   //API post
   const saveSettings = async (event) => {
     try {
-      const response = await axios.post(baseUrl, {
-        uid: UUID,
-        email: uniEmail,
-        password: newPassword
-      });
-      console.log(response.status);
+      if (passwordChanged) {
+        const response = await axios.post(baseUrl, {
+          uid: UUID,
+          dob: dob,
+          email: uniEmail,
+          univExcExp: isSwitchOn,
+          password: newPassword
+        });
+        console.log(response.status);
+      } else {
+        const response = await axios.post(baseUrl, {
+          uid: UUID,
+          dob: dob,
+          email: uniEmail,
+          univExcExp: isSwitchOn
+        });
+        console.log(response.status);
+      }
     } catch (error) {
       alert('An error has occurred');
 
@@ -126,6 +141,8 @@ export const Settings = ({ navigation }) => {
               oldPassword: oldPassword,
               newPassword: newPassword,
               newPasswordAgain: newPasswordAgain,
+              passwordChanged: passwordChanged,
+              setPasswordChanged: setPasswordChanged,
               setOldPassword: setOldPassword,
               setNewPassword: setNewPassword,
               setNewPasswordAgain: setNewPasswordAgain

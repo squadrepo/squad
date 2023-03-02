@@ -9,7 +9,12 @@ export const Dob = ({ navigation, route }) => {
     navigation.navigate('Settings');
   };
 
-  const [date, setDate] = React.useState();
+  const [date, setDate] = React.useState(new Date());
+
+  const convertDate = (dateObject) => {
+    const newDate = Math.round(dateObject.getTime() / 1000);
+    setDate(newDate);
+  };
 
   return (
     <View>
@@ -20,12 +25,12 @@ export const Dob = ({ navigation, route }) => {
           Done
         </Button>
       </Appbar.Header>
-      <Text>{date ? date.toDateString() : 'Select date...'}</Text>
+      <Text>{'Select date... dd/mm/yyyy'}</Text>
       <SafeAreaView>
         <DatePicker
           startYear={1990}
-          value={Math.floor(Date.parse(date) / 1000)}
-          onChange={(value) => setDate(value)}
+          value={date}
+          onChange={(value) => convertDate(value)}
           //format="yyyy-mm-dd"
         />
       </SafeAreaView>
