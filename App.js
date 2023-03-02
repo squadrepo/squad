@@ -1,5 +1,5 @@
-import { StatusBar } from "expo-status-bar";
-import { Provider as PaperProvider, TextInput } from "react-native-paper";
+import 'react-native-gesture-handler';
+import { Provider as PaperProvider, View, Text, TouchableOpacity} from "react-native-paper";
 import { LoginScreen } from "./App/Screens/Login/login.screen";
 import { SignUpScreen } from "./App/Screens/SignUp/signup.screen";
 import { Settings } from "./App/Screens/Settings/settings.screen";
@@ -9,10 +9,11 @@ import { EmailChange } from "./App/Screens/Settings/email.screens";
 import { NavigationContainer, StackActions } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { withAuthenticator } from "aws-amplify-react-native";
-import Amplify from "@aws-amplify/core";
+import { Amplify } from "@aws-amplify/core";
 import awsConfig from "./aws-exports";
 import awsmobile from "./aws-exports";
-import { Tabs } from "./App/Screens/Navigation/BottomBar";
+import { MainDrawer } from './App/Screens/Navigation/Drawer';
+
 
 
 Amplify.configure({ awsConfig, ...awsmobile, Analytics: { disabled: true } });
@@ -33,20 +34,15 @@ const signUpConfig = {
   ],
 };
 
+
+
 function App() {
   return (
     <PaperProvider>
     <NavigationContainer>
-      {/*<Stack.Navigator
-        initialRouteName="Login"
-        screenOptions={{ headerShown: false }}
-      >*/}
       <Stack.Navigator
-
-        initialRouteName="Tabs"
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen name="Tabs" component={Tabs} />
+        screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Drawers" component={MainDrawer} />
         <Stack.Screen name="Settings" component={Settings} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
@@ -59,4 +55,4 @@ function App() {
   );
 }
 
-export default withAuthenticator(App, { signUpConfig, includeGreetings: true});
+export default withAuthenticator(App, { signUpConfig });
