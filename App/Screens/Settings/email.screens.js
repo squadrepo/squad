@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
-import { TextInput, Button, Text, Appbar } from 'react-native-paper';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
+import { TextInput, Button, Appbar } from 'react-native-paper';
+import { View } from 'react-native';
 import { UserContext } from '../../Context';
 
 export const EmailChange = ({ navigation, route }) => {

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { TextInput, Button, Text, Appbar } from 'react-native-paper';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
+import { Button, Text, Appbar } from 'react-native-paper';
+import { SafeAreaView, View } from 'react-native';
 import DatePicker from '@dietime/react-native-date-picker';
 import { UserContext } from '../../Context';
 

@@ -2,32 +2,14 @@
 // UnivExcl does not save upon post request
 
 import React, { useState, useEffect, useContext } from 'react';
-import {
-  TextInput,
-  Button,
-  Text,
-  Appbar,
-  Menu,
-  IconButton,
-  Switch
-} from 'react-native-paper';
-import { SafeAreaView, View, StyleSheet, useRoute } from 'react-native';
-import { Auth } from '@aws-amplify/auth';
+import { Button, Appbar, Menu, IconButton, Switch } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { UserContext } from '../../Context';
 
 export const Settings = ({ navigation }) => {
-  const {
-    uid,
-    password,
-    setPassword,
-    dob,
-    setDOB,
-    email,
-    setEmail,
-    univExclExp,
-    setUnivExclExp
-  } = useContext(UserContext);
+  const { uid, password, dob, email, univExclExp, setUnivExclExp } =
+    useContext(UserContext);
 
   const [passwordChanged, setPasswordChanged] = useState(false);
   const [isSwitchOn, setIsSwitchOn] = useState(univExclExp);

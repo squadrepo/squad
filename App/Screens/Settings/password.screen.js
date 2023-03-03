@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { TextInput, Button, Text, Appbar } from 'react-native-paper';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { useRoute } from '@react-navigation/core';
 import { UserContext } from '../../Context';
 
