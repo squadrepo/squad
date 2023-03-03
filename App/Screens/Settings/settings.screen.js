@@ -1,10 +1,7 @@
-// TODO: BUGS in settings pages ->
+// TODO:
 // UnivExcl does not save upon post request
-// Dob is not updated nor does it save on post request
-// Back button does not go back to the landing page
-//
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   TextInput,
   Button,
@@ -17,74 +14,36 @@ import {
 import { SafeAreaView, View, StyleSheet, useRoute } from 'react-native';
 import { Auth } from '@aws-amplify/auth';
 import axios from 'axios';
+import { UserContext } from '../../Context';
 
 export const Settings = ({ navigation }) => {
-  const [isSwitchOn, setIsSwitchOn] = useState(false);
-  const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
+  const {
+    uid,
+    password,
+    setPassword,
+    dob,
+    setDOB,
+    email,
+    setEmail,
+    univExclExp,
+    setUnivExclExp
+  } = useContext(UserContext);
 
-  {
-    /*Relevant settings states that may change based on users input */
-  }
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [newPasswordAgain, setNewPasswordAgain] = useState('');
   const [passwordChanged, setPasswordChanged] = useState(false);
-  const [dob, setDOB] = useState(new Date());
-  const [uniEmail, setUniEmail] = useState('');
-  const [UUID, setUUID] = useState('');
+  const [isSwitchOn, setIsSwitchOn] = useState(univExclExp);
+  const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
 
   const baseUrl =
     'https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/account/editSettings';
-  const getUrl =
-    'https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/account/user?uid=';
-  async function getUserUUID() {
-    try {
-      // Get the current authenticated user
-      const currentUser = await Auth.currentAuthenticatedUser();
-
-      // Get the user's UUID
-      const userUUID = currentUser.attributes.sub;
-
-      console.log('User UUID:', userUUID);
-
-      return userUUID;
-    } catch (error) {
-      console.log('Error getting user UUID:', error);
-      throw error;
-    }
-  }
 
   useEffect(() => {
-    console.log(newPassword);
+    console.log(password);
     console.log(isSwitchOn);
     console.log(dob);
-    console.log(uniEmail);
-    console.log(UUID);
+    console.log(email);
+    console.log(uid);
     console.log(' ');
-  }, [newPassword, isSwitchOn, dob, uniEmail, UUID]);
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const UUID = await getUserUUID();
-        setUUID(UUID);
-
-        // Invoking get method to perform a GET request
-        axios.get(`${getUrl}${UUID}`).then((response) => {
-          //setUserObject(response.data);
-          setDOB(response.data.dob);
-          setIsSwitchOn(response.data.univExclExp);
-          setUniEmail(response.data.email);
-          console.log(response.data);
-        });
-      } catch (error) {
-        if (error.response == undefined) throw error;
-        const { response } = errorObj;
-        return console.log(`${response.status}: ${response.data}`);
-      }
-    };
-    getUser();
-  }, []);
+  }, [password, isSwitchOn, dob, email, uid]);
 
   //API post
   //TODO: univExclExp is not saving
@@ -92,19 +51,19 @@ export const Settings = ({ navigation }) => {
     try {
       if (passwordChanged) {
         const response = await axios.post(baseUrl, {
-          uid: UUID,
+          uid: uid,
           dob: dob,
-          email: uniEmail,
+          email: email,
           univExclExp: isSwitchOn,
-          password: newPassword
+          password: password
         });
         console.log(response.status);
         alert('Settings saved successfuly.');
       } else {
         const response = await axios.post(baseUrl, {
-          uid: UUID,
+          uid: uid,
           dob: dob,
-          email: uniEmail,
+          email: email,
           univExcExp: isSwitchOn
         });
         console.log(response.status);
@@ -137,14 +96,8 @@ export const Settings = ({ navigation }) => {
           icon="dots-horizontal"
           onPress={() =>
             navigation.navigate('Password', {
-              oldPassword: oldPassword,
-              newPassword: newPassword,
-              newPasswordAgain: newPasswordAgain,
-              passwordChanged: passwordChanged,
-              setPasswordChanged: setPasswordChanged,
-              setOldPassword: setOldPassword,
-              setNewPassword: setNewPassword,
-              setNewPasswordAgain: setNewPasswordAgain
+              passwordChanged,
+              setPasswordChanged
             })
           }
         />
@@ -157,24 +110,14 @@ export const Settings = ({ navigation }) => {
         <Menu.Item title="Date Of Birth" />
         <IconButton
           icon="dots-horizontal"
-          onPress={() =>
-            navigation.navigate('Dob', {
-              dob: dob,
-              setDOB: setDOB
-            })
-          }
+          onPress={() => navigation.navigate('Dob')}
         />
       </View>
       <View style={styles.options}>
         <Menu.Item title="Change University Email" />
         <IconButton
           icon="dots-horizontal"
-          onPress={() =>
-            navigation.navigate('EmailChange', {
-              uniEmail: uniEmail,
-              setUniEmail: setUniEmail
-            })
-          }
+          onPress={() => navigation.navigate('EmailChange')}
         />
       </View>
     </View>

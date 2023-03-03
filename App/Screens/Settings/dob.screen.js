@@ -2,8 +2,10 @@ import * as React from 'react';
 import { TextInput, Button, Text, Appbar } from 'react-native-paper';
 import { SafeAreaView, View, StyleSheet } from 'react-native';
 import DatePicker from '@dietime/react-native-date-picker';
+import { UserContext } from '../../Context';
 
 export const Dob = ({ navigation, route }) => {
+  const { setDOB } = React.useContext(UserContext);
   const [date, setDate] = React.useState(new Date());
 
   const convertDate = (dateObject) => {
@@ -12,7 +14,7 @@ export const Dob = ({ navigation, route }) => {
   };
 
   const done = () => {
-    route.params.setDOB(date);
+    setDOB(date);
     navigation.navigate('Settings');
   };
 

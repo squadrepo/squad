@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { TextInput, Button, Text, Appbar } from 'react-native-paper';
 import { SafeAreaView, View, StyleSheet } from 'react-native';
 import { useRoute } from '@react-navigation/core';
+import { UserContext } from '../../Context';
 
 export const Password = ({ navigation, route }) => {
   const [newPwrd, setNewPwrd] = useState('');
   const [newPwrdAgain, setNewPwrdAgain] = useState('');
+  const { setPassword } = useContext(UserContext);
 
   const done = () => {
     if (newPwrd === newPwrdAgain) {
-      route.params.setNewPassword(newPwrd);
+      setPassword(newPwrd);
       route.params.setPasswordChanged(true);
       navigation.navigate('Settings');
     } else {

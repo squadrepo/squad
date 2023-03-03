@@ -21,6 +21,7 @@ const UserProvider = ({ children }) => {
   const [univ, setUniv] = useState('');
   const [univExclExp, setUnivExclExp] = useState(false);
   const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   return (
     <UserContext.Provider
@@ -52,7 +53,9 @@ const UserProvider = ({ children }) => {
         univExclExp,
         setUnivExclExp,
         username,
-        setUsername
+        setUsername,
+        password,
+        setPassword
       }}
     >
       {children}
