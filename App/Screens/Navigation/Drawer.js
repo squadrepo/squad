@@ -1,10 +1,11 @@
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem  } from '@react-navigation/drawer';
 import { FoodFeed } from '../Feeds/FoodFeed';
 import { SocialFeed } from '../Feeds/SocialFeed';
+import { ProfileScreen } from '../Profile/profile.screen';
 import { Settings } from '../Settings/settings.screen';
 import { Tabs } from './BottomBar';
-import { Auth, Hub } from 'aws-amplify'
-import { Profile } from '../Profile/profile.screen';
+import { Auth, Hub } from 'aws-amplify';
+
 
 const Drawer = createDrawerNavigator(); 
 
@@ -40,7 +41,7 @@ export const MainDrawer = () => {
     screenOptions={{ headerShown: false, 
     drawerPosition:"right"}}>
       <Drawer.Screen name="Main" component={Tabs}/>
-      <Drawer.Screen name="Profile" component={Profile} />
+      <Drawer.Screen name="Profile" component={ProfileScreen} />
       <Drawer.Screen name="Settings" component={Settings} />
     </Drawer.Navigator>
   );
