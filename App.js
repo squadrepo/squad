@@ -11,6 +11,13 @@ import { Settings } from './App/Screens/Settings/settings.screen';
 import { Password } from './App/Screens/Settings/password.screen';
 import { Dob } from './App/Screens/Settings/dob.screen';
 import { EmailChange } from './App/Screens/Settings/email.screens';
+
+import { ProfileScreen } from "./App/Screens/Profile/profile.screen";
+import { ProfileViewScreen } from "./App/Screens/Profile/profileView.screen";
+import { ProfileEditScreen } from "./App/Screens/Profile/profileEdit.screen";
+import { ProfileEditUsernameScreen } from "./App/Screens/Profile/profileEditUsername.screen";
+import { ProfileEditBioScreen } from "./App/Screens/Profile/profileEditBio.screen";
+
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { withAuthenticator } from 'aws-amplify-react-native';
@@ -45,8 +52,16 @@ function App() {
     <UserProvider>
       <PaperProvider>
         <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Navigator 
+              //initialRouteName="Settings" 
+              initialRouteName="Profile" 
+              screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Drawers" component={MainDrawer} />
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="ViewProfile" component={ProfileViewScreen} />
+            <Stack.Screen name="EditProfile" component={ProfileEditScreen} />
+            <Stack.Screen name="Username" component={ProfileEditUsernameScreen}/>
+            <Stack.Screen name="Bio" component={ProfileEditBioScreen}/>
             <Stack.Screen name="Settings" component={Settings} />
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="SignUp" component={SignUpScreen} />
