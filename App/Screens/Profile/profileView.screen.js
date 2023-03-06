@@ -1,8 +1,98 @@
 import React from "react";
 import { Button, Appbar} from "react-native-paper";
 import { SafeAreaView, View, StyleSheet, Image, Text, TextInput} from "react-native";
+import { UserContext } from '../../Context';
+import { Auth } from '@aws-amplify/auth';
+import axios from 'axios';
 
 export const ProfileViewScreen = ({ navigation }) => {
+
+  const {
+    aboutMe,
+    setAboutMe,
+    classHist,
+    setClassHist,
+    dispTags,
+    setDispTags,
+    dob,
+    setDOB,
+    email,
+    setEmail,
+    emailLastVerifiedDate,
+    setEmailLastVerifiedDate,
+    fullName,
+    setFullName,
+    pfpUrl,
+    setPfpUrl,
+    tags,
+    setTags,
+    tutorRating,
+    setTutorRating,
+    uid,
+    setUid,
+    univ,
+    setUniv,
+    univExclExp,
+    setUnivExclExp,
+    username,
+    setUsername
+  } = React.useContext(UserContext);
+
+  //URL used to GET users info
+  const getUrl =
+    'https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/account/user?uid=';
+
+  async function getUserUUID() {
+    try {
+      // Get the current authenticated user
+      const currentUser = await Auth.currentAuthenticatedUser();
+
+      // Get the user's UUID
+      const userUUID = currentUser.attributes.sub;
+
+      console.log('User UUID:', userUUID);
+
+      return userUUID;
+    } catch (error) {
+      console.log('Error getting user UUID:', error);
+      throw error;
+    }
+  }
+
+  //This will get the users information and store the info in the correct states
+  React.useEffect(() => {
+    const getUser = async () => {
+      try {
+        const UUID = await getUserUUID();
+        setUid(UUID);
+
+        // GET request for user info
+        axios.get(`${getUrl}${UUID}`).then((response) => {
+          console.log(response.data);
+          //set user states
+          setAboutMe(response.data.aboutMe);
+          setClassHist(response.data.classHist);
+          setDispTags(response.data.dispTags);
+          setDOB(response.data.dob);
+          setEmail(response.data.email);
+          setEmailLastVerifiedDate(response.data.emailLastVerifiedDate);
+          setFullName(response.data.fullName);
+          setPfpUrl(response.data.pfpUrl);
+          setTags(response.data.tags);
+          setTutorRating(response.data.tutorRating);
+          setUniv(response.data.univ);
+          setUnivExclExp(response.data.univExclExp);
+          setUsername(response.data.username);
+        });
+      } catch (error) {
+        if (error.response == undefined) throw error;
+        const { response } = errorObj;
+        return console.log(`${response.status}: ${response.data}`);
+      }
+    };
+    getUser();
+  }, []);
+
   return (
 
     <View>
@@ -18,8 +108,8 @@ export const ProfileViewScreen = ({ navigation }) => {
       <View style={styles.profileHeader}>
         <View style={styles.left}>
           <View style={styles.names}>
-            <Text style={styles.name}>Person Name</Text>
-            <Text style={styles.username}>@UserName</Text>
+            <Text style={styles.name}>{fullName}</Text>
+            <Text style={styles.username}>@{username}</Text>
           </View>
 
           <View style={styles.edit}>
@@ -40,8 +130,7 @@ export const ProfileViewScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.profileDesc}>
-        <Text>This is the about me section where you would write about yourself and stuff and yeah there's a text limit. 
-          Just testing how far this desc can go and how natural it looks</Text>
+        <Text>{aboutMe}</Text>
       </View>
 
       <View style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth}}></View>
@@ -50,8 +139,8 @@ export const ProfileViewScreen = ({ navigation }) => {
 
         <Text style={styles.categoryText}>Tutoring</Text>
         <View style={styles.tagCategory}>
-          <Tag tag={{ name:"Physics" }}/>
-          <Tag tag={{ name:"Chemistry" }}/>
+          <Tag tag={{ name:Array.from(tags)[0] }}/>
+          <Tag tag={{ name:Array.from(tags)[1] }}/>
         </View>
 
         <Text style={styles.categoryText}>Food</Text>
