@@ -14,6 +14,7 @@ import axios from 'axios';
 
 export const ProfileScreen = ({ navigation }) => {
 
+//Need vv this since profile screens aren't connected with home screen yet
   const {
     aboutMe,
     setAboutMe,
