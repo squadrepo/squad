@@ -1,3 +1,7 @@
+/*
+Convert spaces to underscores for usernames
+*/
+
 import React, { useState } from "react";
 import { Button, Appbar} from "react-native-paper";
 import { SafeAreaView, View, StyleSheet, Image, Text, TextInput} from "react-native";

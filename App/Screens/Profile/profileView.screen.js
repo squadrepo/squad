@@ -1,3 +1,7 @@
+/*
+Link message button to screens when available
+*/
+
 import React from "react";
 import { Button, Appbar} from "react-native-paper";
 import { SafeAreaView, View, StyleSheet, Image, Text, TextInput} from "react-native";
