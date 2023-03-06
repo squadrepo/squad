@@ -6,6 +6,8 @@ about me, then save, it does not save the changes to username.
 Basically, users can only update one thing at a time.
 Also updating multiple times in the same session will cause the
 old data to fill the update data instead of the new shit
+Add edit functionality for tags a bit
+Add camera functionality
 */
 
 import React, { useState } from "react";
