@@ -11,6 +11,7 @@ import { Settings } from './App/Screens/Settings/settings.screen';
 import { Password } from './App/Screens/Settings/password.screen';
 import { Dob } from './App/Screens/Settings/dob.screen';
 import { EmailChange } from './App/Screens/Settings/email.screens';
+import { MessageOverview } from './App/Screens/Messaging/MessageOverview';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { withAuthenticator } from 'aws-amplify-react-native';
@@ -21,6 +22,7 @@ import { MainDrawer } from './App/Screens/Navigation/Drawer';
 
 import { Auth } from 'aws-amplify';
 import { UserContext, UserProvider } from './App/Context';
+import { CreateNewMessage } from './App/Screens/Messaging/CreateNewMessage';
 
 Amplify.configure({ awsConfig, ...awsmobile, Analytics: { disabled: true } });
 
@@ -53,6 +55,11 @@ function App() {
             <Stack.Screen name="Password" component={Password} />
             <Stack.Screen name="Dob" component={Dob} />
             <Stack.Screen name="EmailChange" component={EmailChange} />
+            <Stack.Screen name="MessageOverview" component={MessageOverview} />
+            <Stack.Screen
+              name="CreateNewMessage"
+              component={CreateNewMessage}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
