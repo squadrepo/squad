@@ -1,21 +1,14 @@
 /*
 Bugs/Things to fix/TO-DO:
-While users can edit username and about me,
-if they make changes to username, save, then make changes to
-about me, then save, it does not save the changes to username.
-Basically, users can only update one thing at a time.
-Also updating multiple times in the same session will cause the
-old data to fill the update data instead of the new shit
 Add edit functionality for tags a bit
 Add camera functionality
 */
 
 import React, { useState } from "react";
 import { Button, Appbar} from "react-native-paper";
-import { SafeAreaView, View, StyleSheet, Image, Text, TextInput } from "react-native";
-import { useRoute } from "@react-navigation/core";
+import { SafeAreaView, View, StyleSheet, Image, Text } from "react-native";
+import { Camera, useCameraDevices } from "react-native-vision-camera";
 import { UserContext } from '../../Context';
-import { Auth } from "@aws-amplify/auth";
 import axios from "axios";
 
 export const ProfileEditScreen = ({ navigation, route }) => {
@@ -40,7 +33,7 @@ export const ProfileEditScreen = ({ navigation, route }) => {
     "username": username,
     "aboutMe": aboutMe,
     "tags": Array.from(tags),
-    "pfpUrl": "something"
+    "pfpUrl": "https://squad-app-s3.s3.amazonaws.com/VOKOLOS.png"
   };
 
 
@@ -66,113 +59,149 @@ export const ProfileEditScreen = ({ navigation, route }) => {
  
   const save = () => {
     updateProfile();
-    navigation.navigate("Profile");
+    navigation.replace("Profile");
   }
   
 
   function getUsername() {
     if (route.params?.username) {
       updateData["username"] = route.params?.username;
-      console.log(updateData["username"])
-      return route.params?.username;
+      return updateData["username"];
     } else {
-      updateData["username"] = username;
-      return username;
+      return updateData["username"];
     }
   }
 
   function getBio() {
     if (route.params?.aboutMe) {
       updateData["aboutMe"] = route.params?.aboutMe;
-      return route.params?.aboutMe;
+      return updateData["aboutMe"];
     } else {
-      updateData["aboutMe"] = aboutMe;
-      return aboutMe;
+      return updateData["aboutMe"];
     }
   }
-  
+
+  function getTags() {
+    if (route.params?.tags) {
+      updateData["username"] = route.params?.tags;
+      return updateData["tags"];
+    } else {
+      return updateData["tags"];
+    }
+  }
+
+  function getPfpUrl() {
+    if (route.params?.pfpUrl) {
+      updateData["pfpUrl"] = route.params?.pfpUrl;
+      return updateData["pfpUrl"];
+    } else {
+      return updateData["pfpUrl"];
+    }
+  }
+
+  /*
+  async function getPermission() {
+    const permission = await Camera.requestCameraPermission();
+    console.log(`Camera permission status: ${permission}`);
+    //if (permission === 'denied') await Linking.openSettings();
+  }
+  */
+
+  async function getPermission() {
+    const cameraPermission = await Camera.getCameraPermissionStatus()
+    const microphonePermission = await Camera.getMicrophonePermissionStatus()
+  }
+  //const devices = useCameraDevices();
+  //const device = devices.back;
+
+
   return (
 
-      <View>
+    <View>
 
-      <Appbar.Header>
-          <Appbar.BackAction onPress={() => navigation.goBack()} />
-          <Appbar.Content title="Edit Profile" />
-          <Button textDecoration="underline" onPress={save}>Save</Button>
-      </Appbar.Header>
+    <Appbar.Header>
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title="Edit Profile" />
+        <Button textDecoration="underline" onPress={save}>Save</Button>
+    </Appbar.Header>
 
-      <View style={styles.changePhoto}>
+    <View style={styles.changePhoto}>
 
-          <View style={styles.profilePic}>
-              <Image></Image>
-              <View style={styles.circle}></View>
-              <Button title="Change Photo">Change Photo</Button>
-          </View>
+        <View style={styles.profilePicContainer}>
+          <Image style={styles.profilePic} source={{uri: pfpUrl}}/>
+          <Button title="Change Photo" onPress={() => getPermission()}>Change Photo</Button>
+        </View>
 
-      </View>
+    </View>
 
-      <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
 
-          <View style={styles.profileDetails}>
-              <Text style={styles.textHeader}>Name</Text>
-              <Text style={styles.textInputName} label="Full Name">
-                  {fullName}
-              </Text>
-      
-              <Text style={styles.textHeader}>Username</Text>
-              <Text style={styles.textInput} label="Username" onPress={() => navigation.navigate("Username", {
-                  currentUsername: getUsername(),
-              })}>
-                  {getUsername()}
-              </Text>
+        <View style={styles.profileDetails}>
+            <Text style={styles.textHeader}>Name</Text>
+            <Text style={styles.textInputName} label="Full Name">
+                {fullName}
+            </Text>
+    
+            <Text style={styles.textHeader}>Username</Text>
+            <Text style={styles.textInput} label="Username" onPress={() => navigation.navigate("Username", {
+                currentUsername: getUsername(), 
+                currentBio: getBio(), 
+                currentTags: getTags(), 
+                currentPfpUrl: getPfpUrl(),
+            })}>
+                {getUsername()}
+            </Text>
 
-              <Text style={styles.textHeader}>About Me</Text>
-              <Text style={styles.textInput} multiline={true} label="About Me" onPress={() => navigation.navigate("Bio", {
-                  currentBio: getBio(),
-              })}>
-                  {getBio()}
-              </Text>
-          </View>
+            <Text style={styles.textHeader}>About Me</Text>
+            <Text style={styles.textInput} multiline={true} label="About Me" onPress={() => navigation.navigate("Bio", {
+                currentUsername: getUsername(), 
+                currentBio: getBio(), 
+                currentTags: getTags(), 
+                currentPfpUrl: getPfpUrl(),
+            })}>
+                {getBio()}
+            </Text>
+        </View>
 
-      <View style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth}}></View>
+    <View style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth}}></View>
 
-      <View style={styles.tagList}>
+    <View style={styles.tagList}>
 
-          <Text style={styles.categoryText}>Tutoring</Text>
-          <View style={styles.tagCategory}>
-          
-          <Tag tag={{ name:Array.from(tags)[0] }}/>
-          <Tag tag={{ name:Array.from(tags)[1] }}/>
+        <Text style={styles.categoryText}>Tutoring</Text>
+        <View style={styles.tagCategory}>
+        
+        <Tag tag={{ name:Array.from(tags)[0] }}/>
+        <Tag tag={{ name:Array.from(tags)[1] }}/>
 
-          </View>
+        </View>
 
-          <Text style={styles.categoryText}>Food</Text>
-          <View style={styles.tagCategory}>
+        <Text style={styles.categoryText}>Food</Text>
+        <View style={styles.tagCategory}>
 
-          <Tag tag={{ name:"Vegetarian" }}/>
+        <Tag tag={{ name:"Vegetarian" }}/>
 
-          </View>
+        </View>
 
-          <Text style={styles.categoryText}>Social</Text>
-          <View style={styles.tagCategory}>
-          
-          <Tag tag={{ name:"Walking" }}/>
-          <Tag tag={{ name:"Running" }}/>
-          <Tag tag={{ name:"Food" }}/>
-          <Tag tag={{ name:"Jogging" }}/>
+        <Text style={styles.categoryText}>Social</Text>
+        <View style={styles.tagCategory}>
+        
+        <Tag tag={{ name:"Walking" }}/>
+        <Tag tag={{ name:"Running" }}/>
+        <Tag tag={{ name:"Food" }}/>
+        <Tag tag={{ name:"Jogging" }}/>
 
-          </View>
+        </View>
 
-          <Text style={styles.categoryText}>Gig-work</Text>
-          <View style={styles.tagCategory}>
-          
-          <Tag tag={{ name:"Groceries" }}/>
+        <Text style={styles.categoryText}>Gig-work</Text>
+        <View style={styles.tagCategory}>
+        
+        <Tag tag={{ name:"Groceries" }}/>
 
-          </View>
+        </View>
 
-      </View>
-      </SafeAreaView>
-      </View>
+    </View>
+    </SafeAreaView>
+    </View>
   );
 };
 
@@ -190,11 +219,17 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgrey",
   },
 
-  profilePic: {
+  profilePicContainer: {
     alignItems: "center",
     justifyContent: "center",
     width: 180,
     height: 180,
+  },
+
+  profilePic: {
+    width: 100,
+    height: 100,
+    borderRadius: 100/2,
   },
 
   profileDetails: {
