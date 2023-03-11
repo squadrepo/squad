@@ -16,14 +16,10 @@ export const ProfileEditScreen = ({ navigation, route }) => {
 
   const {
     aboutMe,
-    setAboutMe,
     username,
-    setUsername,
     fullName,
     pfpUrl,
-    setPfpUrl,
     tags,
-    setTags,
     uid,
   } = React.useContext(UserContext);
 
@@ -103,8 +99,6 @@ export const ProfileEditScreen = ({ navigation, route }) => {
   return (
 
     <View>
-
-    <Camera {...props} photo={true} />
 
     <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.goBack()} />

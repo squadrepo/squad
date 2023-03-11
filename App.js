@@ -7,17 +7,15 @@ import {
 } from 'react-native-paper';
 import { LoginScreen } from './App/Screens/Login/login.screen';
 import { SignUpScreen } from './App/Screens/SignUp/signup.screen';
-import { Settings } from './App/Screens/Settings/settings.screen';
-import { Password } from './App/Screens/Settings/password.screen';
-import { Dob } from './App/Screens/Settings/dob.screen';
-import { EmailChange } from './App/Screens/Settings/email.screens';
-
 import { ProfileScreen } from "./App/Screens/Profile/profile.screen";
 import { ProfileViewScreen } from "./App/Screens/Profile/profileView.screen";
 import { ProfileEditScreen } from "./App/Screens/Profile/profileEdit.screen";
 import { ProfileEditUsernameScreen } from "./App/Screens/Profile/profileEditUsername.screen";
 import { ProfileEditBioScreen } from "./App/Screens/Profile/profileEditBio.screen";
-
+import { Settings } from './App/Screens/Settings/settings.screen';
+import { Password } from './App/Screens/Settings/password.screen';
+import { Dob } from './App/Screens/Settings/dob.screen';
+import { EmailChange } from './App/Screens/Settings/email.screens';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { withAuthenticator } from 'aws-amplify-react-native';
@@ -52,10 +50,7 @@ function App() {
     <UserProvider>
       <PaperProvider>
         <NavigationContainer>
-          <Stack.Navigator 
-              //initialRouteName="Settings" 
-              initialRouteName="Profile" 
-              screenOptions={{ headerShown: false }}>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Drawers" component={MainDrawer} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="ViewProfile" component={ProfileViewScreen} />

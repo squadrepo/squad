@@ -1,11 +1,10 @@
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem  } from '@react-navigation/drawer';
 import { FoodFeed } from '../Feeds/FoodFeed';
 import { SocialFeed } from '../Feeds/SocialFeed';
-import { ProfileScreen } from '../Profile/profile.screen';
 import { Settings } from '../Settings/settings.screen';
 import { Tabs } from './BottomBar';
-import { Auth, Hub } from 'aws-amplify';
-
+import { Auth, Hub } from 'aws-amplify'
+import { ProfileScreen } from '../Profile/profile.screen';
 
 const Drawer = createDrawerNavigator(); 
 
