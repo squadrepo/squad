@@ -5,9 +5,10 @@ Add camera functionality
 */
 
 import React, { useState } from "react";
-import { Button, Appbar} from "react-native-paper";
+import { Button, Appbar } from "react-native-paper";
 import { SafeAreaView, View, StyleSheet, Image, Text } from "react-native";
-import { Camera, useCameraDevices } from "react-native-vision-camera";
+import { LoadingView } from 'react-native-loading-view'
+import { Camera, CameraView, useCameraDevices } from "react-native-vision-camera";
 import { UserContext } from '../../Context';
 import axios from "axios";
 
@@ -99,25 +100,11 @@ export const ProfileEditScreen = ({ navigation, route }) => {
     }
   }
 
-  /*
-  async function getPermission() {
-    const permission = await Camera.requestCameraPermission();
-    console.log(`Camera permission status: ${permission}`);
-    //if (permission === 'denied') await Linking.openSettings();
-  }
-  */
-
-  async function getPermission() {
-    const cameraPermission = await Camera.getCameraPermissionStatus()
-    const microphonePermission = await Camera.getMicrophonePermissionStatus()
-  }
-  //const devices = useCameraDevices();
-  //const device = devices.back;
-
-
   return (
 
     <View>
+
+    <Camera {...props} photo={true} />
 
     <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
