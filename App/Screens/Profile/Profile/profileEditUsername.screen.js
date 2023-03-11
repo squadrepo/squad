@@ -1,26 +1,14 @@
-/*
-Convert spaces to underscores for usernames
-*/
-
 import React, { useState } from "react";
 import { Button, Appbar} from "react-native-paper";
 import { SafeAreaView, View, StyleSheet, Image, Text, TextInput} from "react-native";
 import { useRoute } from "@react-navigation/core";
 
 export const ProfileEditUsernameScreen = ({ navigation, route }) => {
-  const [username, setCurrentUsername] = React.useState(route.params.currentUsername);
-  const [bio] = React.useState(route.params.currentBio);
-  const [tags] = React.useState(route.params.currentTags);
-  const [pfpUrl] = React.useState(route.params.currentPfpUrl);
+  const [username, setUsername] = useState(route.params.username);
 
   const save = () => {
-    navigation.navigate("EditProfile", 
-    { 
-      username: username, 
-      aboutMe: bio,
-      tags: tags,
-      pfpUrl: pfpUrl
-    });
+    route.params.setUsername({ username });
+    navigation.navigate("EditProfile");
   }
 
   return (
@@ -37,7 +25,7 @@ export const ProfileEditUsernameScreen = ({ navigation, route }) => {
 
       <View style={styles.profileDetail}>
         <Text style={styles.textHeader}>Username</Text>
-        <TextInput style={styles.textInput} value={username} mode="text" label="Username" onChangeText={setCurrentUsername}></TextInput>
+        <TextInput style={styles.textInput} mode="text" label="Username" onChangeText={(text) => setUsername(text)}></TextInput>
       </View>
 
     </SafeAreaView>

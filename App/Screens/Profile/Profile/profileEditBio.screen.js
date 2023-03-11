@@ -1,26 +1,14 @@
-/*
-Convert spaces to underscores for usernames
-*/
-
 import React, { useState } from "react";
 import { Button, Appbar} from "react-native-paper";
 import { SafeAreaView, View, StyleSheet, Image, Text, TextInput} from "react-native";
 import { useRoute } from "@react-navigation/core";
 
-export const ProfileEditUsernameScreen = ({ navigation, route }) => {
-  const [username, setCurrentUsername] = React.useState(route.params.currentUsername);
-  const [bio] = React.useState(route.params.currentBio);
-  const [tags] = React.useState(route.params.currentTags);
-  const [pfpUrl] = React.useState(route.params.currentPfpUrl);
+export const ProfileEditBioScreen = ({ navigation, route }) => {
+  const [bio, setBio] = useState(route.params.bio);
 
   const save = () => {
-    navigation.navigate("EditProfile", 
-    { 
-      username: username, 
-      aboutMe: bio,
-      tags: tags,
-      pfpUrl: pfpUrl
-    });
+    route.params.setBio({ bio });
+    navigation.navigate("EditProfile");
   }
 
   return (
@@ -29,15 +17,15 @@ export const ProfileEditUsernameScreen = ({ navigation, route }) => {
 
       <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title="Username" />
+        <Appbar.Content title="Bio" />
         <Button textDecoration="underline" onPress={save}>Save</Button>
       </Appbar.Header>
-    
+
     <SafeAreaView style={styles.container}>
 
       <View style={styles.profileDetail}>
-        <Text style={styles.textHeader}>Username</Text>
-        <TextInput style={styles.textInput} value={username} mode="text" label="Username" onChangeText={setCurrentUsername}></TextInput>
+        <Text style={styles.textHeader}>About me</Text>
+        <TextInput style={styles.textInput} mode="text" label="Bio" onChangeText={(text) => setBio(text)}></TextInput>
       </View>
 
     </SafeAreaView>
@@ -75,4 +63,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-

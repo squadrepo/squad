@@ -1,5 +1,12 @@
 {
   "expo": {
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+        }
+      ]],
     "name": "squad",
     "slug": "squad",
     "version": "1.0.0",

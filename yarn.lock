@@ -3830,6 +3830,13 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
+"@koale/useworker@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.npmjs.org/@koale/useworker/-/useworker-4.0.2.tgz"
+  integrity sha512-xPIPADtom8/3/4FLNj7MvNcBM/Z2FleH85Fdx2O869eoKW8+PoEgtSVvoxWjCWMA46Sm9A5/R1TyzNGc+yM0wg==
+  dependencies:
+    dequal "^1.0.0"
+
 "@leichtgewicht/ip-codec@^2.0.1":
   "integrity" "sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A=="
   "resolved" "https://registry.npmjs.org/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz"
@@ -6160,11 +6167,6 @@ depd@2.0.0:
   resolved "https://registry.npmjs.org/depd/-/depd-2.0.0.tgz"
   integrity sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==
 
-depd@~1.1.2:
-  version "1.1.2"
-  resolved "https://registry.npmjs.org/depd/-/depd-1.1.2.tgz"
-  integrity sha512-7emPTl6Dpo6JRXOXjLRxck+FlLRX5847cLKEn00PLAgc3g2hTZZgr+e4c2v6QpSmLeFP3n5yUo7ft6avBK/5jQ==
-
 destroy@1.2.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/destroy/-/destroy-1.2.0.tgz"
@@ -6465,10 +6467,10 @@ entities@2.2.0, entities@^2.0.0:
     "path-browserify" "^1.0.0"
     "url-parse" "^1.5.9"
 
-"expo-constants@~14.0.0", "expo-constants@~14.0.2":
-  "integrity" "sha512-wzV3nrzTXTI8yG0tfas3fnqCfKV6YE+1GphEREyVDAShEB6mBInX1b6HgtpHFy2wOtnml+lPVmTCeGtjjLnZhA=="
-  "resolved" "https://registry.npmjs.org/expo-constants/-/expo-constants-14.0.2.tgz"
-  "version" "14.0.2"
+expo-constants@~14.0.0, expo-constants@~14.0.2:
+  version "14.0.2"
+  resolved "https://registry.npmjs.org/expo-constants/-/expo-constants-14.0.2.tgz"
+  integrity sha512-wzV3nrzTXTI8yG0tfas3fnqCfKV6YE+1GphEREyVDAShEB6mBInX1b6HgtpHFy2wOtnml+lPVmTCeGtjjLnZhA==
   dependencies:
     "@expo/config" "~7.0.2"
     "uuid" "^3.3.2"
@@ -9852,10 +9854,10 @@ postcss@^8.3.5, postcss@^8.4.19:
     "kleur" "^3.0.3"
     "sisteransi" "^1.0.5"
 
-"prop-types@*", "prop-types@^15.7.2", "prop-types@^15.7.x", "prop-types@^15.8.1":
-  "integrity" "sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg=="
-  "resolved" "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
-  "version" "15.8.1"
+prop-types@^15.7.2, prop-types@^15.8.1:
+  version "15.8.1"
+  resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
+  integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
   dependencies:
     "loose-envify" "^1.4.0"
     "object-assign" "^4.1.1"
@@ -10100,7 +10102,7 @@ react-native-reanimated@~2.12.0:
     "setimmediate" "^1.0.5"
     "string-hash-64" "^1.0.3"
 
-react-native-safe-area-context@4.4.1:
+react-native-safe-area-context@*, "react-native-safe-area-context@>= 3.0.0", react-native-safe-area-context@4.4.1:
   version "4.4.1"
   resolved "https://registry.npmjs.org/react-native-safe-area-context/-/react-native-safe-area-context-4.4.1.tgz"
   integrity sha512-N9XTjiuD73ZpVlejHrUWIFZc+6Z14co1K/p1IFMkImU7+avD69F3y+lhkqA2hN/+vljdZrBSiOwXPkuo43nFQA==
@@ -10119,6 +10121,14 @@ react-native-tab-view@^3.4.1:
   integrity sha512-pjhcm9bml91tbO7GkKQ5FGrwlHJXQqMzLcZtkXOSfFxoJ2XHJvbLxQSK0MpLyOjhbFdVbeeG4Zt083XQB1c1Lw==
   dependencies:
     "use-latest-callback" "^0.1.5"
+
+react-native-vector-icons@*, "react-native-vector-icons@>= 6.0.0":
+  version "9.2.0"
+  resolved "https://registry.npmjs.org/react-native-vector-icons/-/react-native-vector-icons-9.2.0.tgz"
+  integrity sha512-wKYLaFuQST/chH3AJRjmOLoLy3JEs1JR6zMNgTaemFpNoXs0ztRnTxcxFD9xhX7cJe1/zoN5BpQYe7kL0m5yyA==
+  dependencies:
+    prop-types "^15.7.2"
+    yargs "^16.1.1"
 
 react-native-web@~0.18.9:
   version "0.18.12"
@@ -10191,7 +10201,20 @@ react@18.1.0:
   dependencies:
     "loose-envify" "^1.1.0"
 
-readable-stream@^3.4.0:
+readable-stream@^2.0.1, readable-stream@~2.3.6:
+  version "2.3.8"
+  resolved "https://registry.npmjs.org/readable-stream/-/readable-stream-2.3.8.tgz"
+  integrity sha512-8p0AUk4XODgIewSi0l8Epjs+EVnWiK7NoDIEGU0HhE7+ZyY8D1IMY7odu5lRrFXGg71L15KG8QrPmum45RTtdA==
+  dependencies:
+    core-util-is "~1.0.0"
+    inherits "~2.0.3"
+    isarray "~1.0.0"
+    process-nextick-args "~2.0.0"
+    safe-buffer "~5.1.1"
+    string_decoder "~1.1.1"
+    util-deprecate "~1.0.1"
+
+readable-stream@^3.0.6:
   version "3.6.1"
   resolved "https://registry.npmjs.org/readable-stream/-/readable-stream-3.6.1.tgz"
   integrity sha512-+rQmrWMYGA90yenhTYsLWAsLsqVC8osOw6PKE1HDYiO0gdPeKe/xDHNzIAIn4C91YQ6oenEhfYqqc1883qHbjQ==

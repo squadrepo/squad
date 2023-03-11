@@ -8,11 +8,20 @@ import { SafeAreaView, View, StyleSheet, Image, Text, TextInput} from "react-nat
 import { useRoute } from "@react-navigation/core";
 
 export const ProfileEditBioScreen = ({ navigation, route }) => {
+  const [username] = React.useState(route.params.currentUsername);
   const [bio, setBio] = React.useState(route.params.currentBio);
+  const [tags] = React.useState(route.params.currentTags);
+  const [pfpUrl] = React.useState(route.params.currentPfpUrl);
 
   const save = () => {
-    setBio(bio);
-    navigation.navigate("EditProfile", { aboutMe: bio});
+    console.log(route.params.currentUsername)
+    navigation.navigate("EditProfile", 
+    { 
+      username: username, 
+      aboutMe: bio,
+      tags: tags,
+      pfpUrl: pfpUrl
+    });
   }
 
   return (

@@ -130,10 +130,8 @@ export const ProfileScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.right}>
-          <View style={styles.profilePic}>
-            <Image></Image>
-            <View style={styles.circle}></View>
-            <Text></Text>
+          <View style={styles.profilePicContainer}>
+              <Image style={styles.profilePic} source={pfpUrl ? {uri: pfpUrl} : undefined}/>
           </View>
         </View>
       
@@ -217,11 +215,17 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 
-  profilePic: {
+  profilePicContainer: {
     alignItems: "center",
     justifyContent: "center",
     width: 180,
     height: 180,
+  },
+
+  profilePic: {
+    width: 180,
+    height: 180,
+    borderRadius: 180/2,
   },
 
   circle: {

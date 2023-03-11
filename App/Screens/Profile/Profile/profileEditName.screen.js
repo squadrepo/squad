@@ -1,27 +1,9 @@
-/*
-Convert spaces to underscores for usernames
-*/
-
 import React, { useState } from "react";
 import { Button, Appbar} from "react-native-paper";
 import { SafeAreaView, View, StyleSheet, Image, Text, TextInput} from "react-native";
 import { useRoute } from "@react-navigation/core";
 
-export const ProfileEditUsernameScreen = ({ navigation, route }) => {
-  const [username, setCurrentUsername] = React.useState(route.params.currentUsername);
-  const [bio] = React.useState(route.params.currentBio);
-  const [tags] = React.useState(route.params.currentTags);
-  const [pfpUrl] = React.useState(route.params.currentPfpUrl);
-
-  const save = () => {
-    navigation.navigate("EditProfile", 
-    { 
-      username: username, 
-      aboutMe: bio,
-      tags: tags,
-      pfpUrl: pfpUrl
-    });
-  }
+export const ProfileEditNameScreen = ({ navigation }) => {
 
   return (
 
@@ -29,15 +11,15 @@ export const ProfileEditUsernameScreen = ({ navigation, route }) => {
 
       <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title="Username" />
-        <Button textDecoration="underline" onPress={save}>Save</Button>
+        <Appbar.Content title="Name" />
+        <Button textDecoration="underline">Save</Button>
       </Appbar.Header>
-    
-    <SafeAreaView style={styles.container}>
 
+    <SafeAreaView style={styles.container}>
+      
       <View style={styles.profileDetail}>
-        <Text style={styles.textHeader}>Username</Text>
-        <TextInput style={styles.textInput} value={username} mode="text" label="Username" onChangeText={setCurrentUsername}></TextInput>
+        <Text style={styles.textHeader}>Name</Text>
+        <TextInput style={styles.textInput} mode="text" label="Name" onChangeText={(text) => setName(text)}></TextInput>
       </View>
 
     </SafeAreaView>
@@ -55,6 +37,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     alignItems: "stretch",
     alignContent: "stretch",
+
   },
 
   textHeader: {
@@ -73,6 +56,6 @@ const styles = StyleSheet.create({
     alignContent: "stretch",
     alignSelf: 'flex-start',
     fontSize: 16,
+
   },
 });
-
