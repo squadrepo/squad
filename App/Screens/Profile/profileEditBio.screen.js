@@ -1,5 +1,6 @@
 /*
 Let users add lines when entering instead of closing keyboard
+Add HelperText from React Native Paper for screen
 */
 
 import React, { useState } from "react";

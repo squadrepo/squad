@@ -6494,10 +6494,10 @@ expo-constants@~14.0.0, expo-constants@~14.0.2:
   dependencies:
     "fontfaceobserver" "^2.1.0"
 
-"expo-keep-awake@~11.0.1":
-  "integrity" "sha512-44ZjgLE4lnce2d40Pv8xsjMVc6R5GvgHOwZfkLYtGmgYG9TYrEJeEj5UfSeweXPL3pBFhXKfFU8xpGYMaHdP0A=="
-  "resolved" "https://registry.npmjs.org/expo-keep-awake/-/expo-keep-awake-11.0.1.tgz"
-  "version" "11.0.1"
+expo-keep-awake@~11.0.1:
+  version "11.0.1"
+  resolved "https://registry.npmjs.org/expo-keep-awake/-/expo-keep-awake-11.0.1.tgz"
+  integrity sha512-44ZjgLE4lnce2d40Pv8xsjMVc6R5GvgHOwZfkLYtGmgYG9TYrEJeEj5UfSeweXPL3pBFhXKfFU8xpGYMaHdP0A==
 
 expo-linear-gradient@^12.0.1:
   version "12.1.1"
@@ -10074,6 +10074,11 @@ react-native-gesture-handler@~2.8.0:
     "react-native-typing-animation" "0.1.7"
     "use-memo-one" "1.1.2"
     "uuid" "3.4.0"
+
+react-native-loading-view@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/react-native-loading-view/-/react-native-loading-view-1.0.1.tgz"
+  integrity sha512-smDetk4H2P2ybCv00TN0Wjd93bgmuQmla3qvLIxsV4FR9V3jNB99P7+5DgtO9HvwRV2dJZt5rDeBudeKToP4sw==
 
 react-native-pager-view@*, "react-native-pager-view@>= 4.0.0", react-native-pager-view@6.0.1:
   version "6.0.1"
