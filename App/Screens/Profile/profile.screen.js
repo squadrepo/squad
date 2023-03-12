@@ -1,8 +1,7 @@
 /*
 Bugs/Things to fix/TO-DO:
-While users can edit profile and save changes, 
-thus updating the user table,
-it doesn't display on the profile screen
+
+Modify text on screens evan worked on with react native paper typography
 */
 
 import React, { Component, useContext, useState } from "react";

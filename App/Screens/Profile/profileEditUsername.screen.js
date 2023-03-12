@@ -1,5 +1,6 @@
 /*
 Convert spaces to underscores for usernames
+Add HelperText from React Native Paper for screen
 */
 
 import React, { useState } from "react";

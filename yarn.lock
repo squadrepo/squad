@@ -6439,6 +6439,18 @@ expo-font@~11.0.1:
   dependencies:
     fontfaceobserver "^2.1.0"
 
+expo-image-loader@~4.1.0:
+  version "4.1.1"
+  resolved "https://registry.npmjs.org/expo-image-loader/-/expo-image-loader-4.1.1.tgz"
+  integrity sha512-ciEHVokU0f6w0eTxdRxLCio6tskMsjxWIoV92+/ZD37qePUJYMfEphPhu1sruyvMBNR8/j5iyOvPFVGTfO8oxA==
+
+expo-image-manipulator@^11.1.1:
+  version "11.1.1"
+  resolved "https://registry.npmjs.org/expo-image-manipulator/-/expo-image-manipulator-11.1.1.tgz"
+  integrity sha512-W9LfJK/IL7EhhkkC1JQnEX/1S9B09rcGasJiQjXc2s1bEsrQnqXvXEv7shUW8b/L8rE+ynf+XvvDE+YIDL7oFg==
+  dependencies:
+    expo-image-loader "~4.1.0"
+
 expo-keep-awake@~11.0.1:
   version "11.0.1"
   resolved "https://registry.npmjs.org/expo-keep-awake/-/expo-keep-awake-11.0.1.tgz"
@@ -9733,6 +9745,11 @@ react-native-gradle-plugin@^0.70.3:
   version "0.70.3"
   resolved "https://registry.npmjs.org/react-native-gradle-plugin/-/react-native-gradle-plugin-0.70.3.tgz"
   integrity sha512-oOanj84fJEXUg9FoEAQomA8ISG+DVIrTZ3qF7m69VQUJyOGYyDZmPqKcjvRku4KXlEH6hWO9i4ACLzNBh8gC0A==
+
+react-native-hole-view@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.npmjs.org/react-native-hole-view/-/react-native-hole-view-2.2.0.tgz"
+  integrity sha512-0J5AAW7ESIpRP8K3XTluYZ62+6g57SgeeoBwUFpXz/wRSk5vr3/r6vf2NGg5rmKCOFCSumJmVHZeabSRYlTdNQ==
 
 react-native-loading-view@^1.0.1:
   version "1.0.1"

@@ -1,14 +1,12 @@
 /*
 Bugs/Things to fix/TO-DO:
 Add edit functionality for tags a bit
-Add camera functionality
+Fix issues with uploading pfp to s3 bucket
 */
 
 import React, { useState } from "react";
-import { Button, Appbar } from "react-native-paper";
 import { SafeAreaView, View, StyleSheet, Image, Text } from "react-native";
-import { LoadingView } from 'react-native-loading-view'
-import { Camera, CameraView, useCameraDevices } from "react-native-vision-camera";
+import { Button, Appbar } from "react-native-paper";
 import { UserContext } from '../../Context';
 import axios from "axios";
 
@@ -33,6 +31,23 @@ export const ProfileEditScreen = ({ navigation, route }) => {
     "pfpUrl": "https://squad-app-s3.s3.amazonaws.com/VOKOLOS.png"
   };
 
+  const uploadPfp = async () => {
+    const s3url = "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/squad-app-s3";
+    let localUri = route.params?.pfpUrl;
+    let filename = localUri.split('/').pop();
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+    let formData = new FormData();
+    formData.append('photo', { uri: localUri, name: filename, type });
+
+    await axios.put(s3url, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        }).then(res => {
+          console.log(res.status)
+      }).catch(err => {
+          console.log(err.response);
+      });
+    }
 
   //{"uid":"123", "username":"GG466", "aboutMe":"Me Love Squad", "tags":["JOJO", "apple sucks"], "pfpUrl":"too prett for a URL"}
   const updateProfile = async () => {
@@ -55,8 +70,10 @@ export const ProfileEditScreen = ({ navigation, route }) => {
 
  
   const save = () => {
+    //temp method to make it look like the image changed, will need to fix
+    updateData["pfpUrl"] = route.params?.pfpUrl;
     updateProfile();
-    navigation.replace("Profile");
+    navigation.navigate("Profile");
   }
   
 
@@ -87,10 +104,12 @@ export const ProfileEditScreen = ({ navigation, route }) => {
     }
   }
 
+  //fix this
   function getPfpUrl() {
     if (route.params?.pfpUrl) {
-      updateData["pfpUrl"] = route.params?.pfpUrl;
-      return updateData["pfpUrl"];
+      uploadPfp();
+      updateData["pfpUrl"] = "https://squad-app-s3.s3.amazonaws.com/" + route.params?.pfpUrl.split('/').pop();
+      return route.params?.pfpUrl;
     } else {
       return updateData["pfpUrl"];
     }
@@ -109,12 +128,17 @@ export const ProfileEditScreen = ({ navigation, route }) => {
     <View style={styles.changePhoto}>
 
         <View style={styles.profilePicContainer}>
-          <Image style={styles.profilePic} source={{uri: pfpUrl}}/>
-          <Button title="Change Photo" onPress={() => getPermission()}>Change Photo</Button>
+          <Image style={styles.profilePic} source={{uri: getPfpUrl()}}/>
+          <Button title="Change Photo" onPress={() => navigation.navigate("ProfilePicturePicker", {
+            currentUsername: getUsername(), 
+            currentBio: getBio(), 
+            currentTags: getTags(), 
+            currentPfpUrl: getPfpUrl(),
+          })}>Change Photo</Button>
         </View>
 
     </View>
-
+ 
     <SafeAreaView style={styles.container}>
 
         <View style={styles.profileDetails}>

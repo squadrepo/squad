@@ -12,6 +12,7 @@ import { ProfileViewScreen } from "./App/Screens/Profile/profileView.screen";
 import { ProfileEditScreen } from "./App/Screens/Profile/profileEdit.screen";
 import { ProfileEditUsernameScreen } from "./App/Screens/Profile/profileEditUsername.screen";
 import { ProfileEditBioScreen } from "./App/Screens/Profile/profileEditBio.screen";
+import { ProfilePicturePicker } from "./App/Screens/CameraImagePicker/profilePicturePicker";
 import { Settings } from './App/Screens/Settings/settings.screen';
 import { Password } from './App/Screens/Settings/password.screen';
 import { Dob } from './App/Screens/Settings/dob.screen';
@@ -52,6 +53,7 @@ function App() {
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Drawers" component={MainDrawer} />
+            <Stack.Screen name="ProfilePicturePicker" component={ProfilePicturePicker} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="ViewProfile" component={ProfileViewScreen} />
             <Stack.Screen name="EditProfile" component={ProfileEditScreen} />
