@@ -3,7 +3,6 @@ import { View} from 'react-native';
 
 export const SocialPostScreen = ({navigation, route}) => {
     const {event, root} = route.params;
-    console.log(event)
   return (
     <View>
       <Appbar.Header>
@@ -11,7 +10,7 @@ export const SocialPostScreen = ({navigation, route}) => {
         <Appbar.Content title="Back to Feed" />
       </Appbar.Header>
       <View style={{ display: "flex", flexDirection: "column", justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ fontSize: 28, color: 'black', textAlign: 'center' }}>
+        <Text style={{ fontSize: 28, color: 'black', textAlign: 'center', padding: 20}}>
             {event?.eventName ?? ""}
         </Text>
         <Text style={{ fontSize: 20, color: 'black', textAlign: 'center' }}>

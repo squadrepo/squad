@@ -51,8 +51,6 @@ export const MainFeed = () => {
       // Get the user's UUID
       const userUUID = currentUser.attributes.sub;
 
-      console.log('User UUID:', userUUID);
-
       return userUUID;
     } catch (error) {
       console.log('Error getting user UUID:', error);
@@ -69,7 +67,6 @@ export const MainFeed = () => {
 
         // GET request for user info
         axios.get(`${BASE_API_URL}/account/user?uid=${UUID}`).then((response) => {
-          console.log(response.data);
           //set user states
           setAboutMe(response.data.aboutMe);
           setClassHist(response.data.classHist);
@@ -95,11 +92,15 @@ export const MainFeed = () => {
   }, []);
 
   const [socialEvents, setSocialEvents] = useState([]);
+  const [triggerFetch, setTriggerFetch] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   useEffect(() => {
     const getSocialEvents = async () => {
       try {
         const response = await axios.get(`${BASE_API_URL}/socialEvent/getEvents?univ=${univ}`);
-        setSocialEvents(response.data);
+        const socialEvents = response.data.sort((a, b) => a.eventTimestamp - b.eventTimestamp)
+        setSocialEvents(socialEvents);
+        setIsFetching(false);
       } catch (error) {
         if (error.response == undefined) throw error;
         const { response } = errorObj;
@@ -108,8 +109,11 @@ export const MainFeed = () => {
     };
 
     getSocialEvents();
-  }, [univ]);
-
+  }, [univ, triggerFetch]);
+  const onRefresh = () => {
+    setTriggerFetch(!triggerFetch);
+    setIsFetching(true)
+  }
 
 const styles = StyleSheet.create({
 
@@ -160,7 +164,6 @@ const SocialCard = ({event, navigation, styles}) => {
   const uri = (event.bannerUrl && event.bannerUrl.length > 0)
     ? event.bannerUrl 
     : "https://squad-app-s3.s3.amazonaws.com/VOKOLOS.png";
-    console.log(getStringDateFromUnix(event.eventTimestamp))
   return (
   <Card style={styles.card} onPress={() =>
             navigation.navigate('SocialPost', {event: event, root:'HomeFeed'})}>
@@ -192,7 +195,9 @@ const HomeFeed = ({navigation}) => (
       data={socialEvents}
       renderItem={({item}) => <SocialCard event={item} navigation={navigation} styles={styles}/>} 
       extraData={socialEvents.length} 
-      keyExtractor={event => event?.eid}/>
+      keyExtractor={event => event?.eid}
+      onRefresh={onRefresh}
+      refreshing={isFetching}/>
     </View>
   );
 
