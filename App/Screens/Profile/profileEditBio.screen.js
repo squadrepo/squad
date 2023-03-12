@@ -39,7 +39,7 @@ export const ProfileEditBioScreen = ({ navigation, route }) => {
 
       <View style={styles.profileDetail}>
         <Text style={styles.textHeader}>About me</Text>
-        <TextInput style={styles.textInput} value={bio} mode="text" label="Bio" onChangeText={setBio}></TextInput>
+        <TextInput style={styles.textInput} value={bio} mode="text" label="Bio" multiline={true} onChangeText={setBio}></TextInput>
       </View>
 
     </SafeAreaView>

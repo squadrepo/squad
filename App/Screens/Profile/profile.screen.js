@@ -99,7 +99,7 @@ export const ProfileScreen = ({ navigation }) => {
 
         <View style={styles.right}>
           <View style={styles.profilePicContainer}>
-              <Image style={styles.profilePic} source={pfpUrl ? {uri: pfpUrl} : undefined}/>
+              <Image style={styles.profilePic} source={pfpUrl ? {uri: pfpUrl} : <View style={styles.circle}></View>}/>
           </View>
         </View>
       
