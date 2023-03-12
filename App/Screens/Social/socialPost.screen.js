@@ -2,7 +2,7 @@ import { Text, Appbar } from 'react-native-paper';
 import { View} from 'react-native';
 
 export const SocialPostScreen = ({navigation, route}) => {
-    const {event, root} = route.params;
+  const {event, root} = route.params;
   return (
     <View>
       <Appbar.Header>

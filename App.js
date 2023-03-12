@@ -6,7 +6,6 @@ import { LoginScreen } from './App/Screens/Login/login.screen';
 import { SignUpScreen } from './App/Screens/SignUp/signup.screen';
 import { Settings } from './App/Screens/Settings/settings.screen';
 import { Password } from './App/Screens/Settings/password.screen';
-import { Dob } from './App/Screens/Settings/dob.screen';
 import { EmailChange } from './App/Screens/Settings/email.screens';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -71,7 +70,6 @@ function App() {
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="SignUp" component={SignUpScreen} />
             <Stack.Screen name="Password" component={Password} />
-            <Stack.Screen name="Dob" component={Dob} />
             <Stack.Screen name="EmailChange" component={EmailChange} />
           </Stack.Navigator>
         </NavigationContainer>

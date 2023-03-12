@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { MainFeed } from '../Feeds/Home';
+import { HomeFeed } from '../Feeds/HomeFeed';
 import { SocialFeed } from '../Feeds/SocialFeed';
 import { FoodFeed } from '../Feeds/FoodFeed';
 import { TutoringFeed } from '../Feeds/TutoringFeed';
@@ -20,7 +20,7 @@ export const Tabs = () => {
         >
             <Tab.Screen 
             name="Home" 
-            component={MainFeed}
+            component={HomeFeed}
             options={{
                 tabBarIcon: 'home',
               }}/> 

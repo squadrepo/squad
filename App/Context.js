@@ -8,11 +8,9 @@ const UserProvider = ({ children }) => {
   const [aboutMe, setAboutMe] = useState('');
   const [classHist, setClassHist] = useState('');
   const [dispTags, setDispTags] = useState('');
-  const [dob, setDOB] = useState(new Date());
+  const [dobNum, setDobNum] = useState(0);
   const [email, setEmail] = useState('');
-  const [emailLastVerifiedDate, setEmailLastVerifiedDate] = useState(
-    new Date()
-  );
+  const [emailLastVerifiedDateNum, setEmailLastVerifiedDateNum] = useState(0);
   const [fullName, setFullName] = useState('');
   const [pfpUrl, setPfpUrl] = useState('');
   const [tags, setTags] = useState('');
@@ -32,12 +30,12 @@ const UserProvider = ({ children }) => {
         setClassHist,
         dispTags,
         setDispTags,
-        dob,
-        setDOB,
+        dobNum,
+        setDobNum,
         email,
         setEmail,
-        emailLastVerifiedDate,
-        setEmailLastVerifiedDate,
+        emailLastVerifiedDateNum,
+        setEmailLastVerifiedDateNum,
         fullName,
         setFullName,
         pfpUrl,
