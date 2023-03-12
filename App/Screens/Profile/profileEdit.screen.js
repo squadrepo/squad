@@ -28,7 +28,7 @@ export const ProfileEditScreen = ({ navigation, route }) => {
     "username": username,
     "aboutMe": aboutMe,
     "tags": Array.from(tags),
-    "pfpUrl": "https://squad-app-s3.s3.amazonaws.com/VOKOLOS.png"
+    "pfpUrl": pfpUrl
   };
 
   const uploadPfp = async () => {
@@ -45,7 +45,7 @@ export const ProfileEditScreen = ({ navigation, route }) => {
         }).then(res => {
           console.log(res.status)
       }).catch(err => {
-          console.log(err.response);
+          //console.log(err.response);
       });
     }
 
