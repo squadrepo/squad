@@ -1,9 +1,6 @@
 import 'react-native-gesture-handler';
 import {
   Provider as PaperProvider,
-  View,
-  Text,
-  TouchableOpacity
 } from 'react-native-paper';
 import { LoginScreen } from './App/Screens/Login/login.screen';
 import { SignUpScreen } from './App/Screens/SignUp/signup.screen';
@@ -13,14 +10,14 @@ import { Dob } from './App/Screens/Settings/dob.screen';
 import { EmailChange } from './App/Screens/Settings/email.screens';
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { withAuthenticator } from 'aws-amplify-react-native';
+import { withAuthenticator, AmplifyTheme } from 'aws-amplify-react-native';
 import { Amplify } from '@aws-amplify/core';
 import awsConfig from './aws-exports';
 import awsmobile from './aws-exports';
 import { MainDrawer } from './App/Screens/Navigation/Drawer';
-
-import { Auth } from 'aws-amplify';
-import { UserContext, UserProvider } from './App/Context';
+import { Platform, StyleSheet } from 'react-native';
+import { UserProvider } from './App/Context';
+import { PURPLE_COLOR } from './App/constants';
 
 Amplify.configure({ awsConfig, ...awsmobile, Analytics: { disabled: true } });
 
@@ -39,6 +36,29 @@ const signUpConfig = {
     }
   ]
 };
+
+// Properties available to override: https://github.com/aws-amplify/amplify-js/blob/main/packages/aws-amplify-react-native/src/AmplifyTheme.ts
+const buttonColor = PURPLE_COLOR;
+const disabledButtonColor = buttonColor + '80';
+const theme = StyleSheet.create({
+  ...AmplifyTheme,
+	sectionFooterLink: {
+		...AmplifyTheme.sectionFooterLink,
+		color: buttonColor,
+	},
+	sectionFooterLinkDisabled: {
+		...AmplifyTheme.sectionFooterLinkDisabled,
+		color: disabledButtonColor,
+	},
+	button: {
+    ...AmplifyTheme.button,
+		backgroundColor: buttonColor,
+	},
+	buttonDisabled: {
+    ...AmplifyTheme.buttonDisabled,
+		backgroundColor: disabledButtonColor,
+	},
+});
 
 function App() {
   return (
@@ -60,4 +80,4 @@ function App() {
   );
 }
 
-export default withAuthenticator(App, { signUpConfig });
+export default withAuthenticator(App, { signUpConfig }, undefined, undefined, theme);

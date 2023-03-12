@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, Text, Appbar } from 'react-native-paper';
 import { SafeAreaView, View } from 'react-native';
-import DatePicker from '@dietime/react-native-date-picker';
+import DatePicker from 'react-native-date-picker';
 import { UserContext } from '../../Context';
 
 export const Dob = ({ navigation, route }) => {
