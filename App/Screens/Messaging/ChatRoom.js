@@ -98,7 +98,13 @@ export const ChatRoom = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    GetMessages();
+    //GetMessages();
+    const fetchMessages = () => {
+      GetMessages();
+    };
+    fetchMessages();
+    const interval = setInterval(fetchMessages, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   const onSend = useCallback((messages = []) => {

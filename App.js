@@ -17,9 +17,24 @@ import { MainDrawer } from './App/Screens/Navigation/Drawer';
 import { StyleSheet } from 'react-native';
 import { PURPLE_COLOR } from './App/constants';
 import { MessageOverview } from "./App/Screens/Messaging/MessageOverview";
+import { MainDrawer } from "./App/Screens/Navigation/Drawer";
 import { Chats } from "./App/Screens/Messaging/chats";
 import { ChatRoom } from "./App/Screens/Messaging/ChatRoom";
-import { UserProvider } from "./App/Context";
+import { ProfileScreen } from "./App/Screens/Profile/profile.screen";
+import { ProfileViewScreen } from "./App/Screens/Profile/profileView.screen";
+import { ProfileEditScreen } from "./App/Screens/Profile/profileEdit.screen";
+import { ProfileEditUsernameScreen } from "./App/Screens/Profile/profileEditUsername.screen";
+import { ProfileEditBioScreen } from "./App/Screens/Profile/profileEditBio.screen";
+import { ProfilePicturePicker } from "./App/Screens/CameraImagePicker/profilePicturePicker";
+import { NavigationContainer, StackActions } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { withAuthenticator } from 'aws-amplify-react-native';
+import { Amplify } from '@aws-amplify/core';
+import awsConfig from './aws-exports';
+import awsmobile from './aws-exports';
+
+import { Auth } from "aws-amplify";
+import { UserContext, UserProvider } from "./App/Context";
 
 Amplify.configure({ awsConfig, ...awsmobile, Analytics: { disabled: true } });
 
@@ -69,6 +84,12 @@ function App() {
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Drawers" component={MainDrawer} />
+            <Stack.Screen name="ProfilePicturePicker" component={ProfilePicturePicker} />
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="ViewProfile" component={ProfileViewScreen} />
+            <Stack.Screen name="EditProfile" component={ProfileEditScreen} />
+            <Stack.Screen name="Username" component={ProfileEditUsernameScreen}/>
+            <Stack.Screen name="Bio" component={ProfileEditBioScreen}/>
             <Stack.Screen name="Settings" component={Settings} />
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="SignUp" component={SignUpScreen} />

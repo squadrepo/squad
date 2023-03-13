@@ -4,7 +4,7 @@ import { SocialFeed } from '../Feeds/SocialFeed';
 import { Settings } from '../Settings/settings.screen';
 import { Tabs } from './BottomBar';
 import { Auth, Hub } from 'aws-amplify'
-import { Profile } from '../Profile/profile.screen';
+import { ProfileScreen } from '../Profile/profile.screen';
 
 const Drawer = createDrawerNavigator(); 
 
@@ -40,7 +40,7 @@ export const MainDrawer = () => {
     screenOptions={{ headerShown: false, 
     drawerPosition:"right"}}>
       <Drawer.Screen name="Main" component={Tabs}/>
-      <Drawer.Screen name="Profile" component={Profile} />
+      <Drawer.Screen name="Profile" component={ProfileScreen} />
       <Drawer.Screen name="Settings" component={Settings} />
     </Drawer.Navigator>
   );
