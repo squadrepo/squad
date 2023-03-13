@@ -51,8 +51,6 @@ export const Chats = ({ navigation }) => {
   function displayChat(pfp, chat) {
     if (chat.roomName === "") {
       chat.roomName = "Temp Room";
-    } else {
-      chat.roonName = chat.roomName;
     }
     return (
       <Pressable
@@ -63,6 +61,7 @@ export const Chats = ({ navigation }) => {
             timestamp: chat.chunkCreateTimestamp
           })
         }
+        key={chat.cid}
       >
         <View style={styles.pfpContainer}>
           <Image style={styles.pfp} source={{ uri: pfp }} />
