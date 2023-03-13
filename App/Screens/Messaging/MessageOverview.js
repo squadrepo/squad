@@ -1,23 +1,30 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { TextInput, Button, Text, Appbar, List } from "react-native-paper";
-import { SafeAreaView, View, StyleSheet } from "react-native";
+import { SafeAreaView, View, StyleSheet, Image } from "react-native";
 import axios from "axios";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import { withAuthenticator } from "aws-amplify-react-native";
+import { UserContext } from "../../Context";
 
 export const MessageOverview = ({ navigation }) => {
-  const [userQuery, setUserQuery] = React.useState("");
-  const [queriedUser, setQueriedUser] = React.useState("");
-  const [queriedUserFullName, setQueriedUserFullName] = React.useState("");
-  const [queriedUserUsername, setQueriedUserUsername] = React.useState("");
-  const [checked, setChecked] = React.useState(false);
-  const [users, setUsers] = React.useState([]);
+  const [userQuery, setUserQuery] = useState("");
+  const [queriedUser, setQueriedUser] = useState("");
+  const [queriedUserFullName, setQueriedUserFullName] = useState("");
+  const [queriedUserUsername, setQueriedUserUsername] = useState("");
+  const [queriedUserPFP, setQueriedUserPFP] = useState("");
+  const [checked, setChecked] = useState(false);
+  const [users, setUsers] = useState([]);
 
   const getUrl =
     "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/account/getUid?username=";
 
   const getUserUrl =
     "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/account/user?uid=";
+
+  const { uid } = React.useContext(UserContext);
+  React.useEffect(() => {
+    uid;
+  }, [uid]);
 
   React.useEffect(() => {
     console.log(userQuery);
@@ -32,7 +39,7 @@ export const MessageOverview = ({ navigation }) => {
       axios.get(`${getUrl}${userQuery}`).then((response) => {
         console.log(response.data);
         setQueriedUser(response.data.uid);
-        getUser(response.data.uid);
+        getUserInfo(response.data.uid);
       });
     } catch (error) {
       if (error.response == undefined) throw error;
@@ -41,7 +48,7 @@ export const MessageOverview = ({ navigation }) => {
     }
   };
 
-  const getUser = (user) => {
+  const getUserInfo = (user) => {
     try {
       // GET request for user info
       axios.get(`${getUserUrl}${user}`).then((response) => {
@@ -49,6 +56,7 @@ export const MessageOverview = ({ navigation }) => {
         console.log("succesfully got users info");
         setQueriedUserFullName(response.data.fullName);
         setQueriedUserUsername(response.data.username);
+        setQueriedUserPFP(response.data.pfpUrl);
       });
     } catch (error) {
       if (error.response == undefined) throw error;
@@ -57,7 +65,7 @@ export const MessageOverview = ({ navigation }) => {
     }
   };
 
-  const setCheckedHandler = () => {
+  const setCheckedHandler = async () => {
     setChecked(!checked);
 
     if (checked) {
@@ -81,7 +89,7 @@ export const MessageOverview = ({ navigation }) => {
     if (users.length > 0) {
       const stringUser = JSON.stringify(users);
       const newUserObject = JSON.parse(stringUser);
-      console.log(" FULLNAME : ", newUserObject[0].uid);
+      console.log(" FULLNAME : ", newUserObject[0].fullName);
       return newUserObject;
     }
   };
@@ -104,12 +112,48 @@ export const MessageOverview = ({ navigation }) => {
     setUserQuery(text);
   };
 
+  const sendFirstMessage = async (currentuser_uid, users) => {
+    const allMemberUids = users.map((user) => user.uid);
+    console.log("ALL USERS UID: ", allMemberUids);
+
+    const allMemberNamesString = users.map((user) => user.username).join(", ");
+    console.log(allMemberNamesString);
+
+    try {
+      const baseUrl =
+        "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/messages/createChatroom";
+      const body = {
+        roomName: allMemberNamesString, //update based on thr roomname created
+        memberUids: allMemberUids,
+        requesterUid: currentuser_uid
+      };
+
+      const config = { "content-type": "application/json" };
+      const response = await axios.post(baseUrl, body, config);
+      navigation.navigate("ChatRoom", {
+        chatroomCID: response.data.chatroomCid,
+        timestamp: response.data.timestamp
+      });
+      //console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <View>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.navigate("Main")} />
+        <Appbar.BackAction onPress={() => navigation.navigate("Chats")} />
         <Appbar.Content title="New Message" />
-        <Button>chat</Button>
+        <Button
+          onPress={() => {
+            sendFirstMessage(uid, users);
+            console.log(uid);
+            console.log(users);
+          }}
+        >
+          chat
+        </Button>
       </Appbar.Header>
       <Text>{getNamesFromUserJSON()}</Text>
       <TextInput
@@ -126,8 +170,7 @@ export const MessageOverview = ({ navigation }) => {
           onPress={setCheckedHandler}
           style={
             //checked === true ? { backgroundColor: "rgb(200,175,227)" } : {}
-            users.some((user) => user.uid === `${queriedUser}`) === true ||
-            checked === true
+            users.some((user) => user.uid === `${queriedUser}`) === true
               ? { backgroundColor: "rgb(200,175,227)" }
               : {}
           }
@@ -135,6 +178,16 @@ export const MessageOverview = ({ navigation }) => {
           <List.Item
             title={queriedUserFullName}
             description={queriedUserUsername}
+            left={() => (
+              <List.Icon
+                icon={() => (
+                  <Image
+                    style={{ width: 50, height: 50, borderRadius: 25 }}
+                    source={{ uri: queriedUserPFP }}
+                  />
+                )}
+              />
+            )}
           />
         </TouchableOpacity>
       </View>

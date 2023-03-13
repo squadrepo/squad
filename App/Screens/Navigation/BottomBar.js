@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { MainFeed } from '../Feeds/Home';
-import { SocialFeed } from '../Feeds/SocialFeed';
-import { FoodFeed } from '../Feeds/FoodFeed';
-import { TutoringFeed } from '../Feeds/TutoringFeed';
-import { GigWorkFeed } from '../Feeds/GigworkFeed';
-import { Portal, FAB } from 'react-native-paper';
+import * as React from "react";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import { MainFeed } from "../Feeds/Home";
+import { SocialFeed } from "../Feeds/SocialFeed";
+import { FoodFeed } from "../Feeds/FoodFeed";
+import { TutoringFeed } from "../Feeds/TutoringFeed";
+import { GigWorkFeed } from "../Feeds/GigworkFeed";
+import { Portal, FAB } from "react-native-paper";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -17,35 +17,35 @@ export const Tabs = ({ navigation }) => {
           name="Home"
           component={MainFeed}
           options={{
-            tabBarIcon: 'home'
+            tabBarIcon: "home"
           }}
         />
         <Tab.Screen
           name="Social"
           component={SocialFeed}
           options={{
-            tabBarIcon: 'account-group'
+            tabBarIcon: "account-group"
           }}
         />
         <Tab.Screen
           name="Food"
           component={FoodFeed}
           options={{
-            tabBarIcon: 'food'
+            tabBarIcon: "food"
           }}
         />
         <Tab.Screen
           name="Tutoring"
           component={TutoringFeed}
           options={{
-            tabBarIcon: 'notebook'
+            tabBarIcon: "notebook"
           }}
         />
         <Tab.Screen
           name="GigWork"
           component={GigWorkFeed}
           options={{
-            tabBarIcon: 'briefcase'
+            tabBarIcon: "briefcase"
           }}
         />
       </Tab.Navigator>
@@ -53,7 +53,7 @@ export const Tabs = ({ navigation }) => {
         <FAB
           icon="plus"
           style={{
-            position: 'absolute',
+            position: "absolute",
             bottom: 135,
             left: 16,
             borderRadius: 50
@@ -66,14 +66,14 @@ export const Tabs = ({ navigation }) => {
         <FAB
           icon="message"
           style={{
-            position: 'absolute',
+            position: "absolute",
             bottom: 200,
             left: 16,
             borderRadius: 50
           }}
           prop
           size="medium"
-          onPress={() => navigation.navigate('MessageOverview')}
+          onPress={() => navigation.navigate("Chats")}
         />
       </Portal>
     </React.Fragment>

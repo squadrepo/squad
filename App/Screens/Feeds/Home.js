@@ -1,14 +1,16 @@
-import * as React from 'react';
-import { TextInput, Button, Text } from 'react-native-paper';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
-import { UserContext } from '../../Context';
-import { Auth } from '@aws-amplify/auth';
-import axios from 'axios';
+import * as React from "react";
+import { TextInput, Button, Text } from "react-native-paper";
+import { SafeAreaView, View, StyleSheet } from "react-native";
+import { UserContext } from "../../Context";
+import { Auth } from "@aws-amplify/auth";
+import axios from "axios";
 
 export const MainFeed = () => {
   const {
     aboutMe,
     setAboutMe,
+    chatroomCids,
+    setChatroomCids,
     classHist,
     setClassHist,
     dispTags,
@@ -39,7 +41,7 @@ export const MainFeed = () => {
 
   //URL used to GET users info
   const getUrl =
-    'https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/account/user?uid=';
+    "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/account/user?uid=";
 
   async function getUserUUID() {
     try {
@@ -49,11 +51,11 @@ export const MainFeed = () => {
       // Get the user's UUID
       const userUUID = currentUser.attributes.sub;
 
-      console.log('User UUID:', userUUID);
+      console.log("User UUID:", userUUID);
 
       return userUUID;
     } catch (error) {
-      console.log('Error getting user UUID:', error);
+      console.log("Error getting user UUID:", error);
       throw error;
     }
   }
@@ -70,6 +72,7 @@ export const MainFeed = () => {
           console.log(response.data);
           //set user states
           setAboutMe(response.data.aboutMe);
+          setChatroomCids(response.data.chatroomCids);
           setClassHist(response.data.classHist);
           setDispTags(response.data.dispTags);
           setDOB(response.data.dob);
@@ -93,9 +96,9 @@ export const MainFeed = () => {
   }, []);
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ fontSize: 28, color: 'black', textAlign: 'center' }}>
-        {' '}
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text style={{ fontSize: 28, color: "black", textAlign: "center" }}>
+        {" "}
         Home Page
       </Text>
       <Text>Hi {fullName} !</Text>

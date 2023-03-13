@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { Button, Text, Appbar } from 'react-native-paper';
-import { SafeAreaView, View } from 'react-native';
-import DatePicker from '@dietime/react-native-date-picker';
-import { UserContext } from '../../Context';
+import * as React from "react";
+import { Button, Text, Appbar } from "react-native-paper";
+import { SafeAreaView, View } from "react-native";
+//import DatePicker from "react-native-date-picker";
+import { UserContext } from "../../Context";
 
 export const Dob = ({ navigation, route }) => {
   const { setDOB } = React.useContext(UserContext);
@@ -15,19 +15,19 @@ export const Dob = ({ navigation, route }) => {
 
   const done = () => {
     setDOB(date);
-    navigation.navigate('Settings');
+    navigation.navigate("Settings");
   };
 
   return (
     <View>
-      <Appbar.Header>
+      {/* <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title="Date Of Birth" />
         <Button textDecoration="underline" onPress={done}>
           Done
         </Button>
       </Appbar.Header>
-      <Text>{'Select date... dd/mm/yyyy'}</Text>
+      <Text>{"Select date... dd/mm/yyyy"}</Text>
       <SafeAreaView>
         <DatePicker
           startYear={1990}
@@ -35,7 +35,7 @@ export const Dob = ({ navigation, route }) => {
           onChange={(value) => convertDate(value)}
           //format="yyyy-mm-dd"
         />
-      </SafeAreaView>
+      </SafeAreaView> */}
     </View>
   );
 };
