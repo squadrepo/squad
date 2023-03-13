@@ -17,7 +17,6 @@ import { MainDrawer } from './App/Screens/Navigation/Drawer';
 import { StyleSheet } from 'react-native';
 import { PURPLE_COLOR } from './App/constants';
 import { MessageOverview } from "./App/Screens/Messaging/MessageOverview";
-import { MainDrawer } from "./App/Screens/Navigation/Drawer";
 import { Chats } from "./App/Screens/Messaging/chats";
 import { ChatRoom } from "./App/Screens/Messaging/ChatRoom";
 import { ProfileScreen } from "./App/Screens/Profile/profile.screen";
@@ -26,15 +25,7 @@ import { ProfileEditScreen } from "./App/Screens/Profile/profileEdit.screen";
 import { ProfileEditUsernameScreen } from "./App/Screens/Profile/profileEditUsername.screen";
 import { ProfileEditBioScreen } from "./App/Screens/Profile/profileEditBio.screen";
 import { ProfilePicturePicker } from "./App/Screens/CameraImagePicker/profilePicturePicker";
-import { NavigationContainer, StackActions } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { withAuthenticator } from 'aws-amplify-react-native';
-import { Amplify } from '@aws-amplify/core';
-import awsConfig from './aws-exports';
-import awsmobile from './aws-exports';
-
-import { Auth } from "aws-amplify";
-import { UserContext, UserProvider } from "./App/Context";
+import { UserProvider } from "./App/Context";
 
 Amplify.configure({ awsConfig, ...awsmobile, Analytics: { disabled: true } });
 
