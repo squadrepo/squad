@@ -1,31 +1,25 @@
 import "react-native-gesture-handler";
 import {
   Provider as PaperProvider,
-  View,
-  Text,
-  TouchableOpacity
 } from "react-native-paper";
 import { LoginScreen } from './App/Screens/Login/login.screen';
 import { SignUpScreen } from './App/Screens/SignUp/signup.screen';
 import { Settings } from './App/Screens/Settings/settings.screen';
 import { Password } from './App/Screens/Settings/password.screen';
 import { EmailChange } from './App/Screens/Settings/email.screens';
-import { NavigationContainer, StackActions } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { withAuthenticator, AmplifyTheme } from 'aws-amplify-react-native';
 import { Amplify } from '@aws-amplify/core';
 import awsConfig from './aws-exports';
 import awsmobile from './aws-exports';
 import { MainDrawer } from './App/Screens/Navigation/Drawer';
-import { Platform, StyleSheet } from 'react-native';
-import { UserContext, UserProvider } from "./App/Context";
+import { StyleSheet } from 'react-native';
 import { PURPLE_COLOR } from './App/constants';
 import { MessageOverview } from "./App/Screens/Messaging/MessageOverview";
 import { Chats } from "./App/Screens/Messaging/chats";
 import { ChatRoom } from "./App/Screens/Messaging/ChatRoom";
-
-import { Auth } from "aws-amplify";
-import { UserContext, UserProvider } from "./App/Context";
+import { UserProvider } from "./App/Context";
 
 Amplify.configure({ awsConfig, ...awsmobile, Analytics: { disabled: true } });
 

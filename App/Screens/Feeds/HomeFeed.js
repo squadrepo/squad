@@ -14,6 +14,7 @@ export const HomeFeed = () => {
   const {
     univ,
     setAboutMe,
+    setChatroomCids,
     setClassHist,
     setDispTags,
     setDobNum,
@@ -41,6 +42,7 @@ export const HomeFeed = () => {
         axios.get(`${BASE_API_URL}/account/user?uid=${UUID}`).then((response) => {
           //set user states
           setAboutMe(response.data.aboutMe);
+          setChatroomCids(response.data.chatroomCids);
           setClassHist(response.data.classHist);
           setDispTags(response.data.dispTags);
           setDobNum(response.data.dob);
