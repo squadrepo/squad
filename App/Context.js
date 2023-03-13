@@ -1,6 +1,6 @@
-import { createContext, React, useContext, useState } from 'react';
-import { Auth } from '@aws-amplify/auth';
-import axios from 'axios';
+import { createContext, React, useContext, useState } from "react";
+import { Auth } from "@aws-amplify/auth";
+import axios from "axios";
 
 const UserContext = createContext();
 
@@ -18,14 +18,17 @@ const UserProvider = ({ children }) => {
   const [uid, setUid] = useState('');
   const [univ, setUniv] = useState('');
   const [univExclExp, setUnivExclExp] = useState(false);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [chatroomCids, setChatroomCids] = useState([]);
 
   return (
     <UserContext.Provider
       value={{
         aboutMe,
         setAboutMe,
+        chatroomCids,
+        setChatroomCids,
         classHist,
         setClassHist,
         dispTags,

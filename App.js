@@ -1,7 +1,10 @@
-import 'react-native-gesture-handler';
+import "react-native-gesture-handler";
 import {
   Provider as PaperProvider,
-} from 'react-native-paper';
+  View,
+  Text,
+  TouchableOpacity
+} from "react-native-paper";
 import { LoginScreen } from './App/Screens/Login/login.screen';
 import { SignUpScreen } from './App/Screens/SignUp/signup.screen';
 import { Settings } from './App/Screens/Settings/settings.screen';
@@ -15,22 +18,28 @@ import awsConfig from './aws-exports';
 import awsmobile from './aws-exports';
 import { MainDrawer } from './App/Screens/Navigation/Drawer';
 import { Platform, StyleSheet } from 'react-native';
-import { UserProvider } from './App/Context';
+import { UserContext, UserProvider } from "./App/Context";
 import { PURPLE_COLOR } from './App/constants';
+import { MessageOverview } from "./App/Screens/Messaging/MessageOverview";
+import { Chats } from "./App/Screens/Messaging/chats";
+import { ChatRoom } from "./App/Screens/Messaging/ChatRoom";
+
+import { Auth } from "aws-amplify";
+import { UserContext, UserProvider } from "./App/Context";
 
 Amplify.configure({ awsConfig, ...awsmobile, Analytics: { disabled: true } });
 
 const Stack = createNativeStackNavigator();
 
 const signUpConfig = {
-  hiddenDefaults: ['phone_number'],
+  hiddenDefaults: ["phone_number"],
   signUpFields: [
     {
-      label: 'Name',
-      key: 'name',
+      label: "Name",
+      key: "name",
       required: true,
       displayOrder: 1,
-      type: 'name',
+      type: "name",
       custom: false
     }
   ]
@@ -71,6 +80,9 @@ function App() {
             <Stack.Screen name="SignUp" component={SignUpScreen} />
             <Stack.Screen name="Password" component={Password} />
             <Stack.Screen name="EmailChange" component={EmailChange} />
+            <Stack.Screen name="MessageOverview" component={MessageOverview} />
+            <Stack.Screen name="Chats" component={Chats} />
+            <Stack.Screen name="ChatRoom" component={ChatRoom} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
