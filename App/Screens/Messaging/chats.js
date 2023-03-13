@@ -17,8 +17,14 @@ export const Chats = ({ navigation }) => {
 
   useEffect(() => {
     console.log(chatroomCids);
-    getChats();
+    const fetchMessages = () => {
+      getChats();
+    };
+    fetchMessages();
+    const interval = setInterval(fetchMessages, 1000);
+    return () => clearInterval(interval);
   }, [chatroomCids, userChats]);
+
   const [userChats, setUserChats] = useState([]);
 
   const getChats = async () => {
