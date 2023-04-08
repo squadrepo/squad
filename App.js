@@ -25,6 +25,7 @@ import { ProfileEditScreen } from "./App/Screens/Profile/profileEdit.screen";
 import { ProfileEditUsernameScreen } from "./App/Screens/Profile/profileEditUsername.screen";
 import { ProfileEditBioScreen } from "./App/Screens/Profile/profileEditBio.screen";
 import { ProfilePicturePicker } from "./App/Screens/CameraImagePicker/profilePicturePicker";
+import { RsvpFeed } from "./App/Screens/Feeds/RsvpedEvents";
 import { UserProvider } from "./App/Context";
 
 Amplify.configure({ awsConfig, ...awsmobile, Analytics: { disabled: true } });
@@ -89,6 +90,7 @@ function App() {
             <Stack.Screen name="MessageOverview" component={MessageOverview} />
             <Stack.Screen name="Chats" component={Chats} />
             <Stack.Screen name="ChatRoom" component={ChatRoom} />
+            <Stack.Screen name="RsvpFeed" component={RsvpFeed} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>

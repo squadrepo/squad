@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, Button} from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import { View, FlatList } from 'react-native';
 import { UserContext } from '../../Context';
 import { BASE_API_URL } from '../../constants';
@@ -8,24 +8,26 @@ import { SocialPostScreen } from '../Social/socialPost.screen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SocialEventCard } from '../../Components/SocialEventCard';
 import { feedStyles as styles } from './FeedStyles';
-import { RsvpFeed } from "../Feeds/RsvpedEvents";
 
-export const SocialFeed = () => {
+export const RsvpFeed = () => {
   const { univ } = useContext(UserContext);
   const Stack = createNativeStackNavigator();
 
-  // Social events feed
-  const [socialEvents, setSocialEvents] = useState([]);
+  // Rsvp events feed
+  const [RsvpEvents, setRsvpEvents] = useState([]);
   const [triggerFetch, setTriggerFetch] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
+  const { uid } = useContext(UserContext);
+  useEffect(() => {
+    uid;
+  }, [uid]);
 
   useEffect(() => {
-    const getSocialEvents = async () => {
+    const getRsvpEvents = async () => {
       try {
         const response = await axios.get(`${BASE_API_URL}/socialEvent/getEvents?univ=${univ}`);
-        const socialEvents = response.data.sort((a, b) => a.eventTimestamp - b.eventTimestamp)
-        console.log(response)
-        setSocialEvents(socialEvents);
+        const RsvpEvents = response.data.sort((a, b) => a.eventTimestamp - b.eventTimestamp)
+        setRsvpEvents(RsvpEvents);
         setIsFetching(false);
       } catch (error) {
         if (error.response == undefined) throw error;
@@ -34,7 +36,7 @@ export const SocialFeed = () => {
       }
     };
 
-    getSocialEvents();
+    getRsvpEvents();
   }, [univ, triggerFetch]);
 
   const onRefresh = () => {
@@ -42,16 +44,15 @@ export const SocialFeed = () => {
     setIsFetching(true)
   }
 
-const SocialPostsFeed = ({navigation}) => (
+const RsvpPostsFeed = ({navigation}) => (
     <View style={styles.container}>
       <View style={styles.topBar}>
-        <Text variant="headlineMedium" style={styles.topBarText}>Social Events for {univ}</Text>
-        <Button style={styles.topBarButton} onPress={() => navigation.navigate('RsvpFeed')}>RSVP's</Button>
+        <Text variant="headlineMedium" style={styles.topBarText}>Rsvp Events for {univ}</Text>
       </View>
       <FlatList 
-      data={socialEvents}
+      data={RsvpEvents}
       renderItem={({item}) => <SocialEventCard event={item} navigation={navigation} root='SocialFeed'/>} 
-      extraData={socialEvents.length} 
+      extraData={RsvpEvents.length} 
       keyExtractor={event => event?.eid}
       onRefresh={onRefresh}
       refreshing={isFetching}/>
@@ -60,8 +61,8 @@ const SocialPostsFeed = ({navigation}) => (
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="SocialFeed" component={SocialPostsFeed} />
-      <Stack.Screen name="SocialPost" component={SocialPostScreen} />
+      <Stack.Screen name="RsvpFeeds" component={RsvpPostsFeed} />
+      <Stack.Screen name="RsvpPost" component={SocialPostScreen} />
     </Stack.Navigator>
   );
 };
