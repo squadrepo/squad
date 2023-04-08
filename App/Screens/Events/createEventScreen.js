@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Image, Text, picker } from "react-native";
+import { View, StyleSheet, Image, Text, ScrollView } from "react-native";
 import { Button, Appbar, Switch, Menu, DatePicker } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { getDateFromUnix } from "../../utilities";
 import { TextInput } from "react-native-paper";
+import * as ImagePicker from "expo-image-picker";
 
 export const CreateEvent = ({ navigation }) => {
   const [isSwitchOn, setIsSwitchOn] = useState(false);
@@ -14,6 +15,21 @@ export const CreateEvent = ({ navigation }) => {
   const [dateError, setDateError] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState([]);
+
+  const [image, setImage] = useState(null);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1
+    });
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
 
   const handleTagsChange = (text) => {
     const newTags = text
@@ -63,70 +79,63 @@ export const CreateEvent = ({ navigation }) => {
           save
         </Button>
       </Appbar.Header>
-
-      <View style={styles.changePhoto}>
-        <View style={styles.profilePicContainer}>
-          <Image
-            style={styles.profilePic}
-            source={{
-              uri: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.visitphilly.com%2Fthings-to-do%2Fattractions%2Flove-statue%2F&psig=AOvVaw2Pqn-4e8kwOX8ix2eTLoFb&ust=1681058130983000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCICMk9jbmv4CFQAAAAAdAAAAABAE"
-            }}
-          />
-          <Button
-            title="Change Photo"
-            onPress={() =>
-              navigation.navigate("ProfilePicturePicker", {
-                currentUsername: getUsername(),
-                currentBio: getBio(),
-                currentTags: getTags(),
-                currentPfpUrl: getPfpUrl()
-              })
-            }
-          >
-            Upload photo for event
-          </Button>
+      <ScrollView>
+        <View style={styles.changePhoto}>
+          <View style={styles.profilePicContainer}>
+            <Image
+              style={styles.profilePic}
+              source={
+                image
+                  ? { uri: image }
+                  : { uri: "http://clipart-library.com/images/kcMKrBBXi.jpg" }
+              }
+            />
+          </View>
         </View>
-      </View>
-      <TextInput
-        label="Date"
-        value={date}
-        onChangeText={handleDateChange}
-        error={dateError}
-      />
-      <TextInput
-        label="Time"
-        value={time}
-        onChangeText={(text) => setTime(text)}
-        error={!validateTime(time)}
-      />
-      {!validateTime(time) && (
-        <Text style={{ color: "red" }}>
-          Please enter a valid time (hh:mmAM or hh:mmPM)
-        </Text>
-      )}
-      <TextInput
-        label="Duration (hours)"
-        value={duration}
-        onChangeText={handleDurationChange}
-        keyboardType="numeric"
-      ></TextInput>
-      <TextInput
-        label="Description"
-        multiline={true}
-        numberOfLines={5}
-        maxLength={300}
-        value={description}
-        onChangeText={(text) => setDescription(text)}
-        style={styles.input}
-      />
-      <TextInput
-        label="Tags(Comma separated)"
-        onChangeText={handleTagsChange}
-      ></TextInput>
-      <View style={styles.options}>
-        <Menu.Item title="University Exclusive" />
-        <Switch value={isSwitchOn} onValueChange={onToggleSwitch} />
-      </View>
+        <Button title="Change Photo" onPress={pickImage}>
+          Upload photo for event
+        </Button>
+        <TextInput
+          label="Date"
+          value={date}
+          onChangeText={handleDateChange}
+          error={dateError}
+        />
+        <TextInput
+          label="Time"
+          value={time}
+          onChangeText={(text) => setTime(text)}
+          error={!validateTime(time)}
+        />
+        {!validateTime(time) && (
+          <Text style={{ color: "red" }}>
+            Please enter a valid time (hh:mmAM or hh:mmPM)
+          </Text>
+        )}
+        <TextInput
+          label="Duration (hours)"
+          value={duration}
+          onChangeText={handleDurationChange}
+          keyboardType="numeric"
+        ></TextInput>
+        <TextInput
+          label="Description"
+          multiline={true}
+          numberOfLines={5}
+          maxLength={300}
+          value={description}
+          onChangeText={(text) => setDescription(text)}
+          style={styles.input}
+        />
+        <TextInput
+          label="Tags(Comma separated)"
+          onChangeText={handleTagsChange}
+        ></TextInput>
+        <View style={styles.options}>
+          <Menu.Item title="University Exclusive" />
+          <Switch value={isSwitchOn} onValueChange={onToggleSwitch} />
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -144,6 +153,7 @@ const styles = StyleSheet.create({
   },
 
   profilePicContainer: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     width: 180,
@@ -151,9 +161,9 @@ const styles = StyleSheet.create({
   },
 
   profilePic: {
-    width: 100,
-    height: 100,
-    borderRadius: 100 / 2
+    width: "100%",
+    height: "100%"
+    //borderRadius: 100 / 2
   },
 
   options: {
