@@ -8,6 +8,7 @@ import { SocialPostScreen } from '../Social/socialPost.screen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SocialEventCard } from '../../Components/SocialEventCard';
 import { feedStyles as styles } from './FeedStyles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const RsvpFeed = () => {
   const { univ } = useContext(UserContext);
@@ -28,6 +29,12 @@ export const RsvpFeed = () => {
         var response = await axios.get(`${BASE_API_URL}/socialEvent/getEvents?univ=${univ}`);
         filteredResponse = response.data.filter(event => event.uidsRsvp.includes(uid));
         const RsvpEvents = filteredResponse.sort((a, b) => a.eventTimestamp - b.eventTimestamp)
+        for (const item of RsvpEvents) {
+            console.log(item.eid);
+            await AsyncStorage.setItem(`${item.eid}`, "contained");
+            //const storedItem = await AsyncStorage.getItem(`${item.eid}`);
+            //console.log(storedItem);
+          }
         setRsvpEvents(RsvpEvents);
         setIsFetching(false);
       } catch (error) {
