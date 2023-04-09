@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Image, Text, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  Text,
+  ScrollView,
+  Keyboard,
+  KeyboardAvoidingView
+} from "react-native";
 import { Button, Appbar, Switch, Menu, DatePicker } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { getDateFromUnix } from "../../utilities";
@@ -15,8 +23,15 @@ export const CreateEvent = ({ navigation }) => {
   const [dateError, setDateError] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState([]);
+  const [title, setTitle] = useState("");
 
   const [image, setImage] = useState(null);
+
+  const handleDonePress = () => {
+    // Do something with the text input value
+    console.log("submitted");
+    Keyboard.dismiss();
+  };
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -65,7 +80,10 @@ export const CreateEvent = ({ navigation }) => {
   };
 
   return (
-    <View>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
       <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.navigate("Drawers")} />
         <Appbar.Content title="Create Event" />
@@ -96,15 +114,23 @@ export const CreateEvent = ({ navigation }) => {
           Upload photo for event
         </Button>
         <TextInput
+          label="Title"
+          value={title}
+          onChangeText={(text) => setTitle(text)}
+          returnKeyType="done"
+        />
+        <TextInput
           label="Date"
           value={date}
           onChangeText={handleDateChange}
+          returnKeyType="done"
           error={dateError}
         />
         <TextInput
           label="Time"
           value={time}
           onChangeText={(text) => setTime(text)}
+          returnKeyType="done"
           error={!validateTime(time)}
         />
         {!validateTime(time) && (
@@ -116,6 +142,7 @@ export const CreateEvent = ({ navigation }) => {
           label="Duration (hours)"
           value={duration}
           onChangeText={handleDurationChange}
+          returnKeyType="done"
           keyboardType="numeric"
         ></TextInput>
         <TextInput
@@ -125,18 +152,20 @@ export const CreateEvent = ({ navigation }) => {
           maxLength={300}
           value={description}
           onChangeText={(text) => setDescription(text)}
-          style={styles.input}
+          returnKeyType="done"
+          onSubmitEditing={handleDonePress}
         />
         <TextInput
           label="Tags(Comma separated)"
           onChangeText={handleTagsChange}
+          returnKeyType="done"
         ></TextInput>
         <View style={styles.options}>
           <Menu.Item title="University Exclusive" />
           <Switch value={isSwitchOn} onValueChange={onToggleSwitch} />
         </View>
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
