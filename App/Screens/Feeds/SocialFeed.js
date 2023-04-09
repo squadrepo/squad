@@ -46,7 +46,7 @@ const SocialPostsFeed = ({navigation}) => (
     <View style={styles.container}>
       <View style={styles.topBar}>
         <Text variant="headlineMedium" style={styles.topBarText}>Social Events for {univ}</Text>
-        <Button style={styles.topBarButton} onPress={() => navigation.navigate('RsvpFeed')}>RSVP's</Button>
+        <Button style={styles.topBarButton} onPress={RsvpFeed}>RSVP's</Button>
       </View>
       <FlatList 
       data={socialEvents}

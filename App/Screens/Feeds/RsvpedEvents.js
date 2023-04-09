@@ -25,8 +25,9 @@ export const RsvpFeed = () => {
   useEffect(() => {
     const getRsvpEvents = async () => {
       try {
-        const response = await axios.get(`${BASE_API_URL}/socialEvent/getEvents?univ=${univ}`);
-        const RsvpEvents = response.data.sort((a, b) => a.eventTimestamp - b.eventTimestamp)
+        var response = await axios.get(`${BASE_API_URL}/socialEvent/getEvents?univ=${univ}`);
+        filteredResponse = response.data.filter(event => event.uidsRsvp.includes(uid));
+        const RsvpEvents = filteredResponse.sort((a, b) => a.eventTimestamp - b.eventTimestamp)
         setRsvpEvents(RsvpEvents);
         setIsFetching(false);
       } catch (error) {
