@@ -7,7 +7,7 @@ import { BASE_API_URL } from '../constants';
 import axios from 'axios';
 
 
-const ACTION_TEXT_VARIANT =  "labelSmall"
+const ACTION_TEXT_VARIANT = "labelSmall"
 const bullet = (<Text variant={ACTION_TEXT_VARIANT} style={{fontWeight: 'bold'}}>· </Text>);
 
 
