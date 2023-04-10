@@ -44,7 +44,6 @@ const SendRSVP = async (uid, eid, tentative, uidRemoved) => {
 
     const config = { "content-type": "application/json" };
     const response = await axios.post(baseUrl, body, config);
-    console.log(response.data);
   } catch (error) {
     console.error(error);
   }
@@ -71,13 +70,20 @@ export const SocialEventCard = ({event, navigation, root}) => {
     useEffect(() => {
       const checkIfEidInRsvp = async () => {
         try {
-          const value = await AsyncStorage.getItem(eid);
-          if (value !== null) {
+          const valueYes = await AsyncStorage.getItem(eid + "_Yes");
+          const valueMaybe = await AsyncStorage.getItem(eid + "_Maybe");
+          if (valueYes == "contained") {
             setYesButtonMode("contained")
             setYesRemoval(true); 
-          } else {
+          } else if (valueMaybe == "contained") {
+            setMaybeButtonMode("contained")
+            setMaybeRemoval(true); 
+          } 
+          else {
             setYesButtonMode("outlined")
             setYesRemoval(false); 
+            setMaybeButtonMode("outlined")
+            setMaybeRemoval(false); 
           }
         } catch (error) {
           console.log(error);
@@ -86,6 +92,7 @@ export const SocialEventCard = ({event, navigation, root}) => {
       
       checkIfEidInRsvp();
     }, [eid]);
+
     
     const handleYesButtonPress = async () => {
       SendRSVP(uid, eid, tentative = false, uidRemoved = yesRemoval)
@@ -93,17 +100,18 @@ export const SocialEventCard = ({event, navigation, root}) => {
         setYesButtonMode("contained");
         setMaybeButtonMode("outlined");
         setYesRemoval(true);
-        await AsyncStorage.setItem(eid, "contained");
-      } else if (maybeButtonMode == "contained") {                       // if maybe is selected and user shifts to yes 
+        await AsyncStorage.setItem(eid + "_Yes", "contained");
+      } else if (maybeButtonMode == "contained") {                       // if maybe is selected and user shifts to yes  
           setMaybeButtonMode("outlined");
           setYesButtonMode("contained");
           setYesRemoval(true);
           setMaybeRemoval(false); 
-          await AsyncStorage.setItem(eid, "contained");
+          await AsyncStorage.setItem(eid + "_Yes", "contained");
+          await AsyncStorage.removeItem(eid + "_Maybe");
       } else {                                                          // if user wants to remove their yes rsvp
         setYesButtonMode("outlined");
         setYesRemoval(false); 
-        await AsyncStorage.removeItem(eid);
+        await AsyncStorage.removeItem(eid + "_Yes");
       };      
     };
     
@@ -113,14 +121,18 @@ export const SocialEventCard = ({event, navigation, root}) => {
         setYesButtonMode("outlined");
         setMaybeButtonMode("contained");
         setMaybeRemoval(true);
+        await AsyncStorage.setItem(eid + "_Maybe", "contained");
       } else if (yesButtonMode == "contained") {                           // if yes is selected and user shifts to maybe 
         setMaybeButtonMode("contained");
         setYesButtonMode("outlined");
         setYesRemoval(false);
         setMaybeRemoval(true); 
+        await AsyncStorage.removeItem(eid + "_Yes");
+        await AsyncStorage.setItem(eid + "_Maybe", "contained");
     } else {                                                               // if user wants to remove their maybe rsvp          
         setMaybeButtonMode("outlined");
-        setMaybeRemoval(false); 
+        setMaybeRemoval(false);
+        await AsyncStorage.removeItem(eid + "_Maybe"); 
       };  
     };
 
