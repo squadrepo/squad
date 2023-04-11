@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text } from 'react-native-paper';
+import { Button, Text } from 'react-native-paper';
 import { View, FlatList } from 'react-native';
 import { UserContext } from '../../Context';
 import { Auth } from '@aws-amplify/auth';
@@ -99,6 +99,7 @@ const AllPostsFeed = ({navigation}) => (
     <View style={styles.container}>
       <View style={styles.topBar}>
         <Text variant="headlineMedium" style={styles.topBarText}> Posts for {univ}</Text>
+        <Button style={styles.topBarButton} onPress={() => navigation.navigate('RsvpFeed')}>RSVP's</Button>
       </View>
       <FlatList 
       data={socialEvents}

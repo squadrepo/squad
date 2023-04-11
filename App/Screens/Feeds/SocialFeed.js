@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text } from 'react-native-paper';
+import { Text, Button} from 'react-native-paper';
 import { View, FlatList } from 'react-native';
 import { UserContext } from '../../Context';
 import { BASE_API_URL } from '../../constants';
@@ -8,6 +8,7 @@ import { SocialPostScreen } from '../Social/socialPost.screen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SocialEventCard } from '../../Components/SocialEventCard';
 import { feedStyles as styles } from './FeedStyles';
+import { RsvpFeed } from "../Feeds/RsvpedEvents";
 
 export const SocialFeed = () => {
   const { univ } = useContext(UserContext);
@@ -44,6 +45,7 @@ const SocialPostsFeed = ({navigation}) => (
     <View style={styles.container}>
       <View style={styles.topBar}>
         <Text variant="headlineMedium" style={styles.topBarText}>Social Events for {univ}</Text>
+        <Button style={styles.topBarButton} onPress={RsvpFeed}>RSVP's</Button>
       </View>
       <FlatList 
       data={socialEvents}

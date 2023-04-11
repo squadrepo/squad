@@ -5,6 +5,7 @@ import { SocialFeed } from "../Feeds/SocialFeed";
 import { FoodFeed } from "../Feeds/FoodFeed";
 import { TutoringFeed } from "../Feeds/TutoringFeed";
 import { GigWorkFeed } from "../Feeds/GigworkFeed";
+import { RsvpFeed } from "../Feeds/RsvpedEvents";
 import { Portal, FAB } from "react-native-paper";
 
 const Tab = createMaterialBottomTabNavigator();

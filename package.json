@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@expo/webpack-config": "^18.0.1",
-    "@react-native-async-storage/async-storage": "^1.17.11",
+    "@react-native-async-storage/async-storage": "^1.18.1",
     "@react-native-community/datetimepicker": "6.5.2",
     "@react-native-community/netinfo": "9.3.5",
     "@react-native-picker/picker": "^2.4.8",
@@ -33,8 +33,8 @@
     "react-dom": "18.1.0",
     "react-native": "0.70.5",
     "react-native-gesture-handler": "~2.8.0",
-    "react-native-modal-datetime-picker": "^14.0.1",
     "react-native-gifted-chat": "^1.1.1",
+    "react-native-modal-datetime-picker": "^14.0.1",
     "react-native-pager-view": "6.0.1",
     "react-native-paper": "^5.2.0",
     "react-native-reanimated": "~2.12.0",
