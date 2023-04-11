@@ -8,6 +8,7 @@ import { SocialPostScreen } from '../Social/socialPost.screen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SocialEventCard } from '../../Components/SocialEventCard';
 import { feedStyles as styles } from './FeedStyles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const RsvpFeed = () => {
   const { univ } = useContext(UserContext);
@@ -26,8 +27,24 @@ export const RsvpFeed = () => {
     const getRsvpEvents = async () => {
       try {
         var response = await axios.get(`${BASE_API_URL}/socialEvent/getEvents?univ=${univ}`);
-        filteredResponse = response.data.filter(event => event.uidsRsvp.includes(uid));
+        for (const item of response.data) {
+            try {
+                await AsyncStorage.removeItem(`${item.eid}_Yes`);
+                await AsyncStorage.removeItem(`${item.eid}_Maybe`);
+            } catch (error) {
+                console.log(error)
+            }
+        } 
+        filteredResponse = response.data.filter(event => event.uidsRsvp.includes(uid) || event.uidsInterested.includes(uid));
         const RsvpEvents = filteredResponse.sort((a, b) => a.eventTimestamp - b.eventTimestamp)
+        for (const item of RsvpEvents) {
+            if (item.uidsRsvp.includes(uid)){
+                await AsyncStorage.setItem(`${item.eid}_Yes`, "contained");
+            } else {
+                await AsyncStorage.setItem(`${item.eid}_Maybe`, "contained");
+            }
+            
+          }
         setRsvpEvents(RsvpEvents);
         setIsFetching(false);
       } catch (error) {

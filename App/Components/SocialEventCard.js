@@ -4,6 +4,7 @@ import { getStringDateFromUnix, getStandardPlural } from '../utilities';
 import { useState, useContext, useEffect} from 'react';
 import { UserContext } from '../Context';
 import { BASE_API_URL } from '../constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 
@@ -43,7 +44,6 @@ const SendRSVP = async (uid, eid, tentative, uidRemoved) => {
 
     const config = { "content-type": "application/json" };
     const response = await axios.post(baseUrl, body, config);
-    console.log(response.data);
   } catch (error) {
     console.error(error);
   }
@@ -66,38 +66,73 @@ export const SocialEventCard = ({event, navigation, root}) => {
     useEffect(() => {
       uid;
     }, [uid]);
+
+    useEffect(() => {
+      const checkIfEidInRsvp = async () => {
+        try {
+          const valueYes = await AsyncStorage.getItem(eid + "_Yes");
+          const valueMaybe = await AsyncStorage.getItem(eid + "_Maybe");
+          if (valueYes == "contained") {
+            setYesButtonMode("contained")
+            setYesRemoval(true); 
+          } else if (valueMaybe == "contained") {
+            setMaybeButtonMode("contained")
+            setMaybeRemoval(true); 
+          } 
+          else {
+            setYesButtonMode("outlined")
+            setYesRemoval(false); 
+            setMaybeButtonMode("outlined")
+            setMaybeRemoval(false); 
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      
+      checkIfEidInRsvp();
+    }, [eid]);
+
     
-    const handleYesButtonPress = () => {
+    const handleYesButtonPress = async () => {
       SendRSVP(uid, eid, tentative = false, uidRemoved = yesRemoval)
-      if (yesButtonMode == "outlined" && maybeButtonMode == "outlined") {
+      if (yesButtonMode == "outlined" && maybeButtonMode == "outlined") { // if yes button and maybe button are not selected
         setYesButtonMode("contained");
         setMaybeButtonMode("outlined");
         setYesRemoval(true);
-      } else if (maybeButtonMode == "contained") {
+        await AsyncStorage.setItem(eid + "_Yes", "contained");
+      } else if (maybeButtonMode == "contained") {                       // if maybe is selected and user shifts to yes  
           setMaybeButtonMode("outlined");
           setYesButtonMode("contained");
           setYesRemoval(true);
           setMaybeRemoval(false); 
-      } else {
+          await AsyncStorage.setItem(eid + "_Yes", "contained");
+          await AsyncStorage.removeItem(eid + "_Maybe");
+      } else {                                                          // if user wants to remove their yes rsvp
         setYesButtonMode("outlined");
         setYesRemoval(false); 
+        await AsyncStorage.removeItem(eid + "_Yes");
       };      
     };
     
-    const handleMaybeButtonPress = () => {
+    const handleMaybeButtonPress = async () => {
       SendRSVP(uid, eid, tentative = true, uidRemoved = maybeRemoval)
-      if (maybeButtonMode == "outlined" && yesButtonMode == "outlined") {
+      if (maybeButtonMode == "outlined" && yesButtonMode == "outlined") {  // if yes button and maybe button are not selected
         setYesButtonMode("outlined");
         setMaybeButtonMode("contained");
         setMaybeRemoval(true);
-      } else if (yesButtonMode == "contained") {
+        await AsyncStorage.setItem(eid + "_Maybe", "contained");
+      } else if (yesButtonMode == "contained") {                           // if yes is selected and user shifts to maybe 
         setMaybeButtonMode("contained");
         setYesButtonMode("outlined");
         setYesRemoval(false);
         setMaybeRemoval(true); 
-    } else {
+        await AsyncStorage.removeItem(eid + "_Yes");
+        await AsyncStorage.setItem(eid + "_Maybe", "contained");
+    } else {                                                               // if user wants to remove their maybe rsvp          
         setMaybeButtonMode("outlined");
-        setMaybeRemoval(false); 
+        setMaybeRemoval(false);
+        await AsyncStorage.removeItem(eid + "_Maybe"); 
       };  
     };
 

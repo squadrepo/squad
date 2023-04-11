@@ -24,7 +24,6 @@ export const SocialFeed = () => {
       try {
         const response = await axios.get(`${BASE_API_URL}/socialEvent/getEvents?univ=${univ}`);
         const socialEvents = response.data.sort((a, b) => a.eventTimestamp - b.eventTimestamp)
-        console.log(response)
         setSocialEvents(socialEvents);
         setIsFetching(false);
       } catch (error) {
