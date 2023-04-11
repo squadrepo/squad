@@ -1,6 +1,6 @@
 import { Text, Card, Button } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
-import { getStringDateFromUnix, getStandardPlural } from '../utilities';
+import { getStringDateTimeFromUnix, getStandardPlural } from '../utilities';
 import { useState, useContext, useEffect} from 'react';
 import { UserContext } from '../Context';
 import { BASE_API_URL } from '../constants';
@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 
-const ACTION_TEXT_VARIANT =  "labelSmall"
+const ACTION_TEXT_VARIANT = "labelSmall"
 const bullet = (<Text variant={ACTION_TEXT_VARIANT} style={{fontWeight: 'bold'}}>· </Text>);
 
 
@@ -140,7 +140,7 @@ export const SocialEventCard = ({event, navigation, root}) => {
   <Card style={styles.card} onPress={() =>
             navigation.navigate('SocialPost', {event: event, root: root})}>
     <Card.Cover source={{ uri: uri }}/>
-    <Card.Title title={event.eventName} titleStyle={styles.eventNameText} subtitle={getStringDateFromUnix(event.eventTimestamp)}/>
+    <Card.Title title={event.eventName} titleStyle={styles.eventNameText} subtitle={getStringDateTimeFromUnix(event.eventTimestamp)}/>
     <Card.Content style={styles.cardContent}>
       <Text style={{width: 120}}>
         {bullet}
