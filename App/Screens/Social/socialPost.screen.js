@@ -1,11 +1,12 @@
 import { Text, Appbar, Button } from 'react-native-paper';
 import { View, ScrollView, Image, Dimensions, StyleSheet } from 'react-native';
 import { CommentsSection } from '../../Components/CommentsSection';
-import { getStandardPlural, getStringDateFromUnix } from '../../utilities';
-import { useState, useContext } from 'react';
+import { getStringDateFromUnix, getStringTimeFromUnix } from '../../utilities';
+import { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../../Context';
 import { BASE_API_URL } from '../../constants';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const SocialPostScreen = ({navigation, route}) => {
   const {event, root} = route.params;
@@ -13,6 +14,7 @@ export const SocialPostScreen = ({navigation, route}) => {
   const uri = (event.bannerUrl && event.bannerUrl.length > 0)
     ? event.bannerUrl 
     : "https://squad-app-s3.s3.amazonaws.com/VOKOLOS.png";
+  const eid = event.eid;
   const numGoing = event.uidsRsvp.length;
   const numInterested = event.uidsInterested.length;
 
@@ -44,38 +46,77 @@ export const SocialPostScreen = ({navigation, route}) => {
     }
   };
 
-  const handleYesButtonPress = () => {
-    SendRSVP(uid, event.eid, tentative = false, uidRemoved = yesRemoval)
-    if (yesButtonMode == "outlined" && maybeButtonMode == "outlined") {
-      setYesButtonMode("contained");
-      setMaybeButtonMode("outlined");
-      setYesRemoval(true);
-    } else if (maybeButtonMode == "contained") {
-        setMaybeButtonMode("outlined");
+    useEffect(() => {
+      const checkIfEidInRsvp = async () => {
+        try {
+          const valueYes = await AsyncStorage.getItem(eid + "_Yes");
+          const valueMaybe = await AsyncStorage.getItem(eid + "_Maybe");
+          if (valueYes == "contained") {
+            setYesButtonMode("contained")
+            setYesRemoval(true); 
+          } else if (valueMaybe == "contained") {
+            setMaybeButtonMode("contained")
+            setMaybeRemoval(true); 
+          } 
+          else {
+            setYesButtonMode("outlined")
+            setYesRemoval(false); 
+            setMaybeButtonMode("outlined")
+            setMaybeRemoval(false); 
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      
+      checkIfEidInRsvp();
+    }, [eid]);
+
+    
+    const handleYesButtonPress = async () => {
+      SendRSVP(uid, eid, tentative = false, uidRemoved = yesRemoval)
+      if (yesButtonMode == "outlined" && maybeButtonMode == "outlined") { // if yes button and maybe button are not selected
         setYesButtonMode("contained");
+        setMaybeButtonMode("outlined");
         setYesRemoval(true);
-        setMaybeRemoval(false); 
-    } else {
-      setYesButtonMode("outlined");
-      setYesRemoval(false); 
-    };      
-  };
-  
-  const handleMaybeButtonPress = () => {
-    SendRSVP(uid, event.eid, tentative = true, uidRemoved = maybeRemoval)
-    if (maybeButtonMode == "outlined" && yesButtonMode == "outlined") {
-      setYesButtonMode("outlined");
-      setMaybeButtonMode("contained");
-      setMaybeRemoval(true);
-    } else if (yesButtonMode == "contained") {
-      setMaybeButtonMode("contained");
-      setYesButtonMode("outlined");
-      setYesRemoval(false);
-      setMaybeRemoval(true); 
-  } else {
-      setMaybeButtonMode("outlined");
-      setMaybeRemoval(false); 
-    };  
+        await AsyncStorage.setItem(eid + "_Yes", "contained");
+      } else if (maybeButtonMode == "contained") {                       // if maybe is selected and user shifts to yes  
+          setMaybeButtonMode("outlined");
+          setYesButtonMode("contained");
+          setYesRemoval(true);
+          setMaybeRemoval(false); 
+          await AsyncStorage.setItem(eid + "_Yes", "contained");
+          await AsyncStorage.removeItem(eid + "_Maybe");
+      } else {                                                          // if user wants to remove their yes rsvp
+        setYesButtonMode("outlined");
+        setYesRemoval(false); 
+        await AsyncStorage.removeItem(eid + "_Yes");
+      };      
+    };
+    
+    const handleMaybeButtonPress = async () => {
+      SendRSVP(uid, eid, tentative = true, uidRemoved = maybeRemoval)
+      if (maybeButtonMode == "outlined" && yesButtonMode == "outlined") {  // if yes button and maybe button are not selected
+        setYesButtonMode("outlined");
+        setMaybeButtonMode("contained");
+        setMaybeRemoval(true);
+        await AsyncStorage.setItem(eid + "_Maybe", "contained");
+      } else if (yesButtonMode == "contained") {                           // if yes is selected and user shifts to maybe 
+        setMaybeButtonMode("contained");
+        setYesButtonMode("outlined");
+        setYesRemoval(false);
+        setMaybeRemoval(true); 
+        await AsyncStorage.removeItem(eid + "_Yes");
+        await AsyncStorage.setItem(eid + "_Maybe", "contained");
+    } else {                                                               // if user wants to remove their maybe rsvp          
+        setMaybeButtonMode("outlined");
+        setMaybeRemoval(false);
+        await AsyncStorage.removeItem(eid + "_Maybe"); 
+      };  
+    };
+
+  const handleShareButtonPress = () => {
+    console.log("Shared")
   };
   
 
@@ -94,38 +135,66 @@ export const SocialPostScreen = ({navigation, route}) => {
         </View>
 
         <View style={{ ...styles.verticalFlex, alignItems: "flex-start", padding: 0, margin: 0, width: deviceWidth * 0.92 }}>
-            <Text style={{ fontSize: 28, color: "black", textAlign: "left", paddingTop: 20 }}>
+            <Text style={{ fontSize: 28, color: "black", textAlign: "left", paddingTop: 20, fontWeight: "bold" }}>
                 {event?.eventName ?? ""}
             </Text>
-            <Text style={{ fontSize: 18, color: "black", textAlign: "left", }}>
-                {getStringDateFromUnix(event.eventTimestamp)}
+            <Text style={{ fontSize: 14, color: "black", textAlign: "left", fontStyle: "italic", paddingBottom: 10}}>
+                Posted by {event?.posterUid ?? ""}
             </Text>
-            <Text style={{ fontSize: 14, color: "black", textAlign: "left", }}>
-                from {event?.posterUid ?? ""}
+            <Text style={{ fontSize: 18, color: "black", textAlign: "left", }}>
+                <Text style={{ fontWeight: "bold"}}>
+                    Date:
+                </Text>
+                <Text>
+                    {` ${getStringDateFromUnix(event.eventTimestamp)}`}
+                </Text>
+            </Text>
+            <Text style={{ fontSize: 18, color: "black", textAlign: "left", }}>
+                <Text style={{ fontWeight: "bold"}}>
+                    Time:
+                </Text>
+                <Text>
+                    {` ${getStringTimeFromUnix(event.eventTimestamp)}`}
+                </Text>
+            </Text>
+            <Text style={{ fontSize: 18, color: "black", textAlign: "left", }}>
+                <Text style={{ fontWeight: "bold"}}>
+                    Location:
+                </Text>
+                <Text>
+                    {` ${event?.streetAddress}, ${event?.city}, ${event?.state} ${event?.zip}`}
+                </Text>
             </Text>
             <Text style={{ fontSize: 18, color: "black", textAlign: "left", paddingTop: 15, paddingBottom: 15 }}>
                 {event?.desc}
             </Text>
 
-            <View style={styles.horizontalFlex}>
-                <View style={{...styles.verticalFlex, paddingRight: 30}}>
-                    <Text>
-                      {bullet}
-                      <Text style={styles.coloredText}>{numGoing} student{getStandardPlural(numGoing)} going</Text>
-                    </Text>
-                    <View style={{...styles.horizontalFlex, paddingTop: 10}}>
-                        <Button mode = {yesButtonMode} onPress={handleYesButtonPress}>I'm Going</Button>
-                    </View>
-                </View>
+            <View style={{...styles.horizontalFlex, paddingBottom: 10}}>
+                <Text style={styles.coloredTextHolder}>
+                  {bullet}
+                  <Text style={styles.coloredText}>{`${numGoing} going`}</Text>
+                </Text>
+                <Text style={styles.coloredTextHolder}>
+                  {bullet}
+                  <Text style={styles.coloredText}>{numInterested} interested</Text>
+                </Text>
+            </View>
 
-                <View style={styles.verticalFlex}>
-                    <Text>
-                      {bullet}
-                      <Text style={styles.coloredText}>{numInterested} interested</Text>
-                    </Text>
-                    <View style={{...styles.horizontalFlex, paddingTop: 10}}>
-                        <Button mode = {maybeButtonMode} onPress={handleMaybeButtonPress}>Maybe</Button>
-                    </View>
+            <View style={{...styles.horizontalFlex, justifyContent: "space-evenly", borderBottomWidth: 1, borderTopWidth: 1, borderColor: "#999999", borderStyle: "solid", width: deviceWidth * 0.92, paddingTop: 10, paddingBottom: 10}}>
+                <View style={{...styles.horizontalFlex}}>
+                    <Button mode={yesButtonMode} onPress={handleYesButtonPress} icon="calendar-check">
+                        Going
+                    </Button>
+                </View>
+                <View style={{...styles.horizontalFlex}}>
+                    <Button mode={maybeButtonMode} onPress={handleMaybeButtonPress}  icon="calendar-minus">
+                        Maybe
+                    </Button>
+                </View>
+                <View style={{...styles.horizontalFlex}}>
+                    <Button mode="outlined" onPress={handleShareButtonPress}  icon="share-outline">
+                        Share
+                    </Button>
                 </View>
             </View>
 
@@ -148,6 +217,9 @@ const styles = StyleSheet.create({
   },
   coloredText: {
     color: '#9662fc',
-    fontSize: 18
+    fontSize: 14
+  },
+  coloredTextHolder: {
+    paddingRight: 10
   }
 })
