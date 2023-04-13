@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   View,
   StyleSheet,
@@ -13,8 +13,13 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { getDateFromUnix } from "../../utilities";
 import { TextInput } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
+import { UserContext } from "../../Context";
+import axios from "axios";
 
 export const CreateEvent = ({ navigation }) => {
+  //User context variable
+  const { univ, uid } = useContext(UserContext);
+
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
   const [time, setTime] = useState("9:00AM");
@@ -24,8 +29,45 @@ export const CreateEvent = ({ navigation }) => {
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState([]);
   const [title, setTitle] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [image, setImage] = useState(
+    "http://clipart-library.com/images/kcMKrBBXi.jpg"
+  );
 
-  const [image, setImage] = useState(null);
+  const baseUrl =
+    "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/beta/socialEvent/createsocialpost";
+
+  const postEvent = async (event) => {
+    try {
+      const body = {
+        univAssoc: univ,
+        createTimestamp: "",
+        bannerUrl: image,
+        city: city,
+        desc: description,
+        eventName: title,
+        eventTimestamp: time,
+        posterUid: uid,
+        state: state,
+        streetAddress: address,
+        tags: tags,
+        univExcl: isSwitchOn,
+        zip: zipCode
+      };
+      console.log(body);
+      const response = await axios.post(baseUrl, body);
+      alert("Event posted successfully.");
+      navigation.navigate("Main");
+    } catch (error) {
+      alert("An error has occurred");
+      if (error.response === undefined) throw error;
+      const { response } = error;
+      console.log(`${response.status}:`, response.data);
+    }
+  };
 
   const handleDonePress = () => {
     // Do something with the text input value
@@ -73,6 +115,20 @@ export const CreateEvent = ({ navigation }) => {
     }
   };
 
+  const stateHandler = (value) => {
+    const cleanedText = value
+      .replace(/[^A-Za-z]/g, "")
+      .toUpperCase()
+      .slice(0, 2);
+    console.log(cleanedText);
+    setState(cleanedText);
+  };
+
+  const zipCodeHandler = (value) => {
+    const limitedLengthText = value.replace(/[^0-9]/g, "").slice(0, 5);
+    setZipCode(limitedLengthText);
+  };
+
   const validateTime = (input) => {
     // Regular expression to match time in format hh:mmAM or hh:mmPM
     const timeRegex = /^(0?[1-9]|1[012]):[0-5][0-9][AP][M]$/;
@@ -87,15 +143,7 @@ export const CreateEvent = ({ navigation }) => {
       <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.navigate("Drawers")} />
         <Appbar.Content title="Create Event" />
-        <Button
-          onPress={() => {
-            sendFirstMessage(uid, users);
-            console.log(uid);
-            console.log(users);
-          }}
-        >
-          save
-        </Button>
+        <Button onPress={postEvent}>post</Button>
       </Appbar.Header>
       <ScrollView>
         <View style={styles.changePhoto}>
@@ -144,6 +192,28 @@ export const CreateEvent = ({ navigation }) => {
           onChangeText={handleDurationChange}
           returnKeyType="done"
           keyboardType="numeric"
+        ></TextInput>
+        <TextInput
+          label="Address"
+          onChangeText={(text) => setAddress(text)}
+          returnKeyType="done"
+        ></TextInput>
+        <TextInput
+          label="City"
+          onChangeText={(text) => setCity(text)}
+          returnKeyType="done"
+        ></TextInput>
+        <TextInput
+          label="State"
+          value={state}
+          onChangeText={stateHandler}
+          returnKeyType="done"
+        ></TextInput>
+        <TextInput
+          label="Zip Code"
+          value={zipCode}
+          onChangeText={zipCodeHandler}
+          returnKeyType="done"
         ></TextInput>
         <TextInput
           label="Description"
