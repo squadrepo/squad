@@ -9,22 +9,20 @@ import {
   KeyboardAvoidingView
 } from "react-native";
 import { Button, Appbar, Switch, Menu, DatePicker } from "react-native-paper";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { getDateFromUnix } from "../../utilities";
 import { TextInput } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 import { UserContext } from "../../Context";
 import axios from "axios";
 import moment from "moment";
+import { RNS3 } from "react-native-aws3";
 
 export const CreateEvent = ({ navigation }) => {
-  //User context variable
+  //User context variables
   const { univ, uid } = useContext(UserContext);
 
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
   const [time, setTime] = useState("9:00AM");
-  const [duration, setDuration] = useState("");
   const [date, setDate] = useState("");
   const [dateError, setDateError] = useState("");
   const [description, setDescription] = useState("");
@@ -89,22 +87,6 @@ export const CreateEvent = ({ navigation }) => {
     Keyboard.dismiss();
   };
 
-  {
-    /*
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1
-    });
-
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
-  };
-*/
-  }
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -115,24 +97,28 @@ export const CreateEvent = ({ navigation }) => {
 
     if (!result.cancelled) {
       // Upload the image to S3 bucket
-      const formData = new FormData();
-      formData.append("file", {
+      const file = {
         uri: result.uri,
-        type: "image/jpeg",
-        name: `event_${Date.now()}.jpg`
-      });
-      console.log(formData);
+        name: `event-${Date.now()}.jpg`,
+        type: "image/jpeg"
+      };
+      const options = {
+        keyPrefix: "",
+        bucket: "squad-app-s3",
+        region: "us-east-1",
+        accessKey: "AKIA4H2NY2E7QGQUQ5FQ",
+        secretKey: "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",
+        successActionStatus: 201
+      };
+      const response = await RNS3.put(file, options);
+      console.log(response);
 
-      const s3Url =
-        "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/squad-app-s3/";
-      const response = await axios.post(s3Url, formData);
-      console.log(response.status);
-
-      if (response.status === 200) {
-        // Update the image state with the S3 URL
-        const imageUrl = response.data.Location;
-        setImage(imageUrl);
+      if (response.status !== 201) {
+        console.log(response.status);
+        throw new Error("Failed to upload image to S3");
       }
+
+      setImage(response.body.postResponse.location);
     }
   };
 
@@ -151,15 +137,6 @@ export const CreateEvent = ({ navigation }) => {
       setDateError("Please enter a date in the format MM/DD/YYYY");
     } else {
       setDateError("");
-    }
-  };
-
-  const handleDurationChange = (value) => {
-    const intValue = parseInt(value, 10);
-    if (intValue >= 1 && intValue <= 12) {
-      setDuration(intValue.toString());
-    } else {
-      setDuration("");
     }
   };
 
@@ -234,13 +211,6 @@ export const CreateEvent = ({ navigation }) => {
             Please enter a valid time (hh:mmAM or hh:mmPM)
           </Text>
         )}
-        <TextInput
-          label="Duration (hours)"
-          value={duration}
-          onChangeText={handleDurationChange}
-          returnKeyType="done"
-          keyboardType="numeric"
-        ></TextInput>
         <TextInput
           label="Address"
           onChangeText={(text) => setAddress(text)}
