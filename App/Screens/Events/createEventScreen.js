@@ -15,6 +15,7 @@ import { TextInput } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 import { UserContext } from "../../Context";
 import axios from "axios";
+import moment from "moment";
 
 export const CreateEvent = ({ navigation }) => {
   //User context variable
@@ -42,6 +43,19 @@ export const CreateEvent = ({ navigation }) => {
 
   const postEvent = async (event) => {
     try {
+      const epochTime = moment(
+        `1970-01-01T${time}:00`,
+        "YYYY-MM-DDTHH:mm:ss"
+      ).unix();
+
+      //convert date to epoch
+      const [month, day, year] = date.split("/");
+      const epochDate = Date.UTC(year, month - 1, day) / 1000;
+
+      const eventTimestamp = new Date(epochTime + epochDate).getTime() - 3600;
+
+      console.log(eventTimestamp);
+
       const body = {
         univAssoc: univ,
         createTimestamp: "",
@@ -49,7 +63,7 @@ export const CreateEvent = ({ navigation }) => {
         city: city,
         desc: description,
         eventName: title,
-        eventTimestamp: time,
+        eventTimestamp: eventTimestamp,
         posterUid: uid,
         state: state,
         streetAddress: address,
@@ -75,6 +89,8 @@ export const CreateEvent = ({ navigation }) => {
     Keyboard.dismiss();
   };
 
+  {
+    /*
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -85,6 +101,38 @@ export const CreateEvent = ({ navigation }) => {
 
     if (!result.cancelled) {
       setImage(result.uri);
+    }
+  };
+*/
+  }
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1
+    });
+
+    if (!result.cancelled) {
+      // Upload the image to S3 bucket
+      const formData = new FormData();
+      formData.append("file", {
+        uri: result.uri,
+        type: "image/jpeg",
+        name: `event_${Date.now()}.jpg`
+      });
+      console.log(formData);
+
+      const s3Url =
+        "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/squad-app-s3/";
+      const response = await axios.post(s3Url, formData);
+      console.log(response.status);
+
+      if (response.status === 200) {
+        // Update the image state with the S3 URL
+        const imageUrl = response.data.Location;
+        setImage(imageUrl);
+      }
     }
   };
 
