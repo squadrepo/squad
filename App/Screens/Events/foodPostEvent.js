@@ -1,3 +1,5 @@
+//TODO: change end point to food post endpoint
+
 import React, { useState, useContext } from "react";
 import {
   View,
@@ -16,7 +18,7 @@ import axios from "axios";
 import moment from "moment";
 import { RNS3 } from "react-native-aws3";
 
-export const CreateEvent = ({ navigation }) => {
+export const FoodPostEvent = ({ navigation }) => {
   //User context variables
   const { univ, uid } = useContext(UserContext);
 
@@ -169,7 +171,7 @@ export const CreateEvent = ({ navigation }) => {
         <Appbar.BackAction
           onPress={() => navigation.navigate("ChooseEventType")}
         />
-        <Appbar.Content title="Create Event" />
+        <Appbar.Content title="Create Food Post" />
         <Button onPress={postEvent}>post</Button>
       </Appbar.Header>
       <ScrollView>

@@ -60,7 +60,7 @@ export const Tabs = ({ navigation }) => {
           }}
           prop
           size="medium"
-          onPress={() => navigation.navigate("CreateEvent")}
+          onPress={() => navigation.navigate("ChooseEventType")}
         />
       </Portal>
       <Portal>

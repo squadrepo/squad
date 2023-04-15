@@ -25,6 +25,8 @@ import { ProfileEditBioScreen } from "./App/Screens/Profile/profileEditBio.scree
 import { ProfilePicturePicker } from "./App/Screens/CameraImagePicker/profilePicturePicker";
 import { UserProvider } from "./App/Context";
 import { CreateEvent } from "./App/Screens/Events/createEventScreen";
+import { ChooseEventType } from "./App/Screens/Events/chooseEventType";
+import { FoodPostEvent } from "./App/Screens/Events/foodPostEvent";
 
 Amplify.configure({ awsConfig, ...awsmobile, Analytics: { disabled: true } });
 
@@ -94,7 +96,9 @@ function App() {
             <Stack.Screen name="MessageOverview" component={MessageOverview} />
             <Stack.Screen name="Chats" component={Chats} />
             <Stack.Screen name="ChatRoom" component={ChatRoom} />
+            <Stack.Screen name="ChooseEventType" component={ChooseEventType} />
             <Stack.Screen name="CreateEvent" component={CreateEvent} />
+            <Stack.Screen name="FoodPostEvent" component={FoodPostEvent} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
