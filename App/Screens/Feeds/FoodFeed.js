@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { TextInput, Button, Text, Modal, Portal } from "react-native-paper";
-import { SafeAreaView, View, StyleSheet } from "react-native";
+import { SafeAreaView, View, StyleSheet, ActivityIndicator } from "react-native";
 import MapView, {Marker} from 'react-native-maps';
 import { BASE_API_URL } from '../../constants';
 import axios from 'axios';
@@ -70,17 +70,21 @@ export const FoodFeed = () => {
   
   return (
     <View style={styles.container}>
+    {initialRegion ? (
       <MapView style={styles.map} initialRegion={initialRegion}>
-      {markers && markers.map((marker, index) => (
-        <Marker
-          key={index}
-          coordinate={marker.coordinates}
-          title={marker.title}
-          description={marker.address}
-        >
-        </Marker>
-      ))}
-        </MapView>
+        {markers &&
+          markers.map((marker, index) => (
+            <Marker
+              key={index}
+              coordinate={marker.coordinates}
+              title={marker.title}
+              description={marker.address}
+            />
+          ))}
+      </MapView>
+    ) : (
+      <ActivityIndicator style={styles.activityIndicator} animating={true} size="large" />
+    )}
       <Portal>
         <Modal visible={visible} onDismiss={() => setVisible(false)}>
           <View style={styles.modalContent}>
@@ -153,4 +157,9 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize:20
+  }, 
+  activityIndicator: {
+    position: "absolute",
+    alignSelf: "center",
+    top: "50%",
   }})
