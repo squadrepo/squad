@@ -26,12 +26,20 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,  
+      "config": {
+        "googleMapsApiKey": "ADD_HERE"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
+      }, 
+      "config": {
+        "googleMaps": {
+          "apiKey": "ADD_HERE"
+        }
       }
     },
     "web": {
