@@ -127,7 +127,8 @@ export const SocialPostScreen = ({navigation, route}) => {
         <Appbar.BackAction onPress={() => navigation.navigate(root)} />
         <Appbar.Content title="Back to Feed" />
       </Appbar.Header>
-      <ScrollView contentContainerStyle={{ ...styles.verticalFlex, alignItems: "center", paddingBottom: 100 }}>
+      <ScrollView contentContainerStyle={{ ...styles.verticalFlex, alignItems: "center", paddingBottom: 100 }}
+                  keyboardShouldPersistTaps='handled'>
 
         { /* This gives us a 16/9 container at 96% of the device's width that the image fills evenly */ }
         <View style={{ width: deviceWidth * 0.96, height: deviceWidth * .54 }}>
