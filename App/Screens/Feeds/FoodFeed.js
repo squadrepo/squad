@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { TextInput, Button, Text, Modal, Portal } from "react-native-paper";
 import { SafeAreaView, View, StyleSheet, ActivityIndicator } from "react-native";
-import MapView, {Marker} from 'react-native-maps';
+import MapView, {Marker, PROVIDER_GOOGLE, Callout} from 'react-native-maps';
 import { BASE_API_URL } from '../../constants';
 import axios from 'axios';
 import * as Location from 'expo-location';
+import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
 
 export const FoodFeed = () => {
   const [location, setLocation] = useState();
@@ -39,8 +40,7 @@ export const FoodFeed = () => {
           longitudeDelta: 0.0421,
         })
 
-        console.log(`${BASE_API_URL}/foodEvent?coords=${coords.latitude},${coords.longitude}&radius=${radius}`)
-        const response = await axios.get(`${BASE_API_URL}/foodEvent?coords=${coords.latitude},${coords.longitude}&radius=5`);
+        const response = await axios.get(`${BASE_API_URL}/foodEvent?coords=${coords.latitude},${coords.longitude}&radius=${radius}`);
         const filteredResponse = response.data.map(({ geoJson, eventName, desc, address }) => 
         ({title: eventName,
           description: desc,
@@ -60,6 +60,10 @@ export const FoodFeed = () => {
     getMapData()
   }, [radius]);
 
+  const onButtonPress = () => {
+    console.log('Marker button pressed');
+  };
+
   const applyFilter = () => {
     const filterRadius = radius === '' ? '1' : radius;
     // Apply the filter with the filterRadius value
@@ -71,7 +75,7 @@ export const FoodFeed = () => {
   return (
     <View style={styles.container}>
     {initialRegion ? (
-      <MapView style={styles.map} initialRegion={initialRegion}>
+      <MapView style={styles.map} initialRegion={initialRegion} provider={PROVIDER_GOOGLE} >
         {markers &&
           markers.map((marker, index) => (
             <Marker
@@ -79,15 +83,24 @@ export const FoodFeed = () => {
               coordinate={marker.coordinates}
               title={marker.title}
               description={marker.address}
-            />
+            > 
+            <Callout>
+                <Text variant='labelLarge' style={{margin:2}}>{marker.title}</Text>
+                <Text style={{margin:2}}>Address: {marker.address}</Text>
+                <Button style={{margin:2}} mode="contained"> Show details </Button>
+            </Callout>
+            </Marker>
           ))}
       </MapView>
+      
+      
     ) : (
       <ActivityIndicator style={styles.activityIndicator} animating={true} size="large" />
     )}
       <Portal>
         <Modal visible={visible} onDismiss={() => setVisible(false)}>
           <View style={styles.modalContent}>
+            
             <TextInput
               label="Radius (in miles)"
               keyboardType="numeric"
@@ -107,6 +120,7 @@ export const FoodFeed = () => {
             <Button mode="contained" onPress={() => setVisible(false)}>
               Apply
             </Button>
+            <Text style={{margin:10}}>Please wait for a 10 seconds for the request to be complete...</Text>
           </View>
         </Modal>
       </Portal>
