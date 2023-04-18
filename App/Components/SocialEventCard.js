@@ -156,8 +156,8 @@ export const SocialEventCard = ({event, navigation, root}) => {
       </Text>
     </Card.Content>
     <Card.Actions>
-        <Button mode = {yesButtonMode} onPress={handleYesButtonPress} >Yes</Button>
-        <Button mode = {maybeButtonMode} onPress={handleMaybeButtonPress} >Maybe</Button>
+        <Button mode = {yesButtonMode} onPress={handleYesButtonPress} icon="calendar-check" > Going </Button>
+        <Button mode = {maybeButtonMode} onPress={handleMaybeButtonPress} icon="calendar-minus"> Maybe</Button>
     </Card.Actions>
   </Card>
 )};
