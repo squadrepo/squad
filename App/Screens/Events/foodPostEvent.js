@@ -1,6 +1,4 @@
-//TODO: change end point to food post endpoint
-
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -8,7 +6,8 @@ import {
   Text,
   ScrollView,
   Keyboard,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Alert
 } from "react-native";
 import { Button, Appbar, Switch, Menu, DatePicker } from "react-native-paper";
 import { TextInput } from "react-native-paper";
@@ -21,65 +20,95 @@ import { RNS3 } from "react-native-aws3";
 export const FoodPostEvent = ({ navigation }) => {
   //User context variables
   const { univ, uid } = useContext(UserContext);
-
-  const [isSwitchOn, setIsSwitchOn] = useState(false);
-  const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
   const [time, setTime] = useState("9:00AM");
+  const [duration, setDuration] = useState("");
   const [date, setDate] = useState("");
   const [dateError, setDateError] = useState("");
   const [description, setDescription] = useState("");
-  const [tags, setTags] = useState([]);
+  const [requirements, setRequirements] = useState("");
   const [title, setTitle] = useState("");
   const [address, setAddress] = useState("");
+  const [addressString, setAddressString] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
-  const [zipCode, setZipCode] = useState("");
+  const [addressConfirmed, setAddressConfirmed] = useState(false);
+  const [coordinates, setCoordinates] = useState([]);
   const [image, setImage] = useState(
     "http://clipart-library.com/images/kcMKrBBXi.jpg"
   );
 
   const baseUrl =
-    "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/beta/socialEvent/createsocialpost";
+    "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/foodEvent";
+
+  const geocodingEndpoint = "https://maps.googleapis.com/maps/api/geocode/json";
+  const geoApiKey = "AIzaSyC4ZVO0b9I4oTAlod6_lwmuv1W9YPsPPXE";
 
   const postEvent = async (event) => {
-    try {
-      const epochTime = moment(
-        `1970-01-01T${time}:00`,
-        "YYYY-MM-DDTHH:mm:ss"
-      ).unix();
+    const fullAddress = `${address}, ${city}, ${state}`;
+    setAddressString(fullAddress);
+    if (!addressConfirmed) {
+      Alert.alert(
+        "Confirm Address",
+        `Is this the correct address? ${fullAddress}`,
+        [
+          {
+            text: "Change Address",
+            onPress: () => console.log("Change Address pressed"),
+            style: "cancel"
+          },
+          {
+            text: "Confirm",
+            onPress: async () => {
+              try {
+                const response = await axios.get(
+                  `https://maps.googleapis.com/maps/api/geocode/json?address=${fullAddress}&key=${geoApiKey}`
+                );
+                const { lat, lng } = response.data.results[0].geometry.location;
+                console.log(`Latitude: ${lat}, Longitude: ${lng}`);
+                setCoordinates([...coordinates, lat, lng]);
+                //setCoordinates([...coordinates, lng]);
+                setAddressConfirmed(true);
+              } catch (error) {
+                console.error(error);
+              }
+            }
+          }
+        ]
+      );
+    } else {
+      try {
+        const epochTime = moment(
+          `1970-01-01T${time}:00`,
+          "YYYY-MM-DDTHH:mm:ss"
+        ).unix();
 
-      //convert date to epoch
-      const [month, day, year] = date.split("/");
-      const epochDate = Date.UTC(year, month - 1, day) / 1000;
+        //convert date to epoch
+        const [month, day, year] = date.split("/");
+        const epochDate = Date.UTC(year, month - 1, day) / 1000;
 
-      const eventTimestamp = new Date(epochTime + epochDate).getTime() - 3600;
+        const eventTimestamp = new Date(epochTime + epochDate).getTime() - 3600;
+        const endTime = eventTimestamp + duration * 3600;
 
-      console.log(eventTimestamp);
-
-      const body = {
-        univAssoc: univ,
-        createTimestamp: "",
-        bannerUrl: image,
-        city: city,
-        desc: description,
-        eventName: title,
-        eventTimestamp: eventTimestamp,
-        posterUid: uid,
-        state: state,
-        streetAddress: address,
-        tags: tags,
-        univExcl: isSwitchOn,
-        zip: zipCode
-      };
-      console.log(body);
-      const response = await axios.post(baseUrl, body);
-      alert("Event posted successfully.");
-      navigation.navigate("Main");
-    } catch (error) {
-      alert("An error has occurred");
-      if (error.response === undefined) throw error;
-      const { response } = error;
-      console.log(`${response.status}:`, response.data);
+        const body = {
+          coords: coordinates,
+          eventName: title,
+          bannerUrl: image,
+          desc: description,
+          requirements: requirements,
+          address: addressString,
+          posterUid: uid,
+          startEndTimestamp: [eventTimestamp, endTime]
+        };
+        console.log(body);
+        const response = await axios.post(baseUrl, body);
+        alert("Event posted successfully.");
+        navigation.navigate("Main");
+      } catch (error) {
+        alert("An error has occurred");
+        if (error.response === undefined) throw error;
+        const { response } = error;
+        console.log(`${response.status}:`, response.data);
+      }
     }
   };
 
@@ -124,15 +153,6 @@ export const FoodPostEvent = ({ navigation }) => {
     }
   };
 
-  const handleTagsChange = (text) => {
-    const newTags = text
-      .split(",")
-      .map((tag) => tag.trim().replace(/!+$/, ""))
-      .filter((tag) => tag !== "");
-    setTags(newTags);
-    console.log(newTags);
-  };
-
   const handleDateChange = (value) => {
     setDate(value);
     if (!/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
@@ -149,11 +169,6 @@ export const FoodPostEvent = ({ navigation }) => {
       .slice(0, 2);
     console.log(cleanedText);
     setState(cleanedText);
-  };
-
-  const zipCodeHandler = (value) => {
-    const limitedLengthText = value.replace(/[^0-9]/g, "").slice(0, 5);
-    setZipCode(limitedLengthText);
   };
 
   const validateTime = (input) => {
@@ -216,6 +231,19 @@ export const FoodPostEvent = ({ navigation }) => {
           </Text>
         )}
         <TextInput
+          label="Duration"
+          value={duration}
+          keyboardType="numeric"
+          onChangeText={(text) => {
+            const durationValue = parseInt(text);
+            if (durationValue >= 1 && durationValue <= 8) {
+              setDuration(durationValue);
+            } else {
+              setDuration("");
+            }
+          }}
+        />
+        <TextInput
           label="Address"
           onChangeText={(text) => setAddress(text)}
           returnKeyType="done"
@@ -232,12 +260,6 @@ export const FoodPostEvent = ({ navigation }) => {
           returnKeyType="done"
         ></TextInput>
         <TextInput
-          label="Zip Code"
-          value={zipCode}
-          onChangeText={zipCodeHandler}
-          returnKeyType="done"
-        ></TextInput>
-        <TextInput
           label="Description"
           multiline={true}
           numberOfLines={5}
@@ -248,14 +270,15 @@ export const FoodPostEvent = ({ navigation }) => {
           onSubmitEditing={handleDonePress}
         />
         <TextInput
-          label="Tags(Comma separated)"
-          onChangeText={handleTagsChange}
+          label="Requirements"
+          multiline={true}
+          numberOfLines={5}
+          maxLength={300}
+          value={requirements}
+          onChangeText={(text) => setRequirements(text)}
           returnKeyType="done"
-        ></TextInput>
-        <View style={styles.options}>
-          <Menu.Item title="University Exclusive" />
-          <Switch value={isSwitchOn} onValueChange={onToggleSwitch} />
-        </View>
+          onSubmitEditing={handleDonePress}
+        />
       </ScrollView>
     </KeyboardAvoidingView>
   );
