@@ -9,18 +9,24 @@ import {
   Bubble,
   InputToolbar
 } from "react-native-gifted-chat";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import axios from "axios";
+import { HomeFeed } from "../Feeds/HomeFeed";
+import { SocialPostScreen } from "../Social/socialPost.screen";
+import { getStringDateFromUnix, getStandardPlural } from '../../utilities';
 
 //Todo
 //get timestamp from evan if chat exists or if new chat get it from Dom
 
 export const ChatRoom = ({ navigation, route }) => {
-  const { chatroomCID, timestamp } = route.params;
-  console.log("Params: ", route.params);
+  const { chatroomCID, timestamp, eventData } = route.params;
+  //console.log("Params: ", route.params);
   const [messages, setMessages] = useState([]);
   const { uid } = useContext(UserContext);
   useEffect(() => {
+    if (eventData) {
+      shareEvent(messages);
+    }
     uid;
   }, [uid]);
   const [uidmappings, setUidMappings] = useState({ [uid]: 0 });
@@ -36,7 +42,7 @@ export const ChatRoom = ({ navigation, route }) => {
         }
       });
       setMessages(ConvertData(response.data));
-      console.log(ConvertData(response.data));
+      //console.log(ConvertData(response.data));
     } catch (error) {
       console.error(error);
     }
@@ -44,8 +50,7 @@ export const ChatRoom = ({ navigation, route }) => {
 
   const SendMessages = async (messagetext) => {
     try {
-      const baseUrl =
-        "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/messages/";
+      const baseUrl = "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/messages/";
       const body = {
         cid: chatroomCID, //use imported cid from dom's screen
         message: {
@@ -54,23 +59,43 @@ export const ChatRoom = ({ navigation, route }) => {
           uidSentBy: uid,
           uidsReadBy: []
         }
-      };
-
+      }
       const config = { "content-type": "application/json" };
       const response = await axios.post(baseUrl, body, config);
       console.log("Message Sent!");
-      console.log(response.data);
+      //console.log(response.data);
     } catch (error) {
       console.error(error);
     }
   };
+
+  const SendEventMessage = async () => {
+    try {
+      const baseUrl = "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/messages/";
+      const body = {
+        cid: chatroomCID, //use imported cid from dom's screen
+        message: {
+          attachments: [JSON.stringify(eventData)],
+          text: "An event has been shared to the chat",
+          uidSentBy: uid,
+          uidsReadBy: []
+        }
+      }
+      const config = { "content-type": "application/json" };
+      const response = await axios.post(baseUrl, body, config);
+      console.log("Message Sent!");
+      //console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const ConvertData = (oldArray) => {
     const newArray = [];
     var countUser = 1;
     var countMessage = 0;
     oldArray.forEach((subArray) => {
-      console.log("sub", subArray);
+      //console.log("sub", subArray);
       for (let i = subArray.length - 1; i >= 0; i--) {
         const obj = subArray[i];
         const { uidSentBy, ...rest } = obj;
@@ -85,6 +110,7 @@ export const ChatRoom = ({ navigation, route }) => {
           _id: countMessage,
           text: rest.text,
           createdAt: date,
+          attachments: { event : rest.attachments } ,
           user: {
             _id: uidmappings[uidSentBy],
             name: "React Native"
@@ -114,15 +140,59 @@ export const ChatRoom = ({ navigation, route }) => {
     );
   }, []);
 
-  const renderBubble = (props) => (
-    <Bubble
-      {...props}
-      wrapperStyle={{
-        right: { backgroundColor: "#ceaffa" },
-        left: { backgroundColor: "#e4e1e8" }
-      }}
-    />
-  );
+  const shareEvent = useCallback((messages = []) => {
+    SendEventMessage();
+    setMessages((previousMessages) =>
+      GiftedChat.append(previousMessages, messages)
+    );
+  }, []);
+
+  const renderBubble = (props) => {
+    const { currentMessage } = props;
+  
+    if (currentMessage.attachments && currentMessage.attachments.event != "") {
+      eventDetails = JSON.parse(currentMessage.attachments.event);
+      return (
+        <Bubble
+          {...props}
+          wrapperStyle={{
+            right: { 
+              backgroundColor: "#ceaffa",
+              alignItems: 'center',
+              justifyContent: 'center' 
+            },
+            left: { 
+              backgroundColor: "#e4e1e8",
+              alignItems: 'center', 
+              justifyContent: 'center' 
+            },
+          }}
+          onPress={() => navigation.navigate("SocialPost", { event: JSON.parse(currentMessage.attachments.event), root: "ChatRoom"})}
+        >
+          {currentMessage.text = <Text>
+            {eventDetails.eventName + '\n' + 
+            eventDetails.streetAddress + '\n' +
+            getStringDateFromUnix(eventDetails.eventTimestamp)
+            }
+          </Text>}
+        </Bubble>
+      );
+    }
+    else {
+      return (
+        <Bubble
+          {...props}
+          wrapperStyle={{
+            right: { backgroundColor: "#ceaffa" },
+            left: { backgroundColor: "#e4e1e8" }
+          }}
+        >
+        </Bubble>
+      );
+    }
+  
+    return null;
+  };
 
   const renderInputToolbar = (props) => (
     <InputToolbar
