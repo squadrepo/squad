@@ -4,15 +4,16 @@ export const styles = StyleSheet.create({
     title:{ 
         fontSize: 30, 
         fontWeight: "bold",
-        marginTop: 45,
+        marginTop: 55,
         marginLeft: 20
     }, 
     caption: {   
-        marginLeft: 20
+        marginLeft: 20,
+        marginTop:5
     },
     picture:{
         marginLeft: 10,
-        marginTop:20
+        marginTop:40
     }, 
     stars:{
         marginTop:10,
@@ -63,5 +64,10 @@ export const styles = StyleSheet.create({
      modalTitle: {
         marginTop: 10, 
         marginBottom: 10
-     }
+     }, 
+     activityIndicator: {
+        position: "absolute",
+        alignSelf: "center",
+        top: "50%",
+      }
 })
