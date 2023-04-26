@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
 import { Text, Card, Avatar } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import { getStandardPlural, parseStringSet } from '../utilities';
-import { AirbnbRating, Rating } from 'react-native-ratings';
+import { Rating } from 'react-native-ratings';
 import { PURPLE_COLOR } from "../constants";
 import star from "../../assets/star.png"
 
@@ -21,7 +20,7 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   coloredText: {
-    color: '#9662fc',
+    color: '#57319e',
   },
   contentText: {
     paddingTop: 12,
@@ -59,7 +58,7 @@ export const TutorProfileCard = ({tutorProfile, navigation, root}) => {
             <View style={{display: "flex", flexDirection: "row", paddingBottom: 12}}>
                 {totalNumRatings > 0 ? 
                 (<>
-                    <Text style={{...styles.coloredText, fontSize: 18}}>{calculatedRating.toFixed(1)} </Text>
+                    <Text style={{color: "#9662fc", fontSize: 18}}>{calculatedRating.toFixed(1)} </Text>
                     <Rating
                         type="custom"
                         ratingImage={star}
