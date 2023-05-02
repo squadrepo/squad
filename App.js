@@ -27,7 +27,11 @@ import { ProfileEditBioScreen } from "./App/Screens/Profile/profileEditBio.scree
 import { ProfilePicturePicker } from "./App/Screens/CameraImagePicker/profilePicturePicker";
 import { RsvpFeed } from "./App/Screens/Feeds/RsvpedEvents";
 import { UserProvider } from "./App/Context";
-import { CreateTutorProfile } from "./App/Screens/Tutoring/createTutorProfile";
+import { TutorProfile } from "./App/Screens/Tutoring/TutorProfile";
+import { CreateTutorProfile } from "./App/Screens/Tutoring/CreateTutorProfile";
+import { CreateTutorProfileBio } from "./App/Screens/Tutoring/CreateTutorProfileBio";
+import { CreateTutorProfileSubjects } from "./App/Screens/Tutoring/CreateTutorProfileSubjects";
+import { CreateTutorProfileCourses } from "./App/Screens/Tutoring/CreateTutorProfileCourses";
 
 Amplify.configure({ awsConfig, ...awsmobile, Analytics: { disabled: true } });
 
@@ -92,7 +96,11 @@ function App() {
             <Stack.Screen name="Chats" component={Chats} />
             <Stack.Screen name="ChatRoom" component={ChatRoom} />
             <Stack.Screen name="RsvpFeed" component={RsvpFeed} />
+            <Stack.Screen name="TutorProfile" component={TutorProfile} />
             <Stack.Screen name="CreateTutorProfile" component={CreateTutorProfile}/>
+            <Stack.Screen name="CreateTutorProfileBio" component={CreateTutorProfileBio}/>
+            <Stack.Screen name="CreateTutorProfileSubjects" component={CreateTutorProfileSubjects}/>
+            <Stack.Screen name="CreateTutorProfileCourses" component={CreateTutorProfileCourses}/>
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>

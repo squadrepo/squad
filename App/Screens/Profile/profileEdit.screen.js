@@ -2,6 +2,7 @@
 Bugs/Things to fix/TO-DO:
 Add edit functionality for tags a bit
 Fix issues with uploading pfp to s3 bucket
+Change Boxes to pressable so a line isn't needed for onclick/onpress stuff
 */
 
 import React, { useState } from "react";

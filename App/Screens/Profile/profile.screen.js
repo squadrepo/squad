@@ -73,7 +73,7 @@ export const ProfileScreen = ({ navigation }) => {
     <View>
 
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.BackAction onPress={() => navigation.navigate("HomeFeed")} />
         <Appbar.Content title={fullName}/>
         <Button icon="account-settings" onPress={() => navigation.navigate("Settings")}>Settings</Button>
       </Appbar.Header>
