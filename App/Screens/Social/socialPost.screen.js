@@ -1,5 +1,5 @@
 import { Text, Appbar, Button } from 'react-native-paper';
-import { View, ScrollView, Image, Dimensions, StyleSheet } from 'react-native';
+import { View, ScrollView, Image, Dimensions, StyleSheet, RefreshControl } from 'react-native';
 import { CommentsSection } from '../../Components/CommentsSection';
 import { getStringDateFromUnix, getStringTimeFromUnix } from '../../utilities';
 import { useState, useContext, useEffect } from 'react';
@@ -9,14 +9,26 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const SocialPostScreen = ({navigation, route}) => {
-  const {event, root} = route.params;
+  const {univAssoc, eid, root} = route.params;
+  const [event, setEvent] = useState();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [triggerRefresh, setTriggerRefresh] = useState(false);
 
-  const uri = (event.bannerUrl && event.bannerUrl.length > 0)
-    ? event.bannerUrl 
-    : "https://squad-app-s3.s3.amazonaws.com/VOKOLOS.png";
-  const eid = event.eid;
-  const numGoing = event.uidsRsvp.length;
-  const numInterested = event.uidsInterested.length;
+  useEffect(() => {
+    const getEvent = async () => {
+      setIsRefreshing(true);
+      try {
+        const response = await axios.get(`${BASE_API_URL}/socialEvent/details?univAssoc=${univAssoc}&eid=${eid}`);
+        setEvent(response.data[0]);
+      } catch (error) {
+        if (error.response == undefined) throw error;
+        const { response } = error;
+        console.log(`${response.status}: `, response.data);
+      }
+      setIsRefreshing(false);
+    };
+    getEvent();
+  }, [triggerRefresh]);
 
   const deviceWidth = Dimensions.get('window').width;
 
@@ -128,11 +140,12 @@ export const SocialPostScreen = ({navigation, route}) => {
         <Appbar.Content title="Back to Feed" />
       </Appbar.Header>
       <ScrollView contentContainerStyle={{ ...styles.verticalFlex, alignItems: "center", paddingBottom: 100 }}
+                  refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={() => setTriggerRefresh(!triggerRefresh)}/>}
                   keyboardShouldPersistTaps='handled'>
 
         { /* This gives us a 16/9 container at 96% of the device's width that the image fills evenly */ }
         <View style={{ width: deviceWidth * 0.96, height: deviceWidth * .54 }}>
-            <Image style={{flex: 1, width: undefined, height: undefined}} source={{ uri: uri }}/>
+            {event?.bannerUrl && (<Image style={{flex: 1, width: undefined, height: undefined}} source={{ uri: event?.bannerUrl }}/>)}
         </View>
 
         <View style={{ ...styles.verticalFlex, alignItems: "flex-start", padding: 0, margin: 0, width: deviceWidth * 0.92 }}>
@@ -140,14 +153,14 @@ export const SocialPostScreen = ({navigation, route}) => {
                 {event?.eventName ?? ""}
             </Text>
             <Text style={{ fontSize: 14, color: "black", textAlign: "left", fontStyle: "italic", paddingBottom: 10}}>
-                Posted by {event?.posterUid ?? ""}
+                Posted by {event?.fullName ?? event?.posterUid ?? ""}
             </Text>
             <Text style={{ fontSize: 18, color: "black", textAlign: "left", }}>
                 <Text style={{ fontWeight: "bold"}}>
                     Date:
                 </Text>
                 <Text>
-                    {` ${getStringDateFromUnix(event.eventTimestamp)}`}
+                    {event?.eventTimestamp && ` ${getStringDateFromUnix(event?.eventTimestamp) ?? ""}`}
                 </Text>
             </Text>
             <Text style={{ fontSize: 18, color: "black", textAlign: "left", }}>
@@ -155,7 +168,7 @@ export const SocialPostScreen = ({navigation, route}) => {
                     Time:
                 </Text>
                 <Text>
-                    {` ${getStringTimeFromUnix(event.eventTimestamp)}`}
+                    {event?.eventTimestamp && ` ${getStringTimeFromUnix(event.eventTimestamp)}`}
                 </Text>
             </Text>
             <Text style={{ fontSize: 18, color: "black", textAlign: "left", }}>
@@ -163,7 +176,7 @@ export const SocialPostScreen = ({navigation, route}) => {
                     Location:
                 </Text>
                 <Text>
-                    {` ${event?.streetAddress}, ${event?.city}, ${event?.state} ${event?.zip}`}
+                    {event?.streetAddress && ` ${event?.streetAddress}, ${event?.city}, ${event?.state} ${event?.zip}`}
                 </Text>
             </Text>
             <Text style={{ fontSize: 18, color: "black", textAlign: "left", paddingTop: 15, paddingBottom: 15 }}>
@@ -173,11 +186,11 @@ export const SocialPostScreen = ({navigation, route}) => {
             <View style={{...styles.horizontalFlex, paddingBottom: 10}}>
                 <Text style={styles.coloredTextHolder}>
                   {bullet}
-                  <Text style={styles.coloredText}>{`${numGoing} going`}</Text>
+                  <Text style={styles.coloredText}>{`${event?.uidsRsvp?.length ?? 0} going`}</Text>
                 </Text>
                 <Text style={styles.coloredTextHolder}>
                   {bullet}
-                  <Text style={styles.coloredText}>{numInterested} interested</Text>
+                  <Text style={styles.coloredText}>{event?.uidsInterested?.length ?? 0} interested</Text>
                 </Text>
             </View>
 
