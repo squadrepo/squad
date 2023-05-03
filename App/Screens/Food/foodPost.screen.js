@@ -101,6 +101,23 @@ export const FoodPostScreen = ({navigation, route}) => {
     console.log("Shared")
   };
 
+  const postComment = async (newCommentText) => {
+    if (newCommentText === "") return;
+    try {
+      await axios.post(`${BASE_API_URL}/foodEvent/comment`, 
+        {
+          univAssoc: event.univAssoc,
+          createTimestamp: event.createTimestamp,
+          commenterUid: uid,
+          commentText: newCommentText
+        });
+    } catch (error) {
+      if (error.response == undefined) throw error;
+      const { response } = error;
+      console.log(`${response.status}: `, response.data);
+    }
+  };
+
   // ScrollView's refreshControl for pull to refresh
   return (
     <View>
@@ -186,7 +203,7 @@ export const FoodPostScreen = ({navigation, route}) => {
                   </View>
               </View>
 
-              <CommentsSection comments={event?.comments} />
+              <CommentsSection comments={event?.comments} postFunction={postComment}/>
           </View>
         )}
 

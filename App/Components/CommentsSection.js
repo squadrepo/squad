@@ -5,13 +5,14 @@ import { useState, useContext } from 'react';
 import { UserContext } from '../Context';
 import moment from 'moment';
 
-export const CommentsSection = ({comments}) => {
+export const CommentsSection = ({comments, postFunction}) => {
   const [newCommentText, setNewCommentText] = useState("");
   const [commentButtonsVisible, setCommentButtonsVisible] = useState(false);
   const { uid } = useContext(UserContext);
 
-  const onSubmitComment = () => {
+  const onSubmitComment = async () => {
     if (newCommentText === "") return;
+    await postFunction(newCommentText);
     setNewCommentText("");
     setCommentButtonsVisible(false)
   };
@@ -50,6 +51,7 @@ export const CommentsSection = ({comments}) => {
             size={20}
             onPress={onSubmitComment} 
             disabled={newCommentText === ""}
+            iconColor={"#6750A4"}
             />
         </View>
 
