@@ -18,6 +18,7 @@ export const FoodPostScreen = ({navigation, route}) => {
   const [thumbsUpCount, setThumbsUpCount] = useState(0);
   const [thumbsDownSelected, setThumbsDownSelected] = useState(false);
   const [thumbsDownCount, setThumbsDownCount] = useState(0);
+  const [comments, setComments] = useState([]);
 
   const isLoaded = event?.address !== undefined;
   const deviceWidth = Dimensions.get('window').width;
@@ -48,6 +49,7 @@ export const FoodPostScreen = ({navigation, route}) => {
     setThumbsUpCount(event?.rating?.up?.length ?? 0);
     setThumbsDownSelected(event?.rating?.down?.includes(uid));
     setThumbsDownCount(event?.rating?.down?.length ?? 0);
+    setComments(event?.comments);
 }, [event]);
 
 
@@ -111,6 +113,13 @@ export const FoodPostScreen = ({navigation, route}) => {
           commenterUid: uid,
           commentText: newCommentText
         });
+      setComments([...event.comments, 
+        {
+          commentText: newCommentText, 
+          commenterUid: uid,
+          createTimestamp: Date.now() / 1000,
+          attachmentUrls: [""]
+        }]);
     } catch (error) {
       if (error.response == undefined) throw error;
       const { response } = error;
@@ -203,7 +212,7 @@ export const FoodPostScreen = ({navigation, route}) => {
                   </View>
               </View>
 
-              <CommentsSection comments={event?.comments} postFunction={postComment}/>
+              <CommentsSection comments={comments} postFunction={postComment}/>
           </View>
         )}
 

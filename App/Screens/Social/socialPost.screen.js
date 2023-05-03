@@ -13,6 +13,8 @@ export const SocialPostScreen = ({navigation, route}) => {
   const [event, setEvent] = useState();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [triggerRefresh, setTriggerRefresh] = useState(false);
+  const [comments, setComments] = useState([]);
+
 
   useEffect(() => {
     const getEvent = async () => {
@@ -30,10 +32,17 @@ export const SocialPostScreen = ({navigation, route}) => {
     getEvent();
   }, [triggerRefresh]);
 
+  useEffect(() => {
+    if (!isLoaded) return;
+    console.log(event);
+    setComments(event?.comments);
+}, [event]);
+
+  const isLoaded = event?.streetAddress !== undefined;
   const deviceWidth = Dimensions.get('window').width;
 
   const bullet = (<Text style={{fontWeight: 'bold', fontSize: 18}}>· </Text>);
-  console.log(event?.comments);
+
   const [yesButtonMode, setYesButtonMode] = useState("outlined");
   const [maybeButtonMode, setMaybeButtonMode] = useState("outlined");
   const { uid } = useContext(UserContext);
@@ -141,6 +150,13 @@ export const SocialPostScreen = ({navigation, route}) => {
           commenterUid: uid,
           commentText: newCommentText
         });
+      setComments([...event.comments, 
+        {
+          commentText: newCommentText, 
+          commenterUid: uid,
+          createTimestamp: Date.now() / 1000,
+          attachmentUrls: [""]
+        }]);
     } catch (error) {
       if (error.response == undefined) throw error;
       const { response } = error;
@@ -176,7 +192,7 @@ export const SocialPostScreen = ({navigation, route}) => {
                     Date:
                 </Text>
                 <Text>
-                    {event?.eventTimestamp && ` ${getStringDateFromUnix(event?.eventTimestamp) ?? ""}`}
+                    {isLoaded && ` ${getStringDateFromUnix(event?.eventTimestamp) ?? ""}`}
                 </Text>
             </Text>
             <Text style={{ fontSize: 18, color: "black", textAlign: "left", }}>
@@ -184,7 +200,7 @@ export const SocialPostScreen = ({navigation, route}) => {
                     Time:
                 </Text>
                 <Text>
-                    {event?.eventTimestamp && ` ${getStringTimeFromUnix(event.eventTimestamp)}`}
+                    {isLoaded && ` ${getStringTimeFromUnix(event.eventTimestamp)}`}
                 </Text>
             </Text>
             <Text style={{ fontSize: 18, color: "black", textAlign: "left", }}>
@@ -192,7 +208,7 @@ export const SocialPostScreen = ({navigation, route}) => {
                     Location:
                 </Text>
                 <Text>
-                    {event?.streetAddress && ` ${event?.streetAddress}, ${event?.city}, ${event?.state} ${event?.zip}`}
+                    {isLoaded && ` ${event?.streetAddress}, ${event?.city}, ${event?.state} ${event?.zip}`}
                 </Text>
             </Text>
             <Text style={{ fontSize: 18, color: "black", textAlign: "left", paddingTop: 15, paddingBottom: 15 }}>
@@ -228,7 +244,7 @@ export const SocialPostScreen = ({navigation, route}) => {
                 </View>
             </View>
 
-            <CommentsSection comments={event?.comments} postFunction={postComment}/>
+            <CommentsSection comments={comments} postFunction={postComment}/>
         </View>
 
       </ScrollView>
