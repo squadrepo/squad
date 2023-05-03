@@ -33,7 +33,7 @@ export const SocialPostScreen = ({navigation, route}) => {
   const deviceWidth = Dimensions.get('window').width;
 
   const bullet = (<Text style={{fontWeight: 'bold', fontSize: 18}}>· </Text>);
-
+  console.log(event?.comments);
   const [yesButtonMode, setYesButtonMode] = useState("outlined");
   const [maybeButtonMode, setMaybeButtonMode] = useState("outlined");
   const { uid } = useContext(UserContext);
@@ -130,7 +130,23 @@ export const SocialPostScreen = ({navigation, route}) => {
   const handleShareButtonPress = () => {
     console.log("Shared")
   };
-  
+
+  const postComment = async (newCommentText) => {
+    if (newCommentText === "") return;
+    try {
+      await axios.post(`${BASE_API_URL}/socialEvent/comment`, 
+        {
+          univAssoc: event.univAssoc,
+          createTimestamp: event.createTimestamp,
+          commenterUid: uid,
+          commentText: newCommentText
+        });
+    } catch (error) {
+      if (error.response == undefined) throw error;
+      const { response } = error;
+      console.log(`${response.status}: `, response.data);
+    }
+  };
 
   // ScrollView's refreshControl for pull to refresh
   return (
@@ -212,7 +228,7 @@ export const SocialPostScreen = ({navigation, route}) => {
                 </View>
             </View>
 
-            <CommentsSection comments={event?.comments} />
+            <CommentsSection comments={event?.comments} postFunction={postComment}/>
         </View>
 
       </ScrollView>
