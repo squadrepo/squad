@@ -13,10 +13,12 @@ import axios from 'axios';
 export const TutorProfile = () => {
     const [modalVisible, setModalVisible] = React.useState(false);
     const [rating, setRating] = React.useState(0);
-    const { uid } = useContext(UserContext);
+    const { uid } = useContext(UserContext);                 
     const [tutorProfileData, setTutorProfileData] = React.useState();
     const [loading, setLoading] = useState(true);
-    const tutorUid = "c6030b8d-771b-454b-af0b-4aba56f0b300"  //get this from the previous screen 
+    const [errorMsg, setErrorMsg] = useState();                //remember to update state after session is scheduled
+    const [buttonText, setButtonText] = useState("Submit");    //remember to update state after session is scheduled
+    const tutorUid = "c6030b8d-771b-454b-af0b-4aba56f0b300"    //get this from the previous screen 
     const tutorRating = 3 //get this from brett's screen
     const sessionsTutored = 1000 //also from brett's screen 
 
@@ -43,21 +45,26 @@ export const TutorProfile = () => {
 
 
     const handleRating = async (rating) => {
-        try {
-            const body = {
-                tutorUid: tutorUid,
-                discipleUid: uid,
-                rating: rating
+            if (tutorProfileData.disciples.includes(uid)){
+                try {
+                    const body = {
+                        tutorUid: tutorUid,
+                        discipleUid: uid,
+                        rating: rating
+                    }
+                    console.log(`${BASE_API_URL}/tutoring/rate`)
+                    const response = await axios.post(`${BASE_API_URL}/tutoring/rate`, body);
+                    console.log(response.data)
+                    return true 
+                } catch (error) {
+                    if (error.response == undefined) throw error;
+                    const { response } = error;
+                    console.log(`${response.status}: `, response.data);
+                  }
+
+            } else {
+                return false
             }
-            console.log(`${BASE_API_URL}/tutoring/rate`)
-            const response = await axios.post(`${BASE_API_URL}/tutoring/rate`, body);
-            console.log(response.data)
-        } catch (error) {
-            if (error.response == undefined) throw error;
-            const { response } = error;
-            console.log(`${response.status}: `, response.data);
-          }
-        
     }; 
 
     if (loading) {
@@ -123,9 +130,19 @@ export const TutorProfile = () => {
                                 defaultRating={rating}
                                 showRating={false}
                                 size={30}
-                                onFinishRating={handleRating}
+                                onFinishRating={(newRating) => {
+                                handleRating(newRating).then((success) => {
+                                    if (!success) {
+                                        setErrorMsg("Schedule a meeting with the tutor before rating.")
+                                        setButtonText("Cancel")
+                                    } else {
+                                        setErrorMsg(null)
+                                    }
+                                })
+                            }}
                             />
-                            <Button onPress={() => setModalVisible(false)} mode="contained" style={{marginTop:10}}> Submit </Button>
+                            {errorMsg && <Text>{errorMsg}</Text>}
+                            <Button onPress={() => setModalVisible(false)} mode="contained" style={{marginTop:10}}> {buttonText} </Button>
                             </View>
                     </Modal>
                 </Portal>
