@@ -67,6 +67,23 @@ export const TutorProfile = () => {
             }
     }; 
 
+
+
+    function renderAvailability(avail) {
+        const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+      
+        return days
+          .filter((day) => avail[day].length > 0)
+          .map((day) => {
+            const times = avail[day].map(([start, end]) => `${start} - ${end}`);
+            return (
+              <Text style={styles.text} key={day}>
+                {day}: {times.join(", ")}
+              </Text>
+            );
+          });
+      }
+
     if (loading) {
         return (
                <ActivityIndicator style={styles.activityIndicator} animating={true} color={PURPLE_COLOR} />
@@ -103,8 +120,7 @@ export const TutorProfile = () => {
                 </View>
                 <View>
                     <Title style={styles.headline}>Schedule</Title>
-                    {Object.entries(sampleData[0].Avail).map(([day, time]) => (
-                        <Text style = {styles.text} key={day}> {day}: {time} </Text>))}
+                    <View>{renderAvailability(tutorProfileData.availability)}</View>
                 </View>
                 <View>
                     <Title style={styles.headline}>Tags</Title>
