@@ -3,7 +3,7 @@ import { TextInput, Button, Text, Modal, Portal } from "react-native-paper";
 import { SafeAreaView, View, StyleSheet, ActivityIndicator } from "react-native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MapView, {Marker, PROVIDER_GOOGLE, Callout, MarkerAnimated} from 'react-native-maps';
-import { BASE_API_URL } from '../../constants';
+import { BASE_API_URL, PURPLE_COLOR } from '../../constants';
 import axios from 'axios';
 import * as Location from 'expo-location';
 import { FoodPostScreen } from '../Food/foodPost.screen';
@@ -112,9 +112,11 @@ export const FoodFeed = () => {
                 description={marker.address}
               > 
               <Callout onPress={() => navigation.navigate('FoodPostScreen', {hashKey: marker.hashKey, rangeKey: marker.rangeKey, root: 'FoodMap'})}>
-                  <Text variant='labelLarge' style={{margin:2}}>{marker.title}</Text>
+                  <Text variant='labelLarge' style={{margin:2, color: '#57319e'}}>{marker.title}</Text>
                   <Text style={{margin:2}}>Address: {marker.address}</Text>
                   <Text style={{margin:2}}>Ends: {getStringDateTimeFromUnix(marker.startEndTimestamp[1])}</Text>
+                  <Text style={{margin:2, color: PURPLE_COLOR, fontStyle: "italic", textAlign: "center"}}>Tap for details</Text>
+
               </Callout>
               </Marker>
             ))}
