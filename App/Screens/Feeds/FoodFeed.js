@@ -13,26 +13,43 @@ export const FoodFeed = () => {
   const [visible, setVisible] = useState(false);
   const [radius, setRadius] = useState(1);
   const [markers, setMarkers] = useState(null); 
+  const [granted, setGranted] = useState(false);
+  const [lat, setLat] = useState(39.95380477768779)
+  const [long, setLong] = useState(-75.18490433692932)
+
+  const getPermissions = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      setInitialRegion({
+        latitude: lat,                 //coordinates for Drexel University
+        longitude: long, 
+        latitudeDelta: 0.0922,                      // default values
+        longitudeDelta: 0.0421,
+      })
+      console.log("Please grant location permissions");   
+      return;
+    } else {
+      setGranted(true);
+    }
+
+  }
+
+  const getCurrentPosition = async() => {
+    let currentLocation = await Location.getCurrentPositionAsync({});
+    setLocation(currentLocation);
+    return currentLocation
+  }
 
   useEffect(() => {
-    const getPermissions = async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        console.log("Please grant location permissions");   // TO-DO Set default location 
-        return;
-      }
-    }
   
-    const getCurrentPosition = async() => {
-      let currentLocation = await Location.getCurrentPositionAsync({});
-      setLocation(currentLocation);
-      return currentLocation
-    }
     const getMapData = async () => {
-      try {
+      if (granted) {
         const currentPosition = await getCurrentPosition(); // get the current position of the user
-        const coords = currentPosition.coords
+        coords = currentPosition.coords; 
         
+        setLat(coords.latitude)
+        setLong(coords.longitude)
+
         setInitialRegion({
           latitude: coords.latitude,
           longitude: coords.longitude,
@@ -40,7 +57,9 @@ export const FoodFeed = () => {
           longitudeDelta: 0.0421,
         })
 
-        const response = await axios.get(`${BASE_API_URL}/foodEvent?coords=${coords.latitude},${coords.longitude}&radius=${radius}`);
+      }
+      try {
+        const response = await axios.get(`${BASE_API_URL}/foodEvent?coords=${lat},${long}&radius=${radius}`);
         const filteredResponse = response.data.map(({ geoJson, eventName, desc, address }) => 
         ({title: eventName,
           description: desc,
@@ -50,7 +69,6 @@ export const FoodFeed = () => {
             longitude: parseFloat(geoJson.split(',')[1]),
           }}));
         setMarkers(filteredResponse)
-        console.log(filteredResponse)
 
       } catch (error) {
         console.log(error);
@@ -58,7 +76,8 @@ export const FoodFeed = () => {
     };
     getPermissions()
     getMapData()
-  }, [radius]);
+
+  }, [radius, granted, lat, long]);
 
   const onButtonPress = () => {
     console.log('Marker button pressed');
@@ -66,7 +85,6 @@ export const FoodFeed = () => {
 
   const applyFilter = () => {
     const filterRadius = radius === '' ? '1' : radius;
-    // Apply the filter with the filterRadius value
     console.log('Applied filter with radius:', filterRadius);
     setVisible(true);
   };
@@ -120,7 +138,7 @@ export const FoodFeed = () => {
             <Button mode="contained" onPress={() => setVisible(false)}>
               Apply
             </Button>
-            <Text style={{margin:10}}>Please wait for a 10 seconds for the request to be complete...</Text>
+            <Text style={{margin:10, fontWeight:'bold'}}>Please wait for a 20 seconds for the request to be complete...</Text>
           </View>
         </Modal>
       </Portal>
