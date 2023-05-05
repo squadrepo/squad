@@ -21,7 +21,7 @@ export const SocialPostScreen = ({navigation, route}) => {
       setIsRefreshing(true);
       try {
         const response = await axios.get(`${BASE_API_URL}/socialEvent/details?univAssoc=${univAssoc}&eid=${eid}`);
-        setEvent(response.data[0]);
+        setEvent(response.data);
       } catch (error) {
         if (error.response == undefined) throw error;
         const { response } = error;
@@ -45,7 +45,7 @@ export const SocialPostScreen = ({navigation, route}) => {
 
   const [yesButtonMode, setYesButtonMode] = useState("outlined");
   const [maybeButtonMode, setMaybeButtonMode] = useState("outlined");
-  const { uid } = useContext(UserContext);
+  const { uid, fullName, pfpUrl } = useContext(UserContext);
   const [yesRemoval, setYesRemoval] = useState(false);
   const [maybeRemoval, setMaybeRemoval] = useState(false);
 
@@ -145,7 +145,7 @@ export const SocialPostScreen = ({navigation, route}) => {
     try {
       await axios.post(`${BASE_API_URL}/socialEvent/comment`, 
         {
-          univAssoc: event.univAssoc,
+          univAssoc: univAssoc,
           createTimestamp: event.createTimestamp,
           commenterUid: uid,
           commentText: newCommentText
@@ -154,6 +154,8 @@ export const SocialPostScreen = ({navigation, route}) => {
         {
           commentText: newCommentText, 
           commenterUid: uid,
+          fullName: fullName,
+          pfpUrl: pfpUrl,
           createTimestamp: Date.now() / 1000,
           attachmentUrls: [""]
         }]);

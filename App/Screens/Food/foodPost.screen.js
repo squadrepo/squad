@@ -12,7 +12,7 @@ export const FoodPostScreen = ({navigation, route}) => {
   const [event, setEvent] = useState();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [triggerRefresh, setTriggerRefresh] = useState(false);
-  const { uid } = useContext(UserContext);
+  const { uid, fullName, pfpUrl } = useContext(UserContext);
 
   const [thumbsUpSelected, setThumbsUpSelected] = useState(false);
   const [thumbsUpCount, setThumbsUpCount] = useState(0);
@@ -108,8 +108,8 @@ export const FoodPostScreen = ({navigation, route}) => {
     try {
       await axios.post(`${BASE_API_URL}/foodEvent/comment`, 
         {
-          univAssoc: event.univAssoc,
-          createTimestamp: event.createTimestamp,
+          hashKey: hashKey,
+          rangeKey: rangeKey,
           commenterUid: uid,
           commentText: newCommentText
         });
@@ -117,6 +117,8 @@ export const FoodPostScreen = ({navigation, route}) => {
         {
           commentText: newCommentText, 
           commenterUid: uid,
+          fullName: fullName,
+          pfpUrl: pfpUrl,
           createTimestamp: Date.now() / 1000,
           attachmentUrls: [""]
         }]);
