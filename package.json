@@ -11,7 +11,7 @@
   "dependencies": {
     "@expo/webpack-config": "^18.0.1",
     "@react-native-async-storage/async-storage": "^1.18.1",
-    "@react-native-community/datetimepicker": "6.5.2",
+    "@react-native-community/datetimepicker": "^6.5.2",
     "@react-native-community/netinfo": "9.3.5",
     "@react-native-picker/picker": "^2.4.8",
     "@react-navigation/bottom-tabs": "^6.5.7",

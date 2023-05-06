@@ -1,5 +1,8 @@
 /*
 TODO: Converrt time to epoch
+Change Boxes to pressable so a line isn't needed for onclick/onpress stuff
+Add edit functionality for tags a bit
+Fix issues with uploading pfp to s3 bucket
 */
 
 import React, { useState } from "react";
@@ -62,6 +65,7 @@ export const ProfileEditScreen = ({ navigation, route }) => {
       console.log(response.data);
     }
   };
+
 
   const save = () => {
     //temp method to make it look like the image changed, will need to fix

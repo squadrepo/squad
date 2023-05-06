@@ -7,6 +7,7 @@ import { FlatList, ScrollView, View, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { feedStyles as styles } from './FeedStyles';
 import { TutorProfileCard } from '../../Components/TutorProfileCard';
+import { TutorProfile } from '../Tutoring/TutorProfile';
 
 const subjects = [
   "Accounting",
@@ -111,7 +112,7 @@ export const TutoringFeed = () => {
       :
         <FlatList 
           data={tutorProfiles}
-          renderItem={({item}) => <TutorProfileCard tutorProfile={item} navigation={navigation} root='TutorFeed'/>} 
+          renderItem={({item}) => <TutorProfileCard tutorProfile={item} navigation={navigation} root='TutorFeed' subject={subject} univ={univ}/>} 
           extraData={tutorProfiles.length} 
           keyExtractor={(item, index) => index}
           onRefresh={onRefresh}
@@ -121,14 +122,6 @@ export const TutoringFeed = () => {
 
     );
   }
- 
-  const TutorProfile = ({navigation, route, root}) => {
-    const {tutorProfile} = route.params;
-    return (
-      <View style={{paddingTop:200}}>
-        <Text style={{ paddingTop:200, fontSize: 28, color: 'black', textAlign: 'center' }}>Tutor: {tutorProfile.fullName}, Root: {root}</Text>
-      </View>
-  );}
 
   return (
   <Stack.Navigator screenOptions={{ headerShown: false }}>

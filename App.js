@@ -26,6 +26,11 @@ import { ProfilePicturePicker } from "./App/Screens/CameraImagePicker/profilePic
 import { RsvpFeed } from "./App/Screens/Feeds/RsvpedEvents";
 import { TutorProfile } from "./App/Screens/Tutoring/TutorProfile";
 import { UserProvider } from "./App/Context";
+import { CreateTutorProfile } from "./App/Screens/Tutoring/CreateTutorProfile";
+import { CreateTutorProfileBio } from "./App/Screens/Tutoring/CreateTutorProfileBio";
+import { CreateTutorProfileSubjects } from "./App/Screens/Tutoring/CreateTutorProfileSubjects";
+import { CreateTutorProfileCourses } from "./App/Screens/Tutoring/CreateTutorProfileCourses";
+import { CreateTutorProfileRate } from "./App/Screens/Tutoring/CreateTutorProfileRate";
 import { CreateEvent } from "./App/Screens/Events/createEventScreen";
 import { ChooseEventType } from "./App/Screens/Events/chooseEventType";
 import { FoodPostEvent } from "./App/Screens/Events/foodPostEvent";
@@ -107,7 +112,11 @@ function App() {
               component={SelectTutorSession}
             />
             <Stack.Screen name="RsvpFeed" component={RsvpFeed} />
-            <Stack.Screen name="TutorProfile" component={TutorProfile} />
+            <Stack.Screen name="CreateTutorProfile" component={CreateTutorProfile} />
+            <Stack.Screen name="CreateTutorProfileBio" component={CreateTutorProfileBio} />
+            <Stack.Screen name="CreateTutorProfileSubjects" component={CreateTutorProfileSubjects} />
+            <Stack.Screen name="CreateTutorProfileCourses" component={CreateTutorProfileCourses} />
+            <Stack.Screen name="CreateTutorRate" component={CreateTutorProfileRate} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
