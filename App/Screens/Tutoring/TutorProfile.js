@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import { TextInput, Button, Text, Avatar, Title, Caption, ActivityIndicator, Modal, Portal} from "react-native-paper";
 import { SafeAreaView, StyleSheet, View, Image} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-//import { AirbnbRating } from 'react-native-ratings';
+import { AirbnbRating } from 'react-native-ratings';
 import { DEFAULT_PROFILE_PIC, PURPLE_COLOR } from "../../constants";
 import { stopLocationUpdatesAsync } from "expo-location";
 import { styles } from "./TutorProfileStyles";
@@ -13,10 +13,12 @@ import axios from 'axios';
 export const TutorProfile = () => {
     const [modalVisible, setModalVisible] = React.useState(false);
     const [rating, setRating] = React.useState(0);
-    const { uid } = useContext(UserContext);
+    const { uid } = useContext(UserContext);                 
     const [tutorProfileData, setTutorProfileData] = React.useState();
     const [loading, setLoading] = useState(true);
-    const tutorUid = "c6030b8d-771b-454b-af0b-4aba56f0b300"  //get this from the previous screen 
+    const [errorMsg, setErrorMsg] = useState();                //remember to update state after session is scheduled
+    const [buttonText, setButtonText] = useState("Submit");    //remember to update state after session is scheduled
+    const tutorUid = "c6030b8d-771b-454b-af0b-4aba56f0b300"    //get this from the previous screen 
     const tutorRating = 3 //get this from brett's screen
     const sessionsTutored = 1000 //also from brett's screen 
 
@@ -43,22 +45,44 @@ export const TutorProfile = () => {
 
 
     const handleRating = async (rating) => {
-        try {
-            const body = {
-                tutorUid: tutorUid,
-                discipleUid: uid,
-                rating: rating
+            if (tutorProfileData.disciples.includes(uid)){
+                try {
+                    const body = {
+                        tutorUid: tutorUid,
+                        discipleUid: uid,
+                        rating: rating
+                    }
+                    console.log(`${BASE_API_URL}/tutoring/rate`)
+                    const response = await axios.post(`${BASE_API_URL}/tutoring/rate`, body);
+                    console.log(response.data)
+                    return true 
+                } catch (error) {
+                    if (error.response == undefined) throw error;
+                    const { response } = error;
+                    console.log(`${response.status}: `, response.data);
+                  }
+
+            } else {
+                return false
             }
-            console.log(`${BASE_API_URL}/tutoring/rate`)
-            const response = await axios.post(`${BASE_API_URL}/tutoring/rate`, body);
-            console.log(response.data)
-        } catch (error) {
-            if (error.response == undefined) throw error;
-            const { response } = error;
-            console.log(`${response.status}: `, response.data);
-          }
-        
     }; 
+
+
+
+    function renderAvailability(avail) {
+        const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+      
+        return days
+          .filter((day) => avail[day].length > 0)
+          .map((day) => {
+            const times = avail[day].map(([start, end]) => `${start} - ${end}`);
+            return (
+              <Text style={styles.text} key={day}>
+                {day}: {times.join(", ")}
+              </Text>
+            );
+          });
+      }
 
     if (loading) {
         return (
@@ -74,6 +98,13 @@ export const TutorProfile = () => {
                 <View>
                     <Title style={styles.title}>{tutorProfileData.fullName}</Title>
                     <View style={styles.stars}>
+                    <AirbnbRating
+                    count={5}
+                    isDisabled={true}
+                    defaultRating={tutorRating}
+                    showRating={false}
+                    size={30}
+                    selectedColor={PURPLE_COLOR}/>
                     </View>
                     <Caption style={styles.caption}>{sessionsTutored} sessions tutored</Caption>
                     <Caption style={styles.caption}>${tutorProfileData.hrRate}/hour </Caption>
@@ -89,8 +120,7 @@ export const TutorProfile = () => {
                 </View>
                 <View>
                     <Title style={styles.headline}>Schedule</Title>
-                    {Object.entries(sampleData[0].Avail).map(([day, time]) => (
-                        <Text style = {styles.text} key={day}> {day}: {time} </Text>))}
+                    <View>{renderAvailability(tutorProfileData.availability)}</View>
                 </View>
                 <View>
                     <Title style={styles.headline}>Tags</Title>
@@ -111,8 +141,24 @@ export const TutorProfile = () => {
                     <Modal visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
                         <View style={styles.modalContent}>
                             <Title style={styles.modalTitle}>Leave a Rating</Title>
-
-                            <Button onPress={() => setModalVisible(false)} mode="contained" style={{marginTop:10}}> Submit </Button>
+                            <AirbnbRating
+                                count={5}
+                                defaultRating={rating}
+                                showRating={false}
+                                size={30}
+                                onFinishRating={(newRating) => {
+                                handleRating(newRating).then((success) => {
+                                    if (!success) {
+                                        setErrorMsg("Schedule a meeting with the tutor before rating.")
+                                        setButtonText("Cancel")
+                                    } else {
+                                        setErrorMsg(null)
+                                    }
+                                })
+                            }}
+                            />
+                            {errorMsg && <Text>{errorMsg}</Text>}
+                            <Button onPress={() => setModalVisible(false)} mode="contained" style={{marginTop:10}}> {buttonText} </Button>
                             </View>
                     </Modal>
                 </Portal>
@@ -121,6 +167,7 @@ export const TutorProfile = () => {
         </SafeAreaView>
     )};
 };
+
 
 
 
