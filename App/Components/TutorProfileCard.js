@@ -32,8 +32,7 @@ const ACTION_TEXT_VARIANT = "labelSmall"
 const bullet = (<Text style={{fontWeight: 'bold', fontSize: 14}}>· </Text>);
 
 
-export const TutorProfileCard = ({tutorProfile, navigation, root}) => {
-
+export const TutorProfileCard = ({tutorProfile, navigation, root, subject, univ}) => {
     const numDisciples = tutorProfile?.disciples?.length ?? 0;
     console.log(tutorProfile);
 
@@ -51,7 +50,7 @@ export const TutorProfileCard = ({tutorProfile, navigation, root}) => {
 
     return (
         <Card style={styles.card} onPress={() => {
-            navigation.navigate('TutorProfile', {tutorProfile: tutorProfile, root: root});
+            navigation.navigate('TutorProfile', {tutorUid: tutorProfile?.uid, tutorRating: calculatedRating, totalNumRatings: totalNumRatings, numDisciples: numDisciples, root: root, subject: subject, univ: univ});
         }
         }>
             <Card.Title title={tutorProfile.fullName} subtitle={null} titleStyle={{fontSize: 22, fontWeight: "bold"}} right={() =>
