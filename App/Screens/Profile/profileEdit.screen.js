@@ -52,7 +52,6 @@ export const ProfileEditScreen = ({ navigation, route }) => {
 
   //{"uid":"123", "username":"GG466", "aboutMe":"Me Love Squad", "tags":["JOJO", "apple sucks"], "pfpUrl":"too prett for a URL"}
   const updateProfile = async () => {
-  
     try {
       const response = await axios.post(url, updateData);
       console.log("User table: ", updateData);

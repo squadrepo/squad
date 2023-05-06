@@ -51,24 +51,14 @@ export const CreateTutorProfileCourses = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
   },
 
-  list: {
-
-  },
-
-  listItem: {
-    height: 50,
-    borderColor: "black",
-    borderWidth: 2
-  },
-
-  itemText: {
-    fontSize: 30,
-    paddingTop: 5,
-    alignSelf: "center",
-    justifyContent: "center",
+  profileDetail: {
+    padding: 10,
+    paddingLeft: 15,
+    alignSelf: 'flex-start',
+    alignItems: "stretch",
+    alignContent: "stretch",
   },
 
   textHeader: {

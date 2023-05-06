@@ -32,6 +32,7 @@ import { CreateTutorProfile } from "./App/Screens/Tutoring/CreateTutorProfile";
 import { CreateTutorProfileBio } from "./App/Screens/Tutoring/CreateTutorProfileBio";
 import { CreateTutorProfileSubjects } from "./App/Screens/Tutoring/CreateTutorProfileSubjects";
 import { CreateTutorProfileCourses } from "./App/Screens/Tutoring/CreateTutorProfileCourses";
+import { CreateTutorProfileRate } from "./App/Screens/Tutoring/CreateTutorProfileRate";
 
 Amplify.configure({ awsConfig, ...awsmobile, Analytics: { disabled: true } });
 
@@ -101,6 +102,7 @@ function App() {
             <Stack.Screen name="CreateTutorProfileBio" component={CreateTutorProfileBio}/>
             <Stack.Screen name="CreateTutorProfileSubjects" component={CreateTutorProfileSubjects}/>
             <Stack.Screen name="CreateTutorProfileCourses" component={CreateTutorProfileCourses}/>
+            <Stack.Screen name="CreateTutorProfileRate" component={CreateTutorProfileRate}/>
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>

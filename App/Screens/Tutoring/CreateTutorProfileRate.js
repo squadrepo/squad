@@ -9,10 +9,10 @@ import { SafeAreaView, View, StyleSheet, Image, Text, TextInput} from "react-nat
 import { useRoute } from "@react-navigation/core";
 import { sub } from "react-native-reanimated";
 
-export const CreateTutorProfileBio = ({ navigation, route }) => {
-  const [bio, setBio] = React.useState(route.params.bio);
+export const CreateTutorProfileRate = ({ navigation, route }) => {
+  const [bio] = React.useState(route.params.bio);
   const [availability] = React.useState(route.params.availability);
-  const [hrRate] = React.useState(route.params.hrRate);
+  const [hrRate, setHrRate] = React.useState(route.params.hrRate);
   const [subjects] = React.useState(route.params.subjects);
   const [classesTaken] = React.useState(route.params.classesTaken);
   const [pfpUrl] = React.useState(route.params.pfpUrl);
@@ -29,21 +29,27 @@ export const CreateTutorProfileBio = ({ navigation, route }) => {
     });
   }
 
+  function onChangeText(hrRate) {
+    if (/^[0-9]+(\.[0-9]{1,2})?$/.test(hrRate)) {
+      setHrRate(hrRate);
+    }
+  }
+
   return (
 
     <View>
 
       <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title="Bio" />
+        <Appbar.Content title="Hourly Rate" />
         <Button textDecoration="underline" onPress={save}>Save</Button>
       </Appbar.Header>
 
     <SafeAreaView style={styles.container}>
 
       <View style={styles.profileDetail}>
-        <Text style={styles.textHeader}>About me</Text>
-        <TextInput style={styles.textInput} value={bio} mode="text" label="Bio" multiline={true} onChangeText={setBio}></TextInput>
+        <Text style={styles.textHeader}>Hourly Rate</Text>
+        <TextInput label="$" value={hrRate} onChangeText={hrRate => onChangeText(hrRate)}></TextInput>
       </View>
 
     </SafeAreaView>

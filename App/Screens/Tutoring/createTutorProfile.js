@@ -6,13 +6,14 @@ Modify text on screens evan worked on with react native paper typography
 
 /*
 Other to do
+-Fix adding time not changing time for more than one day
+-Add functionality to remove tags
 -Add functionality for camera
--Add functionality for adding courses taken
 */
 
 import React, { Component, useContext, useState } from "react";
 import { SafeAreaView, View, StyleSheet, Image, Text, Pressable, ScrollView } from "react-native";
-import { Button, Appbar, Modal, Portal } from "react-native-paper";
+import { Button, Appbar, Modal, Portal, TextInput, HelperText } from "react-native-paper";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Moment from 'moment';
 import { UserContext } from '../../Context';
@@ -51,7 +52,6 @@ export const CreateTutorProfile = ({ navigation, route }) => {
 
   //This will get the users information and store the info in the correct states
   React.useEffect(() => {
-    console.log(updateData.subjects);
     const getUser = async () => {
       try {
         const UUID = await getUserUUID();
@@ -72,16 +72,39 @@ export const CreateTutorProfile = ({ navigation, route }) => {
   }, []);
 
   //URL used to POST users info
-  const url = "";
+  const url = "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/tutoring/createtutorprofile";
 
   const updateData = {
     "uid": uid,
-    "bio": "temp",
-    "availability": {"Sun": [[900,1200]], "Mon": [[1230,1300]], "Tue": [[830,1145]], "Wed": [[900,1200]], "Thu": [[900,1200]], "Fri": [[1100,1400]], "Sat": [[900,1200]]},
-    "hrRate": 1234,
-    "subjects": ["Computer Science", "Biology"],
-    "classesTaken": ["CS 493", "CS 123"]
+    "bio": "",
+    "availability": {"Sun": [[900,1700]], "Mon": [[900,1700]], "Tue": [[900,1700]], "Wed": [[900,1700]], "Thu": [[900,1700]], "Fri": [[900,1700]], "Sat": [[900,1700]]},
+    "hrRate": 0,
+    "subjects": [],
+    "classesTaken": []
   };
+
+  const updateTutorProfile = async () => {
+    try {
+      const response = await axios.post(url, updateData);
+      console.log("Tutor table: ", updateData);
+      console.log("Tutor table updated:", response.status);
+    } catch (error) {
+      alert("An error has occurred");
+
+      if (error.response === undefined) {
+        throw error;
+      }
+      const { response } = error;
+      console.log(response.status);
+      console.log(response.data);
+    }
+  };
+
+  const save = () => {
+    console.log(updateData);
+    //updateTutorProfile();
+    //navigation.navigate("HomeFeed");
+  }
 
   const updatePhoto = {};
   function getPfpUrl() {}
@@ -119,6 +142,7 @@ export const CreateTutorProfile = ({ navigation, route }) => {
   function getTime(day) {
     const days = updateData.availability;
     let time = "";
+    
     if (day == "Sun") {
       if ((startTime && endTime) && changeDay == "Sun") {
         days.Sun = [[startTime, endTime]];
@@ -130,7 +154,7 @@ export const CreateTutorProfile = ({ navigation, route }) => {
     }
     if (day == "Mon") {
       if ((startTime && endTime) && changeDay == "Mon") {
-        days.Mon[0] = [startTime, endTime];
+        days.Mon = [[startTime, endTime]];
       }
       for (i = 0; i < days.Mon.length; i++) {
         time += Moment(days.Mon[i][0], 'Hmm').format('h:mm a') + " - " + Moment(days.Mon[i][1], 'Hmm').format('h:mm a') + ", ";
@@ -139,7 +163,7 @@ export const CreateTutorProfile = ({ navigation, route }) => {
     }
     if (day == "Tue") {
       if ((startTime && endTime) && changeDay == "Tue") {
-        days.Tue[0] = [startTime, endTime];
+        days.Tue = [[startTime, endTime]];
       }
       for (i = 0; i < days.Tue.length; i++) {
         time += Moment(days.Tue[i][0], 'Hmm').format('h:mm a') + " - " + Moment(days.Tue[i][1], 'Hmm').format('h:mm a') + ", ";
@@ -148,7 +172,7 @@ export const CreateTutorProfile = ({ navigation, route }) => {
     }
     if (day == "Wed") {
       if ((startTime && endTime) && changeDay == "Wed") {
-        days.Wed[0] = [startTime, endTime];
+        days.Wed = [[startTime, endTime]];
       }
       for (i = 0; i < days.Wed.length; i++) {
         time += Moment(days.Wed[i][0], 'Hmm').format('h:mm a') + " - " + Moment(days.Wed[i][1], 'Hmm').format('h:mm a') + ", ";
@@ -157,7 +181,7 @@ export const CreateTutorProfile = ({ navigation, route }) => {
     }
     if (day == "Thu") {
       if ((startTime && endTime) && changeDay == "Thu") {
-        days.Thu[0] = [startTime, endTime];
+        days.Thu = [[startTime, endTime]];
       }
       for (i = 0; i < days.Thu.length; i++) {
         time += Moment(days.Thu[i][0], 'Hmm').format('h:mm a') + " - " + Moment(days.Thu[i][1], 'Hmm').format('h:mm a') + ", ";
@@ -165,8 +189,8 @@ export const CreateTutorProfile = ({ navigation, route }) => {
       return time;
     }
     if (day == "Fri") {
-      if ((startTime && endTime) && changeDay == "Fri") {
-        days.Fri[0] = [startTime, endTime];;
+      if (changeDay == "Fri") {
+        days.Fri = [[startTime, endTime]];
       }
       for (i = 0; i < days.Fri.length; i++) {
         time += Moment(days.Fri[i][0], 'Hmm').format('h:mm a') + " - " + Moment(days.Fri[i][1], 'Hmm').format('h:mm a') + ", ";
@@ -174,8 +198,8 @@ export const CreateTutorProfile = ({ navigation, route }) => {
       return time;
     }
     if (day == "Sat") {
-      if ((startTime && endTime) && changeDay == "Sat") {
-        days.Sat[0] = [startTime, endTime];
+      if (changeDay == "Sat") {
+        days.Sat = [[startTime, endTime]];
       }
       for (i = 0; i < days.Sat.length; i++) {
         time += Moment(days.Sat[i][0], 'Hmm').format('h:mm a') + " - " + Moment(days.Sat[i][1], 'Hmm').format('h:mm a') + ", ";
@@ -234,6 +258,14 @@ export const CreateTutorProfile = ({ navigation, route }) => {
     }
   }
 
+  function onChangeText(rate) {
+    if (/^[0-9]+(\.[0-9]{1,2})?$/.test(rate)) {
+      setHrRate(rate);
+      updateData["hrRate"] = parseInt(rate);
+      console.log(rate);
+      console.log(updateData.hrRate);
+    }
+  }
 
   function getHrRate() {
     if (route.params?.hrRate) {
@@ -252,7 +284,7 @@ export const CreateTutorProfile = ({ navigation, route }) => {
     <Appbar.Header>
       <Appbar.BackAction onPress={() => navigation.goBack()} />
       <Appbar.Content title="Create/Edit Tutor Profile" />
-      <Button textDecoration="underline" onPress={() => console.log(updateData.subjects[3])}>Save</Button>
+      <Button textDecoration="underline" onPress={save}>Save</Button>
     </Appbar.Header>
 
     <ScrollView>
@@ -260,7 +292,6 @@ export const CreateTutorProfile = ({ navigation, route }) => {
 
       <View style={styles.profilePicContainer}>
       <Image style={styles.profilePic} source={{uri: pfpUrl}}/>
-        <Button title="Change Photo">Change Photo</Button>
       </View>
 
     </View>
@@ -342,6 +373,22 @@ export const CreateTutorProfile = ({ navigation, route }) => {
         </View>
 
       </View>
+
+      <View style={{borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth}}></View>
+
+      <Pressable onPress={() => navigation.navigate("CreateTutorProfileRate", {
+          bio: getBio(),
+          availability: getAvailability(),
+          hrRate: getHrRate(),
+          subject: getSubjects(),
+          classesTaken: getClassesTaken(),
+          pfpUrl: getPfpUrl(),
+        })}>
+      <Text style={styles.textHeader}>Hourly Rate</Text>
+      <Text style={styles.textInput} label="HrRate">
+        $ {getHrRate()}
+      </Text>
+      </Pressable>
 
     </View>
     </SafeAreaView>

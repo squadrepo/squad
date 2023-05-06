@@ -19,7 +19,11 @@ export const CreateTutorProfileSubjects = ({ navigation, route }) => {
   const classSubjects = ["Mathematics","Statistics","Computer Science","Data Science","Physics","Chemistry","Biology","Environmental Science","Geology","Geography","Psychology","Sociology","Anthropology","Philosophy","History","Political Science","Economics","Business","Marketing","Management","Finance","Accounting","Education","English","Creative Writing","Journalism","Communication","Film Studies","Media Studies","Graphic Design","Fine Arts","Music","Theater","Dance","Foreign Languages"];
 
   function addSubject(subject) {
-    setSubjects(subjects.push(subject));
+    if (subjects.includes(subject)) {
+      console.log("Subject is already added.");
+    } else {
+      setSubjects(subjects.push(subject));
+    }
     console.log(subjects);
     navigation.navigate("CreateTutorProfile", 
     { 
