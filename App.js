@@ -26,7 +26,6 @@ import { ProfilePicturePicker } from "./App/Screens/CameraImagePicker/profilePic
 import { RsvpFeed } from "./App/Screens/Feeds/RsvpedEvents";
 import { TutorProfile } from "./App/Screens/Tutoring/TutorProfile";
 import { UserProvider } from "./App/Context";
-import { TutorProfile } from "./App/Screens/Tutoring/TutorProfile";
 import { CreateTutorProfile } from "./App/Screens/Tutoring/CreateTutorProfile";
 import { CreateTutorProfileBio } from "./App/Screens/Tutoring/CreateTutorProfileBio";
 import { CreateTutorProfileSubjects } from "./App/Screens/Tutoring/CreateTutorProfileSubjects";
