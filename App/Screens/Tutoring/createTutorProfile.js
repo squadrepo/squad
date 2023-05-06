@@ -259,7 +259,7 @@ export const CreateTutorProfile = ({ navigation, route }) => {
     <View style={styles.changePhoto}>
 
       <View style={styles.profilePicContainer}>
-      <Image style={styles.profilePic} source={pfpUrl}/>
+      <Image style={styles.profilePic} source={{uri: pfpUrl}}/>
         <Button title="Change Photo">Change Photo</Button>
       </View>
 
