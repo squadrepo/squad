@@ -7,7 +7,7 @@ export const ChooseEventType = ({ navigation }) => {
     <View>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.navigate("Drawers")} />
-        <Appbar.Content title="Choose Event Type" />
+        <Appbar.Content title="Create" />
       </Appbar.Header>
       <View style={{ justifyContent: "center", paddingTop: 150 }}>
         <View>
@@ -28,9 +28,9 @@ export const ChooseEventType = ({ navigation }) => {
           <Button
             mode="contained"
             style={{ borderRadius: 20, margin: 10 }}
-            onPress={() => navigation.navigate("SelectTutorSession")}
+            onPress={() => navigation.navigate("CreateTutorProfile")}
           >
-            Tutoring Post
+            Tutor Profile
           </Button>
         </View>
       </View>

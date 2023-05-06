@@ -90,9 +90,7 @@ export const SelectTutorSession = ({ navigation }) => {
   return (
     <View>
       <Appbar.Header>
-        <Appbar.BackAction
-          onPress={() => navigation.navigate("ChooseEventType")}
-        />
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title="Schedule Session" />
       </Appbar.Header>
       <SafeAreaView style={styles.right}>

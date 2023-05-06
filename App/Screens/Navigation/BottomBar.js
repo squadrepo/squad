@@ -62,7 +62,7 @@ export const Tabs = ({ navigation }) => {
           }}
           prop
           size="medium"
-          onPress={() => navigation.navigate("CreateTutorProfile")}
+          onPress={() => navigation.navigate("ChooseEventType")}
         />
       </Portal>
       <Portal>
