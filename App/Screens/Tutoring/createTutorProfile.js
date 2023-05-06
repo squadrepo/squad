@@ -7,11 +7,6 @@ Modify text on screens evan worked on with react native paper typography
 /*
 Other to do
 -Add functionality for camera
--Fix things for changing bio
---Related screen
---Fixing code when it comes to dealing with params
--Add functionality for availability times
--Add functionality for adding subject
 -Add functionality for adding courses taken
 */
 
@@ -264,7 +259,7 @@ export const CreateTutorProfile = ({ navigation, route }) => {
     <View style={styles.changePhoto}>
 
       <View style={styles.profilePicContainer}>
-        <Image style={styles.profilePic} source={pfpUrl ? {uri: pfpUrl} : <View style={styles.circle}></View>}/>
+      <Image style={styles.profilePic} source={pfpUrl}/>
         <Button title="Change Photo">Change Photo</Button>
       </View>
 
