@@ -112,6 +112,11 @@ function App() {
               component={SelectTutorSession}
             />
             <Stack.Screen name="RsvpFeed" component={RsvpFeed} />
+            <Stack.Screen name="CreateTutorProfile" component={CreateTutorProfile} />
+            <Stack.Screen name="CreateTutorProfileBio" component={CreateTutorProfileBio} />
+            <Stack.Screen name="CreateTutorProfileSubjects" component={CreateTutorProfileSubjects} />
+            <Stack.Screen name="CreateTutorProfileCourses" component={CreateTutorProfileCourses} />
+            <Stack.Screen name="CreateTutorRate" component={CreateTutorProfileRate} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
