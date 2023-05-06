@@ -31,7 +31,7 @@ export const CreateTutorProfileRate = ({ navigation, route }) => {
 
   function onChangeText(hrRate) {
     if (/^[0-9]+(\.[0-9]{1,2})?$/.test(hrRate)) {
-      setHrRate(hrRate);
+      setHrRate(parseInt(hrRate));
     }
   }
 

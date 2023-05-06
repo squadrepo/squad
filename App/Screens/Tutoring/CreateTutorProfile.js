@@ -101,9 +101,9 @@ export const CreateTutorProfile = ({ navigation, route }) => {
   };
 
   const save = () => {
-    //console.log(updateData);
+    console.log(updateData);
     updateTutorProfile();
-    navigation.navigate("HomeFeed");
+    //navigation.navigate("HomeFeed");
   }
 
   const updatePhoto = {};
