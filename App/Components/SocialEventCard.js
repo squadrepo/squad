@@ -138,7 +138,7 @@ export const SocialEventCard = ({event, navigation, root}) => {
 
   return (
   <Card style={styles.card} onPress={() =>
-            navigation.navigate('SocialPost', {event: event, root: root})}>
+            navigation.navigate('SocialPost', {univAssoc: event.univAssoc, eid: event.eid, root: root})}>
     <Card.Cover source={{ uri: uri }}/>
     <Card.Title title={event.eventName} titleStyle={styles.eventNameText} subtitle={getStringDateTimeFromUnix(event.eventTimestamp)}/>
     <Card.Content style={styles.cardContent}>
