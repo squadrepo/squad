@@ -23,6 +23,8 @@ import { ProfileEditScreen } from "./App/Screens/Profile/profileEdit.screen";
 import { ProfileEditUsernameScreen } from "./App/Screens/Profile/profileEditUsername.screen";
 import { ProfileEditBioScreen } from "./App/Screens/Profile/profileEditBio.screen";
 import { ProfilePicturePicker } from "./App/Screens/CameraImagePicker/profilePicturePicker";
+import { RsvpFeed } from "./App/Screens/Feeds/RsvpedEvents";
+import { TutorProfile } from "./App/Screens/Tutoring/TutorProfile";
 import { UserProvider } from "./App/Context";
 import { CreateEvent } from "./App/Screens/Events/createEventScreen";
 import { ChooseEventType } from "./App/Screens/Events/chooseEventType";
@@ -104,6 +106,8 @@ function App() {
               name="SelectTutorSession"
               component={SelectTutorSession}
             />
+            <Stack.Screen name="RsvpFeed" component={RsvpFeed} />
+            <Stack.Screen name="TutorProfile" component={TutorProfile} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
