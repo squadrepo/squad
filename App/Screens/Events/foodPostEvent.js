@@ -317,5 +317,8 @@ const styles = StyleSheet.create({
   },
   toggle: {
     paddingRight: 10
+  },
+  requestButton: {
+    marginTop: 10
   }
 });

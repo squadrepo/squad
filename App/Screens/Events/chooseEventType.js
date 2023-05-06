@@ -25,7 +25,11 @@ export const ChooseEventType = ({ navigation }) => {
           >
             Food Post
           </Button>
-          <Button mode="contained" style={{ borderRadius: 20, margin: 10 }}>
+          <Button
+            mode="contained"
+            style={{ borderRadius: 20, margin: 10 }}
+            onPress={() => navigation.navigate("SelectTutorSession")}
+          >
             Tutoring Post
           </Button>
         </View>
