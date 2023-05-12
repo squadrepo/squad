@@ -7,12 +7,16 @@ import {
   Platform,
   Text
 } from "react-native";
-import { Button, Appbar, Divider } from "react-native-paper";
+import { Button, Appbar, Divider, Title } from "react-native-paper";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { UserContext } from "../../Context";
 import axios from "axios";
+import { DEFAULT_PROFILE_PIC, PURPLE_COLOR } from "../../constants";
+import { Header } from "react-native/Libraries/NewAppScreen";
+import { AirbnbRating } from "react-native-ratings";
+import { ScrollView } from "react-native-gesture-handler";
 
-export const SelectTutorSession = ({ navigation }) => {
+export const SelectTutorSession = ({ navigation, route }) => {
   //Tutors profile picture and uuid should just be passed from previous screen so
   //just hard coded values for those two rn
   const { uid } = useContext(UserContext);
@@ -69,7 +73,7 @@ export const SelectTutorSession = ({ navigation }) => {
 
   const requestSession = async () => {
     const requestBody = {
-      tutorUid: "c6030b8d-771b-454b-af0b-4aba56f0b300",
+      tutorUid: route.params.tutorProfileData.tutorUid,
       discipleUid: uid,
       timestampRequested: epoch
     };
@@ -88,18 +92,29 @@ export const SelectTutorSession = ({ navigation }) => {
       });
   };
   return (
-    <View>
+    <ScrollView>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title="Schedule Session" />
+        <Appbar.Content title={"Schedule Session"} />
       </Appbar.Header>
       <SafeAreaView style={styles.right}>
         <View style={styles.profilePicContainer}>
           <Image
             style={styles.profilePic}
-            source={{ uri: "https://i.redd.it/v0caqchbtn741.jpg" }}
+            source={{
+              uri: route.params.tutorProfileData.pfpUrl || DEFAULT_PROFILE_PIC
+            }}
           />
         </View>
+        <Title>{`${route.params.tutorProfileData.fullName}`}</Title>
+        <AirbnbRating
+          count={5}
+          isDisabled={true}
+          defaultRating={route.params.tutorRating}
+          showRating={false}
+          size={30}
+          selectedColor={PURPLE_COLOR}
+        />
         <View style={styles.datePickerContainer}>
           <Button onPress={openDatePicker} mode="contained">
             Select Date
@@ -152,7 +167,7 @@ export const SelectTutorSession = ({ navigation }) => {
           Request Session
         </Button>
       </SafeAreaView>
-    </View>
+    </ScrollView>
   );
 };
 

@@ -169,7 +169,13 @@ export const TutorProfile = ({ navigation, route }) => {
             <Button
               mode="contained"
               style={{ marginLeft: 30 }}
-              onPress={() => navigation.navigate("SelectTutorSession")}
+              onPress={() =>
+                navigation.navigate("SelectTutorSession", {
+                  tutorUid: tutorUid,
+                  tutorProfileData: tutorProfileData,
+                  tutorRating: tutorRating
+                })
+              }
             >
               Schedule a session
             </Button>
