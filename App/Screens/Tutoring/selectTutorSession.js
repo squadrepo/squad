@@ -73,7 +73,7 @@ export const SelectTutorSession = ({ navigation, route }) => {
 
   const requestSession = async () => {
     const requestBody = {
-      tutorUid: route.params.tutorProfileData.tutorUid,
+      tutorUid: route.params.tutorProfileData.uid,
       discipleUid: uid,
       timestampRequested: epoch
     };
