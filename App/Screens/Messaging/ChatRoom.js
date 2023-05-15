@@ -12,20 +12,24 @@ import {
 import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import axios from "axios";
 import { HomeFeed } from "../Feeds/HomeFeed";
-import { SocialPostScreen } from "../Social/socialPost.screen";
+
+
+
 import { getStringDateFromUnix, getStandardPlural } from '../../utilities';
 
 //Todo
 //get timestamp from evan if chat exists or if new chat get it from Dom
 
 export const ChatRoom = ({ navigation, route }) => {
-  const { chatroomCID, timestamp, eventData } = route.params;
+  const { chatroomCID, timestamp, eventDataSocial, eventDataFood } = route.params ?? {};
   //console.log("Params: ", route.params);
   const [messages, setMessages] = useState([]);
   const { uid } = useContext(UserContext);
   useEffect(() => {
-    if (eventData) {
+    if (eventDataSocial) {
       shareEvent(messages);
+    } else if (eventDataFood) {
+      shareFood(messages)
     }
     uid;
   }, [uid]);
@@ -75,8 +79,29 @@ export const ChatRoom = ({ navigation, route }) => {
       const body = {
         cid: chatroomCID, //use imported cid from dom's screen
         message: {
-          attachments: [JSON.stringify(eventData)],
-          text: "An event has been shared to the chat",
+          attachments: [JSON.stringify(eventDataSocial)],
+          text: "A social event has been shared to the chat",
+          uidSentBy: uid,
+          uidsReadBy: []
+        }
+      }
+      const config = { "content-type": "application/json" };
+      const response = await axios.post(baseUrl, body, config);
+      console.log("Message Sent!");
+      //console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const SendFoodMessage = async () => {
+    try {
+      const baseUrl = "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/messages/";
+      const body = {
+        cid: chatroomCID, //use imported cid from dom's screen
+        message: {
+          attachments: [JSON.stringify(eventDataFood)],
+          text: "A food event has been shared to the chat",
           uidSentBy: uid,
           uidsReadBy: []
         }
@@ -106,6 +131,7 @@ export const ChatRoom = ({ navigation, route }) => {
 
         countUser = countUser + 1;
         const date = new Date(rest.timestamp * 1000);
+        //console.log(rest.attachments);
         newArray.push({
           _id: countMessage,
           text: rest.text,
@@ -147,36 +173,73 @@ export const ChatRoom = ({ navigation, route }) => {
     );
   }, []);
 
+  const shareFood = useCallback((messages = []) => {
+    SendFoodMessage();
+    setMessages((previousMessages) =>
+      GiftedChat.append(previousMessages, messages)
+    );
+  }, []);
+
   const renderBubble = (props) => {
     const { currentMessage } = props;
-  
     if (currentMessage.attachments && currentMessage.attachments.event != "") {
       eventDetails = JSON.parse(currentMessage.attachments.event);
-      return (
-        <Bubble
-          {...props}
-          wrapperStyle={{
-            right: { 
-              backgroundColor: "#ceaffa",
-              alignItems: 'center',
-              justifyContent: 'center' 
-            },
-            left: { 
-              backgroundColor: "#e4e1e8",
-              alignItems: 'center', 
-              justifyContent: 'center' 
-            },
-          }}
-          onPress={() => navigation.navigate("SocialPost", { event: JSON.parse(currentMessage.attachments.event), root: "ChatRoom"})}
-        >
-          {currentMessage.text = <Text>
-            {eventDetails.eventName + '\n' + 
-            eventDetails.streetAddress + '\n' +
-            getStringDateFromUnix(eventDetails.eventTimestamp)
-            }
-          </Text>}
-        </Bubble>
-      );
+      if (eventDetails.univAssoc) {
+        currentMessage.attachments["idOne"] = eventDetails.univAssoc;
+        currentMessage.attachments["idTwo"] = eventDetails.eid;
+        return (
+          <Bubble
+            {...props}
+            wrapperStyle={{
+              right: { 
+                backgroundColor: "#ceaffa",
+                alignItems: 'center',
+                justifyContent: 'center' 
+              },
+              left: { 
+                backgroundColor: "#e4e1e8",
+                alignItems: 'center', 
+                justifyContent: 'center' 
+              },
+            }}
+            onPress={() => navigation.navigate("SocialPost", { univAssoc: currentMessage.attachments.idOne, eid: currentMessage.attachments.idTwo, root: "ChatRoom"})}
+          >
+            {currentMessage.text = <Text>
+              {eventDetails.eventName + '\n' + 
+              eventDetails.streetAddress + '\n' +
+              getStringDateFromUnix(eventDetails.eventTimestamp)
+              }
+            </Text>}
+          </Bubble>
+        );
+      } else if (eventDetails.hashKey) {
+        currentMessage.attachments["idOne"] = eventDetails.hashKey;
+        currentMessage.attachments["idTwo"] = eventDetails.rangeKey;
+        return (
+          <Bubble
+            {...props}
+            wrapperStyle={{
+              right: { 
+                backgroundColor: "#ceaffa",
+                alignItems: 'center',
+                justifyContent: 'center' 
+              },
+              left: { 
+                backgroundColor: "#e4e1e8",
+                alignItems: 'center', 
+                justifyContent: 'center' 
+              },
+            }}
+            onPress={() => navigation.navigate('FoodPostScreen', { hashKey: currentMessage.attachments.idOne, rangeKey: currentMessage.attachments.idTwo, root: "ChatRoom"})}
+          >
+            {currentMessage.text = <Text>
+              {eventDetails.eventName + '\n' + 
+              eventDetails.address }
+            </Text>}
+          </Bubble>
+        );
+      }
+      
     }
     else {
       return (

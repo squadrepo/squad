@@ -11,7 +11,7 @@ import { UserContext } from "../../Context";
 import axios from "axios";
 
 export const Chats = ({ navigation, route }) => {
-  const {eventData} = route.params ?? {};
+  const {eventDataSocial, eventDataFood} = route.params ?? {};
   const getChatsUrl =
     "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/messages/getids";
   const { uid, chatroomCids, pfpUrl } = useContext(UserContext);
@@ -53,7 +53,7 @@ export const Chats = ({ navigation, route }) => {
     if (chat.roomName === "") {
       chat.roomName = "Temp Room";
     }
-    if (eventData) {
+    if (eventDataSocial || eventDataFood) {
       return (
         <Pressable
           style={styles.messageBlock}
@@ -61,7 +61,8 @@ export const Chats = ({ navigation, route }) => {
             navigation.navigate("ChatRoom", {
               chatroomCID: chat.cid,
               timestamp: chat.chunkCreateTimestamp,
-              eventData: eventData
+              eventDataSocial: eventDataSocial,
+              eventDataFood: eventDataFood
             })
           }
           key={chat.cid}
@@ -109,7 +110,7 @@ export const Chats = ({ navigation, route }) => {
   }
 
   function sharePost() {
-    if (eventData) {
+    if (eventDataSocial || eventDataFood) {
       return "Share Post"
     } else {
       return "Messages"

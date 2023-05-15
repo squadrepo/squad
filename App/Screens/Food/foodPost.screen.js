@@ -100,7 +100,7 @@ export const FoodPostScreen = ({navigation, route}) => {
   };
 
   const handleShareButtonPress = () => {
-    console.log("Shared")
+    navigation.navigate("Chats", {eventDataFood : event});
   };
 
   const postComment = async (newCommentText) => {
@@ -133,7 +133,7 @@ export const FoodPostScreen = ({navigation, route}) => {
   return (
     <View>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.navigate(root)} />
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title="Back to Feed" />
       </Appbar.Header>
       <ScrollView 

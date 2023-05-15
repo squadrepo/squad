@@ -137,7 +137,7 @@ export const SocialPostScreen = ({navigation, route}) => {
     };
 
   const handleShareButtonPress = () => {
-    navigation.navigate("Chats", {eventData : event}
+    navigation.navigate("Chats", {eventDataSocial : event});
   };
 
   const postComment = async (newCommentText) => {
@@ -170,7 +170,7 @@ export const SocialPostScreen = ({navigation, route}) => {
   return (
     <View>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.navigate(root)} />
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title="Back to Feed" />
       </Appbar.Header>
       <ScrollView contentContainerStyle={{ ...styles.verticalFlex, alignItems: "center", paddingBottom: 100 }}

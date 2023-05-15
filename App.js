@@ -34,6 +34,7 @@ import { CreateTutorProfileRate } from "./App/Screens/Tutoring/CreateTutorProfil
 import { CreateEvent } from "./App/Screens/Events/createEventScreen";
 import { ChooseEventType } from "./App/Screens/Events/chooseEventType";
 import { FoodPostEvent } from "./App/Screens/Events/foodPostEvent";
+import { FoodPostScreen } from './App/Screens/Food/foodPost.screen';
 import { SelectTutorSession } from "./App/Screens/Tutoring/selectTutorSession";
 
 Amplify.configure({ awsConfig, ...awsmobile, Analytics: { disabled: true } });
@@ -107,6 +108,7 @@ function App() {
             <Stack.Screen name="ChooseEventType" component={ChooseEventType} />
             <Stack.Screen name="CreateEvent" component={CreateEvent} />
             <Stack.Screen name="FoodPostEvent" component={FoodPostEvent} />
+            <Stack.Screen name="FoodPostScreen" component={FoodPostScreen} />
             <Stack.Screen
               name="SelectTutorSession"
               component={SelectTutorSession}
