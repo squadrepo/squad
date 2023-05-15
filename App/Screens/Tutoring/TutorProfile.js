@@ -234,7 +234,7 @@ export const TutorProfile = ({ navigation, route }) => {
                       handleRating(newRating).then((success) => {
                         if (!success) {
                           setErrorMsg(
-                            "Schedule a meeting with the tutor before rating."
+                            "Schedule a meeting before rating."
                           );
                           setButtonText("Cancel");
                         } else {
@@ -243,7 +243,7 @@ export const TutorProfile = ({ navigation, route }) => {
                       });
                     }}
                   />
-                  {errorMsg && <Text>{errorMsg}</Text>}
+                  {errorMsg && <Text style = {{color:"red", fontWeight: "bold"}}>{errorMsg}</Text>}
                   <Button
                     onPress={() => setModalVisible(false)}
                     mode="contained"
