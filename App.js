@@ -118,7 +118,7 @@ function App() {
             <Stack.Screen name="CreateTutorProfileBio" component={CreateTutorProfileBio} />
             <Stack.Screen name="CreateTutorProfileSubjects" component={CreateTutorProfileSubjects} />
             <Stack.Screen name="CreateTutorProfileCourses" component={CreateTutorProfileCourses} />
-            <Stack.Screen name="CreateTutorRate" component={CreateTutorProfileRate} />
+            <Stack.Screen name="CreateTutorProfileRate" component={CreateTutorProfileRate} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
