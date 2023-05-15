@@ -1,14 +1,8 @@
-import { Button, Text, Appbar } from 'react-native-paper';
-import { View } from 'react-native';
-import { useEffect } from 'react';
+import { Text, Appbar } from 'react-native-paper';
+import { View} from 'react-native';
 
 export const SocialPostScreen = ({navigation, route}) => {
   const {event, root} = route.params;
-
-  useEffect(() => {
-    console.log(event);
-  });
-
   return (
     <View>
       <Appbar.Header>
@@ -19,10 +13,28 @@ export const SocialPostScreen = ({navigation, route}) => {
         <Text style={{ fontSize: 28, color: 'black', textAlign: 'center', padding: 20}}>
             {event?.eventName ?? ""}
         </Text>
-        <Button mode="outlined" style={{ fontSize: 20, color: 'black', textAlign: 'center' }} onPress={() => navigation.navigate("Chats", {eventData : event})}>
-            Share event
-        </Button>
+        <Text style={{ fontSize: 20, color: 'black', textAlign: 'center' }}>
+            Social event details coming soon!
+        </Text>
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  horizontalFlex: {
+    display: "flex", 
+    flexDirection: "row"
+  },
+  verticalFlex: {
+    display: "flex", 
+    flexDirection: "column"
+  },
+  coloredText: {
+    color: '#9662fc',
+    fontSize: 14
+  },
+  coloredTextHolder: {
+    paddingRight: 10
+  }
+})

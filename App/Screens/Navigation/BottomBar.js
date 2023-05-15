@@ -5,6 +5,8 @@ import { SocialFeed } from "../Feeds/SocialFeed";
 import { FoodFeed } from "../Feeds/FoodFeed";
 import { TutoringFeed } from "../Feeds/TutoringFeed";
 import { GigWorkFeed } from "../Feeds/GigworkFeed";
+import { TutorProfile } from "../Tutoring/TutorProfile";
+import { RsvpFeed } from "../Feeds/RsvpedEvents";
 import { Portal, FAB } from "react-native-paper";
 
 const Tab = createMaterialBottomTabNavigator();
@@ -43,7 +45,7 @@ export const Tabs = ({ navigation }) => {
         />
         <Tab.Screen
           name="GigWork"
-          component={GigWorkFeed}
+          component={TutorProfile}
           options={{
             tabBarIcon: "briefcase"
           }}
@@ -60,6 +62,7 @@ export const Tabs = ({ navigation }) => {
           }}
           prop
           size="medium"
+          onPress={() => navigation.navigate("ChooseEventType")}
         />
       </Portal>
       <Portal>

@@ -1,13 +1,13 @@
 // TODO:
 // UnivExcl does not save upon post request
 
-import React, { useState, useEffect, useContext } from 'react';
-import { Button, Appbar, Menu, IconButton, Switch } from 'react-native-paper';
-import { View, StyleSheet } from 'react-native';
-import axios from 'axios';
-import { UserContext } from '../../Context';
+import React, { useState, useEffect, useContext } from "react";
+import { Button, Appbar, Menu, IconButton, Switch } from "react-native-paper";
+import { View, StyleSheet } from "react-native";
+import axios from "axios";
+import { UserContext } from "../../Context";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { getDateFromUnix } from '../../utilities';
+import { getDateFromUnix } from "../../utilities";
 
 export const Settings = ({ navigation }) => {
   const { uid, password, dobNum, setDobNum, email, univExclExp } =
@@ -25,15 +25,13 @@ export const Settings = ({ navigation }) => {
   };
 
   const handleConfirm = (date) => {
-    setPickedDate(date)
+    setPickedDate(date);
     hideDatePicker();
   };
 
   const baseUrl =
-    'https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/account/editSettings';
+    "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/account/editSettings";
 
-  //API post
-  //TODO: univExclExp is not saving
   const saveSettings = async (event) => {
     try {
       const newDobNum = Math.floor(pickedDate.getTime() / 1000);
@@ -43,14 +41,14 @@ export const Settings = ({ navigation }) => {
         email: email,
         univExclExp: isSwitchOn,
         password: passwordChanged ? password : undefined
-      }
-      console.log(body)
+      };
+      console.log(body);
       const response = await axios.post(baseUrl, body);
       setDobNum(newDobNum);
       console.log(response.status);
-      alert('Settings saved successfuly.');
+      alert("Settings saved successfuly.");
     } catch (error) {
-      alert('An error has occurred');
+      alert("An error has occurred");
       if (error.response === undefined) throw error;
       const { response } = error;
       console.log(`${response.status}:`, response.data);
@@ -60,7 +58,7 @@ export const Settings = ({ navigation }) => {
   return (
     <View>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.BackAction onPress={() => navigation.navigate('Main')} />
         <Appbar.Content title="Settings" />
         <Button textDecoration="underline" onPress={saveSettings}>
           Save
@@ -71,7 +69,7 @@ export const Settings = ({ navigation }) => {
         <IconButton
           icon="dots-horizontal"
           onPress={() =>
-            navigation.navigate('Password', {
+            navigation.navigate("Password", {
               passwordChanged,
               setPasswordChanged
             })
@@ -93,7 +91,7 @@ export const Settings = ({ navigation }) => {
         <Menu.Item title="Change University Email" />
         <IconButton
           icon="dots-horizontal"
-          onPress={() => navigation.navigate('EmailChange')}
+          onPress={() => navigation.navigate("EmailChange")}
         />
       </View>
 
@@ -103,7 +101,7 @@ export const Settings = ({ navigation }) => {
         mode="date"
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
-        backdropStyleIOS={{backgroundColor: '#674fa5'}}
+        backdropStyleIOS={{ backgroundColor: "#674fa5" }}
       />
     </View>
   );
@@ -111,8 +109,8 @@ export const Settings = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   options: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingRight: 10
   },
   toggle: {

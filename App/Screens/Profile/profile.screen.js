@@ -73,7 +73,7 @@ export const ProfileScreen = ({ navigation }) => {
     <View>
 
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.BackAction onPress={() => navigation.navigate("HomeFeed")} />
         <Appbar.Content title={fullName}/>
         <Button icon="account-settings" onPress={() => navigation.navigate("Settings")}>Settings</Button>
       </Appbar.Header>
@@ -99,7 +99,7 @@ export const ProfileScreen = ({ navigation }) => {
 
         <View style={styles.right}>
           <View style={styles.profilePicContainer}>
-              <Image style={styles.profilePic} source={pfpUrl ? {uri: pfpUrl} : <View style={styles.circle}></View>}/>
+              <Image style={styles.profilePic} source={{uri: pfpUrl}}/>
           </View>
         </View>
       
