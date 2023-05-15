@@ -69,5 +69,9 @@ export const styles = StyleSheet.create({
         position: "absolute",
         alignSelf: "center",
         top: "50%",
-      }
+      }, 
+      overlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)', // Set the opacity to 0.5
+      },
 })

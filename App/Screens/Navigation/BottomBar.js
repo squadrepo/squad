@@ -45,7 +45,7 @@ export const Tabs = ({ navigation }) => {
         />
         <Tab.Screen
           name="GigWork"
-          component={TutorProfile}
+          component={GigWorkFeed}
           options={{
             tabBarIcon: "briefcase"
           }}

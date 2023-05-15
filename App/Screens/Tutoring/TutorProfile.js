@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
 import { Appbar, Button, Text, Avatar, Title, Caption, ActivityIndicator, Modal, Portal} from "react-native-paper";
-import { SafeAreaView, StyleSheet, View, Image} from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { SafeAreaView, StyleSheet, View, TouchableWithoutFeedback} from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { AirbnbRating } from 'react-native-ratings';
 import { DEFAULT_PROFILE_PIC, PURPLE_COLOR } from "../../constants";
 import { styles } from "./TutorProfileStyles";
@@ -24,11 +24,9 @@ export const TutorProfile = ({ navigation, route}) => {
         "Image":"https://squad-app-s3.s3.amazonaws.com/VOKOLOS.png",
         "Avail": {"Sat": "9:00 AM - 5:00 PM", "Sun": "9:00 AM - 1:00 PM, 2:00 PM - 3:00 PM"}, 
     }]
-    console.log("root", root)
     useEffect(() => {
         const tutorData = async() => {
             try {
-                console.log("tuturUid", tutorUid);
                 const response = await axios.get(`${BASE_API_URL}/tutoring/viewtutorprofile`, {
                   params: {
                     uid: tutorUid
@@ -72,7 +70,6 @@ export const TutorProfile = ({ navigation, route}) => {
 
     function renderAvailability(avail) {
         const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-        console.log(avail);
         return days
           .filter((day) => avail[day].length > 0)
           .map((day) => {
@@ -141,9 +138,9 @@ export const TutorProfile = ({ navigation, route}) => {
                         <Text style = {styles.tag} key={course}> #{course} </Text>))}
                         </View>
                 </View>
-                <View>
+               
                 <Portal>
-                    <Modal visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
+                    <Modal dismissable={true} visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
                         <View style={styles.modalContent}>
                             <Title style={styles.modalTitle}>Leave a Rating</Title>
                             <AirbnbRating
@@ -154,7 +151,7 @@ export const TutorProfile = ({ navigation, route}) => {
                                 onFinishRating={(newRating) => {
                                 handleRating(newRating).then((success) => {
                                     if (!success) {
-                                        setErrorMsg("Schedule a meeting with the tutor before rating.")
+                                        setErrorMsg("Schedule a meeting before rating.")
                                         setButtonText("Cancel")
                                     } else {
                                         setErrorMsg(null)
@@ -162,12 +159,11 @@ export const TutorProfile = ({ navigation, route}) => {
                                 })
                             }}
                             />
-                            {errorMsg && <Text>{errorMsg}</Text>}
+                            {errorMsg && <Text style = {{color:"red", fontWeight: "bold"}}>{errorMsg}</Text>}
                             <Button onPress={() => setModalVisible(false)} mode="contained" style={{marginTop:10}}> {buttonText} </Button>
                             </View>
                     </Modal>
                 </Portal>
-                </View>
             </ScrollView>
         </SafeAreaView>
     )};
