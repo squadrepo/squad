@@ -58,7 +58,7 @@ export const Settings = ({ navigation }) => {
   return (
     <View>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.navigate("Main")} />
+        <Appbar.BackAction onPress={() => navigation.navigate('Main')} />
         <Appbar.Content title="Settings" />
         <Button textDecoration="underline" onPress={saveSettings}>
           Save

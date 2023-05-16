@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+  import React, { useState, useContext, useEffect } from "react";
 import {
   Text,
   TextInput,
@@ -10,13 +10,14 @@ import { SafeAreaView, StyleSheet, Image, View, Pressable } from "react-native";
 import { UserContext } from "../../Context";
 import axios from "axios";
 
-export const Chats = ({ navigation }) => {
+export const Chats = ({ navigation, route }) => {
+  const {eventDataSocial, eventDataFood} = route.params ?? {};
   const getChatsUrl =
     "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/messages/getids";
   const { uid, chatroomCids, pfpUrl } = useContext(UserContext);
 
   useEffect(() => {
-    console.log(chatroomCids);
+    //console.log(chatroomCids);
     const fetchMessages = () => {
       getChats();
     };
@@ -34,7 +35,7 @@ export const Chats = ({ navigation }) => {
           chatroomCids: chatroomCids
         }
       });
-      console.log(response.data);
+      //console.log(response.data);
       setUserChats(response.data);
     } catch (error) {
       alert("An error has occurred");
@@ -43,8 +44,8 @@ export const Chats = ({ navigation }) => {
         throw error;
       }
       const { response } = error;
-      console.log(response.status);
-      console.log(response.data);
+      //console.log(response.status);
+      //console.log(response.data);
     }
   };
 
@@ -52,27 +53,53 @@ export const Chats = ({ navigation }) => {
     if (chat.roomName === "") {
       chat.roomName = "Temp Room";
     }
-    return (
-      <Pressable
-        style={styles.messageBlock}
-        onPress={() =>
-          navigation.navigate("ChatRoom", {
-            chatroomCID: chat.cid,
-            timestamp: chat.chunkCreateTimestamp
-          })
-        }
-        key={chat.cid}
-      >
-        <View style={styles.pfpContainer}>
-          <Image style={styles.pfp} source={{ uri: pfp }} />
-        </View>
+    if (eventDataSocial || eventDataFood) {
+      return (
+        <Pressable
+          style={styles.messageBlock}
+          onPress={() =>
+            navigation.navigate("ChatRoom", {
+              chatroomCID: chat.cid,
+              timestamp: chat.chunkCreateTimestamp,
+              eventDataSocial: eventDataSocial,
+              eventDataFood: eventDataFood
+            })
+          }
+          key={chat.cid}
+        >
+          <View style={styles.pfpContainer}>
+            <Image style={styles.pfp} source={{ uri: pfp }} />
+          </View>
 
-        <View style={styles.infoBlock}>
-          <Text style={styles.name}>{chat.roomName}</Text>
-          <Text style={styles.messageStatus}>{chat?.firstMessage?.text}</Text>
-        </View>
-      </Pressable>
-    );
+          <View style={styles.infoBlock}>
+            <Text style={styles.name}>{chat.roomName}</Text>
+            <Text style={styles.messageStatus}>{chat?.firstMessage?.text}</Text>
+          </View>
+        </Pressable>
+      );
+    } else {
+      return (
+        <Pressable
+          style={styles.messageBlock}
+          onPress={() =>
+            navigation.navigate("ChatRoom", {
+              chatroomCID: chat.cid,
+              timestamp: chat.chunkCreateTimestamp
+            })
+          }
+          key={chat.cid}
+        >
+          <View style={styles.pfpContainer}>
+            <Image style={styles.pfp} source={{ uri: pfp }} />
+          </View>
+
+          <View style={styles.infoBlock}>
+            <Text style={styles.name}>{chat.roomName}</Text>
+            <Text style={styles.messageStatus}>{chat?.firstMessage?.text}</Text>
+          </View>
+        </Pressable>
+      );
+    }
   }
 
   function makeChatList() {
@@ -82,11 +109,20 @@ export const Chats = ({ navigation }) => {
     return chatList;
   }
 
+  function sharePost() {
+    if (eventDataSocial || eventDataFood) {
+      return "Share Post"
+    } else {
+      return "Messages"
+    }
+    
+  }
+
   return (
     <View>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.navigate("Home")} />
-        <Appbar.Content title="Messages" />
+        <Appbar.Content title={sharePost()} />
         <Button
           icon="plus"
           onPress={() => navigation.navigate("MessageOverview")}

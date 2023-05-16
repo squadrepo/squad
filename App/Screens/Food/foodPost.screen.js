@@ -100,7 +100,7 @@ export const FoodPostScreen = ({navigation, route}) => {
   };
 
   const handleShareButtonPress = () => {
-    console.log("Shared")
+    navigation.navigate("Chats", {eventDataFood : event});
   };
 
   const postComment = async (newCommentText) => {

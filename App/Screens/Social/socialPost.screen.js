@@ -137,7 +137,7 @@ export const SocialPostScreen = ({navigation, route}) => {
     };
 
   const handleShareButtonPress = () => {
-    console.log("Shared")
+    navigation.navigate("Chats", {eventDataSocial : event});
   };
 
   const postComment = async (newCommentText) => {
