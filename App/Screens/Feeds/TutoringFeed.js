@@ -112,7 +112,7 @@ export const TutoringFeed = () => {
       :
         <FlatList 
           data={tutorProfiles}
-          renderItem={({item}) => <TutorProfileCard tutorProfile={item} navigation={navigation} root='TutorFeed' subject={subject} univ={univ}/>} 
+          renderItem={({item}) => <TutorProfileCard tutorProfile={item} navigation={navigation}/>} 
           extraData={tutorProfiles.length} 
           keyExtractor={(item, index) => index}
           onRefresh={onRefresh}

@@ -38,7 +38,7 @@ export const ProfilePicturePicker = ({ navigation, route }) => {
     // Camera permissions are not granted yet
     return (
       <View style={styles.container}>
-        <Text style={{ textAlign: 'center' }}>Grant Squad permission to use your camera?</Text>
+        <Text style={{ textAlign: 'center', paddingTop: 100 }}>Grant Squad permission to use your camera</Text>
         <Button onPress={requestPermission} title="Grant permission" />
       </View>
     );

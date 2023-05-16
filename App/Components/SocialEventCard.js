@@ -1,4 +1,4 @@
-import { Text, Card, Button } from 'react-native-paper';
+import { Text, Card, Button, IconButton, Avatar } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 import { getStringDateTimeFromUnix, getStandardPlural } from '../utilities';
 import { useState, useContext, useEffect} from 'react';
@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
   },
   eventNameText: {
     fontWeight: "bold",
+    fontSize: 22
   },
   cardContent: {
     display: "flex",
@@ -49,7 +50,7 @@ const SendRSVP = async (uid, eid, tentative, uidRemoved) => {
   }
 };
 
-export const SocialEventCard = ({event, navigation, root}) => {
+export const SocialEventCard = ({event, navigation}) => {
   const numGoing = event.uidsRsvp.length;
   const numInterested = event.uidsInterested.length;
   const numComments = event.comments.length;
@@ -138,9 +139,9 @@ export const SocialEventCard = ({event, navigation, root}) => {
 
   return (
   <Card style={styles.card} onPress={() =>
-            navigation.navigate('SocialPost', {univAssoc: event.univAssoc, eid: event.eid, root: root})}>
+            navigation.navigate('SocialPost', {univAssoc: event.univAssoc, eid: event.eid})}>
     <Card.Cover source={{ uri: uri }}/>
-    <Card.Title title={event.eventName} titleStyle={styles.eventNameText} subtitle={getStringDateTimeFromUnix(event.eventTimestamp)}/>
+    <Card.Title title={event.eventName} titleStyle={styles.eventNameText} subtitle={getStringDateTimeFromUnix(event.eventTimestamp)} right={(props) => <Avatar.Icon icon="account-group" size={50} color="#57319e" style={{backgroundColor: "#00000000"}}/>}/>
     <Card.Content style={styles.cardContent}>
       <Text style={{width: 120}}>
         {bullet}

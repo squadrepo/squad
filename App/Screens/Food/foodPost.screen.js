@@ -8,7 +8,7 @@ import { BASE_API_URL } from '../../constants';
 import axios from 'axios';
 
 export const FoodPostScreen = ({navigation, route}) => {
-  const {hashKey, rangeKey, root} = route.params;
+  const {hashKey, rangeKey} = route.params;
   const [event, setEvent] = useState();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [triggerRefresh, setTriggerRefresh] = useState(false);
@@ -134,7 +134,7 @@ export const FoodPostScreen = ({navigation, route}) => {
     <View>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title="Back to Feed" />
+        <Appbar.Content title="Back" />
       </Appbar.Header>
       <ScrollView 
         contentContainerStyle={{ ...styles.verticalFlex, alignItems: "center", paddingBottom: 100 }}

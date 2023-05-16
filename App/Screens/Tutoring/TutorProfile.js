@@ -25,10 +25,7 @@ export const TutorProfile = ({ navigation, route }) => {
     tutorUid,
     tutorRating,
     totalNumRatings,
-    numDisciples,
-    root,
-    subject,
-    univ
+    numDisciples
   } = route.params;
   const [modalVisible, setModalVisible] = React.useState(false);
   const [rating, setRating] = React.useState(0);
@@ -47,7 +44,6 @@ export const TutorProfile = ({ navigation, route }) => {
       }
     }
   ];
-  console.log("root", root);
   useEffect(() => {
     const tutorData = async () => {
       try {
@@ -132,7 +128,7 @@ export const TutorProfile = ({ navigation, route }) => {
         <Appbar.Header>
           <Appbar.BackAction
             onPress={() =>
-              navigation.navigate(root, { subject: subject, univ: univ })
+              navigation.goBack()
             }
           />
           <Appbar.Content title="Back to Feed" />

@@ -69,7 +69,7 @@ const RsvpPostsFeed = ({navigation}) => (
       </View>
       <FlatList 
       data={RsvpEvents}
-      renderItem={({item}) => <SocialEventCard event={item} navigation={navigation} root='SocialFeed'/>} 
+      renderItem={({item}) => <SocialEventCard event={item} navigation={navigation}/>} 
       extraData={RsvpEvents.length} 
       keyExtractor={event => event?.eid}
       onRefresh={onRefresh}
