@@ -9,7 +9,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const SocialPostScreen = ({navigation, route}) => {
-  const {univAssoc, eid, root} = route.params;
+  const {univAssoc, eid} = route.params;
   const [event, setEvent] = useState();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [triggerRefresh, setTriggerRefresh] = useState(false);
@@ -170,7 +170,7 @@ export const SocialPostScreen = ({navigation, route}) => {
   return (
     <View>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.navigate(root)} />
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title="Back to Feed" />
       </Appbar.Header>
       <ScrollView contentContainerStyle={{ ...styles.verticalFlex, alignItems: "center", paddingBottom: 100 }}

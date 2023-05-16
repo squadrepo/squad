@@ -49,7 +49,7 @@ const SocialPostsFeed = ({navigation}) => (
       </View>
       <FlatList 
       data={socialEvents}
-      renderItem={({item}) => <SocialEventCard event={item} navigation={navigation} root='SocialFeed'/>} 
+      renderItem={({item}) => <SocialEventCard event={item} navigation={navigation}/>} 
       extraData={socialEvents.length} 
       keyExtractor={event => event?.eid}
       onRefresh={onRefresh}
