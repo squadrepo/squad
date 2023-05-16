@@ -92,6 +92,27 @@ export const TutorProfile = ({ navigation, route }) => {
     }
   };
 
+  function convertToAMPM(time){
+    if (time.toString().length == 3) {
+        time = "0"+time
+    }
+    time = time.toString()
+    timeStart = time.slice(0,2)
+    timeEnd = time.slice(-2)
+
+    convertedTime = ""
+    if (Number(timeStart) > 12) {
+        convertedTime+=(Number(timeStart)%12)+":"+timeEnd+" PM"
+    } else if (Number(timeStart) == 24) {
+        convertedTime+=(12)+":"+timeEnd+" PM"
+    } 
+    else {
+        convertedTime+=timeStart+":"+timeEnd+" AM"
+    }
+
+    return convertedTime
+  }
+
   function renderAvailability(avail) {
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     console.log(avail);
@@ -99,13 +120,8 @@ export const TutorProfile = ({ navigation, route }) => {
       .filter((day) => avail[day].length > 0)
       .map((day) => {
         const times = avail[day].map(
-          ([start, end]) =>
-            `${start.toString().slice(0, -2)}:${start
-              .toString()
-              .slice(-2)} - ${end.toString().slice(0, -2)}:${end
-              .toString()
-              .slice(-2)}`
-        );
+
+          ([start, end]) => `${convertToAMPM(start)} - ${convertToAMPM(end)}`);
         return (
           <Text style={styles.text} key={day}>
             {day}: {times.join(", ")}
