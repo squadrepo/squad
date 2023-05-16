@@ -5,7 +5,7 @@ Modify text on screens evan worked on with react native paper typography
 */
 
 import React, { Component, useContext, useState } from "react";
-import { SafeAreaView, View, StyleSheet, Image, Text, } from "react-native";
+import { SafeAreaView, View, StyleSheet, Image, Text } from "react-native";
 import { Button, Appbar } from "react-native-paper";
 import { UserContext } from '../../Context';
 import { Auth } from '@aws-amplify/auth';
@@ -91,15 +91,15 @@ export const ProfileScreen = ({ navigation }) => {
           </View>
 
           <View style={styles.edit}>
-            <Button mode="outlined" onPress={() => navigation.navigate("EditProfile")}>
-             Edit profile
+            <Button mode="outlined" style={{minWidth: 160}} onPress={() => navigation.navigate("EditProfile")}>
+             Edit Profile
             </Button>
           </View>
         </View>
 
         <View style={styles.right}>
           <View style={styles.profilePicContainer}>
-              <Image style={styles.profilePic} source={{uri: pfpUrl}}/>
+              <Image style={styles.profilePic} source={pfpUrl && {uri: pfpUrl}}/>
           </View>
         </View>
       
@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
 
   edit: {
     padding: 10,
+    paddingLeft: 20
   },
 
   right: {
