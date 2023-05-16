@@ -35,19 +35,9 @@ export const TutorProfile = ({ navigation, route }) => {
   const [errorMsg, setErrorMsg] = useState(); //remember to update state after session is scheduled
   const [buttonText, setButtonText] = useState("Submit"); //remember to update state after session is scheduled
 
-  sampleData = [
-    {
-      Image: "https://squad-app-s3.s3.amazonaws.com/VOKOLOS.png",
-      Avail: {
-        Sat: "9:00 AM - 5:00 PM",
-        Sun: "9:00 AM - 1:00 PM, 2:00 PM - 3:00 PM"
-      }
-    }
-  ];
   useEffect(() => {
     const tutorData = async () => {
       try {
-        console.log("tuturUid", tutorUid);
         const response = await axios.get(
           `${BASE_API_URL}/tutoring/viewtutorprofile`,
           {
@@ -81,6 +71,7 @@ export const TutorProfile = ({ navigation, route }) => {
           body
         );
         console.log(response.data);
+    
         return true;
       } catch (error) {
         if (error.response == undefined) throw error;
@@ -115,7 +106,6 @@ export const TutorProfile = ({ navigation, route }) => {
 
   function renderAvailability(avail) {
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-    console.log(avail);
     return days
       .filter((day) => avail[day].length > 0)
       .map((day) => {
@@ -233,7 +223,8 @@ export const TutorProfile = ({ navigation, route }) => {
             <Portal>
               <Modal
                 visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
+                onDismiss={() => setModalVisible(false)}
+                
               >
                 <View style={styles.modalContent}>
                   <Title style={styles.modalTitle}>Leave a Rating</Title>
@@ -246,7 +237,7 @@ export const TutorProfile = ({ navigation, route }) => {
                       handleRating(newRating).then((success) => {
                         if (!success) {
                           setErrorMsg(
-                            "Schedule a meeting before rating."
+                            "Meet with the tutor before rating."
                           );
                           setButtonText("Cancel");
                         } else {
