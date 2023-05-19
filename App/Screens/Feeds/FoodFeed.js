@@ -111,7 +111,7 @@ export const FoodFeed = () => {
                 title={marker.title}
                 description={marker.address}
               > 
-              <Callout onPress={() => navigation.navigate('FoodPostScreen', {hashKey: marker.hashKey, rangeKey: marker.rangeKey, root: 'FoodMap'})}>
+              <Callout onPress={() => navigation.navigate('FoodPostScreen', {hashKey: marker.hashKey, rangeKey: marker.rangeKey})}>
                   <Text variant='labelLarge' style={{margin:2, color: '#57319e'}}>{marker.title}</Text>
                   <Text style={{margin:2}}>Address: {marker.address}</Text>
                   <Text style={{margin:2}}>Ends: {getStringDateTimeFromUnix(marker.startEndTimestamp[1])}</Text>

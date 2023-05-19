@@ -25,10 +25,7 @@ export const TutorProfile = ({ navigation, route }) => {
     tutorUid,
     tutorRating,
     totalNumRatings,
-    numDisciples,
-    root,
-    subject,
-    univ
+    numDisciples
   } = route.params;
   const [modalVisible, setModalVisible] = React.useState(false);
   const [rating, setRating] = React.useState(0);
@@ -38,20 +35,9 @@ export const TutorProfile = ({ navigation, route }) => {
   const [errorMsg, setErrorMsg] = useState(); //remember to update state after session is scheduled
   const [buttonText, setButtonText] = useState("Submit"); //remember to update state after session is scheduled
 
-  sampleData = [
-    {
-      Image: "https://squad-app-s3.s3.amazonaws.com/VOKOLOS.png",
-      Avail: {
-        Sat: "9:00 AM - 5:00 PM",
-        Sun: "9:00 AM - 1:00 PM, 2:00 PM - 3:00 PM"
-      }
-    }
-  ];
-  console.log("root", root);
   useEffect(() => {
     const tutorData = async () => {
       try {
-        console.log("tuturUid", tutorUid);
         const response = await axios.get(
           `${BASE_API_URL}/tutoring/viewtutorprofile`,
           {
@@ -85,6 +71,7 @@ export const TutorProfile = ({ navigation, route }) => {
           body
         );
         console.log(response.data);
+    
         return true;
       } catch (error) {
         if (error.response == undefined) throw error;
@@ -96,20 +83,35 @@ export const TutorProfile = ({ navigation, route }) => {
     }
   };
 
+  function convertToAMPM(time){
+    if (time.toString().length == 3) {
+        time = "0"+time
+    }
+    time = time.toString()
+    timeStart = time.slice(0,2)
+    timeEnd = time.slice(-2)
+
+    convertedTime = ""
+    if (Number(timeStart) > 12) {
+        convertedTime+=(Number(timeStart)%12)+":"+timeEnd+" PM"
+    } else if (Number(timeStart) == 24) {
+        convertedTime+=(12)+":"+timeEnd+" PM"
+    } 
+    else {
+        convertedTime+=timeStart+":"+timeEnd+" AM"
+    }
+
+    return convertedTime
+  }
+
   function renderAvailability(avail) {
     const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-    console.log(avail);
     return days
       .filter((day) => avail[day].length > 0)
       .map((day) => {
         const times = avail[day].map(
-          ([start, end]) =>
-            `${start.toString().slice(0, -2)}:${start
-              .toString()
-              .slice(-2)} - ${end.toString().slice(0, -2)}:${end
-              .toString()
-              .slice(-2)}`
-        );
+
+          ([start, end]) => `${convertToAMPM(start)} - ${convertToAMPM(end)}`);
         return (
           <Text style={styles.text} key={day}>
             {day}: {times.join(", ")}
@@ -132,7 +134,7 @@ export const TutorProfile = ({ navigation, route }) => {
         <Appbar.Header>
           <Appbar.BackAction
             onPress={() =>
-              navigation.navigate(root, { subject: subject, univ: univ })
+              navigation.goBack()
             }
           />
           <Appbar.Content title="Back to Feed" />
@@ -221,7 +223,8 @@ export const TutorProfile = ({ navigation, route }) => {
             <Portal>
               <Modal
                 visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}
+                onDismiss={() => setModalVisible(false)}
+                
               >
                 <View style={styles.modalContent}>
                   <Title style={styles.modalTitle}>Leave a Rating</Title>
@@ -234,7 +237,7 @@ export const TutorProfile = ({ navigation, route }) => {
                       handleRating(newRating).then((success) => {
                         if (!success) {
                           setErrorMsg(
-                            "Schedule a meeting before rating."
+                            "Meet with the tutor before rating."
                           );
                           setButtonText("Cancel");
                         } else {

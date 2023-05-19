@@ -32,14 +32,13 @@ const ACTION_TEXT_VARIANT = "labelSmall"
 const bullet = (<Text style={{fontWeight: 'bold', fontSize: 14}}>· </Text>);
 
 
-export const TutorProfileCard = ({tutorProfile, navigation, root, subject, univ}) => {
+export const TutorProfileCard = ({tutorProfile, navigation}) => {
     const numDisciples = tutorProfile?.disciples?.length ?? 0;
-    console.log(tutorProfile);
 
     const numRatingsPerCategory = [0];
     for (let i = 1; i <= 5; i++) 
     {
-        numRatingsPerCategory.push(parseStringSet(tutorProfile.rating[i.toString()]).length);
+        numRatingsPerCategory.push(parseStringSet(tutorProfile?.rating[i.toString()]).length);
     };
 
     const totalNumRatings = numRatingsPerCategory.reduce((a, b) => a + b, 0) ?? 1;
@@ -50,10 +49,10 @@ export const TutorProfileCard = ({tutorProfile, navigation, root, subject, univ}
 
     return (
         <Card style={styles.card} onPress={() => {
-            navigation.navigate('TutorProfile', {tutorUid: tutorProfile?.uid, tutorRating: calculatedRating, totalNumRatings: totalNumRatings, numDisciples: numDisciples, root: root, subject: subject, univ: univ});
+            navigation.navigate('TutorProfile', {tutorUid: tutorProfile?.uid, tutorRating: calculatedRating, totalNumRatings: totalNumRatings, numDisciples: numDisciples});
         }
         }>
-            <Card.Title title={tutorProfile.fullName} subtitle={null} titleStyle={{fontSize: 22, fontWeight: "bold"}} right={() =>
+            <Card.Title title={tutorProfile?.fullName} subtitle={null} titleStyle={{fontSize: 22, fontWeight: "bold"}} right={() =>
             <View style={{display: "flex", flexDirection: "row", paddingBottom: 12}}>
                 {totalNumRatings > 0 ? 
                 (<>
