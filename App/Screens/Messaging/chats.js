@@ -35,15 +35,12 @@ export const Chats = ({ navigation, route }) => {
           chatroomCids: chatroomCids
         }
       });
-      //console.log(response.data);
-      setUserChats(response.data);
-    } catch (error) {
-      alert("An error has occurred");
-
-      if (error.response === undefined) {
-        throw error;
+      if (response.data != "Error: cid does not exist") {
+          setUserChats(response.data);
       }
-      const { response } = error;
+    } catch (error) {
+      console.alert(error);
+      
       //console.log(response.status);
       //console.log(response.data);
     }
@@ -103,10 +100,13 @@ export const Chats = ({ navigation, route }) => {
   }
 
   function makeChatList() {
-    const chatList = userChats.map((chat) =>
-      displayChat("https://squad-app-s3.s3.amazonaws.com/ElMo.jpg", chat)
-    );
-    return chatList;
+    if (userChats) {
+      const chatList = userChats.map((chat) =>
+        displayChat("https://squad-app-s3.s3.amazonaws.com/ElMo.jpg", chat)
+      );
+      return chatList;
+    }
+    
   }
 
   function sharePost() {
