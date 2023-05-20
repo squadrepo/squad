@@ -212,7 +212,7 @@ export const FoodPostEvent = ({ navigation }) => {
           returnKeyType="done"
         />
         <TextInput
-          label="Date"
+          label="Date: MM/DD/YYYY"
           value={date}
           onChangeText={handleDateChange}
           returnKeyType="done"
@@ -231,7 +231,7 @@ export const FoodPostEvent = ({ navigation }) => {
           </Text>
         )}
         <TextInput
-          label="Duration"
+          label="Duration in hrs: number 1 - 8"
           value={duration}
           keyboardType="numeric"
           onChangeText={(text) => {
