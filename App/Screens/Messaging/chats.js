@@ -14,10 +14,11 @@ export const Chats = ({ navigation, route }) => {
   const {eventDataSocial, eventDataFood} = route.params ?? {};
   const getChatsUrl =
     "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/messages/getids";
-  const { uid, chatroomCids, pfpUrl } = useContext(UserContext);
+  const { uid, chatroomCids, pfpUr } = useContext(UserContext);
 
   useEffect(() => {
     //console.log(chatroomCids);
+
     const fetchMessages = () => {
       getChats();
     };
@@ -87,7 +88,7 @@ export const Chats = ({ navigation, route }) => {
           key={chat.cid}
         >
           <View style={styles.pfpContainer}>
-            <Image style={styles.pfp} source={{ uri: pfp }} />
+            <Image style={styles.pfp} source={pfp && { uri: pfp }} />
           </View>
 
           <View style={styles.infoBlock}>

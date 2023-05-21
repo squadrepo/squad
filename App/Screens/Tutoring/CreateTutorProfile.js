@@ -64,7 +64,7 @@ export const CreateTutorProfile = ({ navigation, route }) => {
         });
       } catch (error) {
         if (error.response == undefined) throw error;
-        const { response } = errorObj;
+        const { response } = error;
         return console.log(`${response.status}: ${response.data}`);
       }
     };

@@ -34,12 +34,15 @@ const bullet = (<Text style={{fontWeight: 'bold', fontSize: 14}}>· </Text>);
 
 export const TutorProfileCard = ({tutorProfile, navigation}) => {
     const numDisciples = tutorProfile?.disciples?.length ?? 0;
-
     const numRatingsPerCategory = [0];
-    for (let i = 1; i <= 5; i++) 
+    if (tutorProfile?.rating)
     {
-        numRatingsPerCategory.push(parseStringSet(tutorProfile?.rating[i.toString()]).length);
-    };
+        for (let i = 1; i <= 5; i++) 
+        {
+            numRatingsPerCategory.push(parseStringSet(tutorProfile?.rating[i.toString()]).length);
+        };
+    }
+
 
     const totalNumRatings = numRatingsPerCategory.reduce((a, b) => a + b, 0) ?? 1;
 

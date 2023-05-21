@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { TextInput, Button, Text, Appbar, List } from "react-native-paper";
-import { SafeAreaView, View, StyleSheet, Image } from "react-native";
+import { SafeAreaView, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import axios from "axios";
-import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
-import { withAuthenticator } from "aws-amplify-react-native";
 import { UserContext } from "../../Context";
+import { BASE_API_URL } from "../../constants";
 
 export const MessageOverview = ({ navigation }) => {
   const [userQuery, setUserQuery] = useState("");
@@ -36,14 +35,13 @@ export const MessageOverview = ({ navigation }) => {
   const searchForUser = async () => {
     try {
       // GET request for user info
-      axios.get(`${getUrl}${userQuery}`).then((response) => {
-        console.log(response.data);
-        setQueriedUser(response.data.uid);
-        getUserInfo(response.data.uid);
-      });
+      const response = await axios.get(`${BASE_API_URL}/account/getUid?username=${userQuery}`);
+      console.log(response.data);
+      setQueriedUser(response.data.uid);
+      getUserInfo(response.data.uid);
     } catch (error) {
       if (error.response == undefined) throw error;
-      const { response } = errorObj;
+      const { response } = error;
       return console.log(`${response.status}: ${response.data}`);
     }
   };
@@ -60,14 +58,14 @@ export const MessageOverview = ({ navigation }) => {
       });
     } catch (error) {
       if (error.response == undefined) throw error;
-      const { response } = errorObj;
+      const { response } = error;
       return console.log(`${response.status}: ${response.data}`);
     }
   };
 
   const setCheckedHandler = async () => {
     setChecked(!checked);
-
+    console.log("checking");
     if (checked) {
       const newUser = {
         uid: queriedUser,
@@ -183,7 +181,7 @@ export const MessageOverview = ({ navigation }) => {
                 icon={() => (
                   <Image
                     style={{ width: 50, height: 50, borderRadius: 25 }}
-                    source={{ uri: queriedUserPFP }}
+                    source={queriedUserPFP && { uri: queriedUserPFP }}
                   />
                 )}
               />

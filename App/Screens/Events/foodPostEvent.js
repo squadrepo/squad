@@ -231,7 +231,7 @@ export const FoodPostEvent = ({ navigation }) => {
           </Text>
         )}
         <TextInput
-          label="Duration in hrs: number 1 - 8"
+          label="Duration in hours: 1 - 8"
           value={duration}
           keyboardType="numeric"
           onChangeText={(text) => {

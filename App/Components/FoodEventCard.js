@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
   },
   eventNameText: {
     fontWeight: "bold",
+    fontSize: 22
   },
   coloredText: {
     color: DARK_PURPLE,
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
 export const FoodEventCard = ({event, navigation}) => {
   const numThumbsUp = parseStringSet(event?.rating?.up).length;
   const numThumbsDown = parseStringSet(event?.rating?.down).length;
-  const numComments = event?.numComments ?? event?.comments?.length ?? 0;
+  const numComments = event?.commentCount ?? event?.comments?.length ?? 0;
   const uri = (event?.bannerUrl && event.bannerUrl.length > 0)
     ? event.bannerUrl 
     : "https://squad-app-s3.s3.amazonaws.com/VOKOLOS.png";
