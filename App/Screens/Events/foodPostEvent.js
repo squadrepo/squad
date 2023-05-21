@@ -44,6 +44,18 @@ export const FoodPostEvent = ({ navigation }) => {
   const geoApiKey = "AIzaSyC4ZVO0b9I4oTAlod6_lwmuv1W9YPsPPXE";
 
   const postEvent = async (event) => {
+    if (
+      time === "" ||
+      duration === "" ||
+      date === "" ||
+      title === "" ||
+      address === "" ||
+      city === "" ||
+      state === ""
+    ) {
+      alert("Please fill in all required fields");
+      return;
+    }
     const fullAddress = `${address}, ${city}, ${state}`;
     setAddressString(fullAddress);
     if (!addressConfirmed) {
