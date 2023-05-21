@@ -32,6 +32,7 @@ export const HomeFeed = () => {
     setUniv,
     setUnivExclExp,
     setUsername,
+    fetchUserTrigger
   } = useContext(UserContext);
 
   // This will get the user's information and store the info in the correct states
@@ -41,7 +42,7 @@ export const HomeFeed = () => {
         const currentUser = await Auth.currentAuthenticatedUser();
         const UUID = currentUser.attributes.sub;
         setUid(UUID);
-
+        console.log("Fetching user");
         // GET request for user info
         axios.get(`${BASE_API_URL}/account/user?uid=${UUID}`).then((response) => {
           //set user states
@@ -67,7 +68,7 @@ export const HomeFeed = () => {
       }
     };
     getUser();
-  }, []);
+  }, [fetchUserTrigger]);
 
   // Social events feed
   const [posts, setPosts] = useState([]);
@@ -166,19 +167,19 @@ const AllPostsFeed = ({navigation}) => (
         <Button style={styles.topBarButton} onPress={() => navigation.navigate('RsvpFeed')}>RSVP's</Button>
       </View>
       <FlatList 
-      data={posts}
-      renderItem={({item}) => 
-        item?.eid 
-          ? <SocialEventCard event={item} navigation={navigation}/>
-          : item?.uid
-            ? <TutorProfileCard tutorProfile={item} navigation={navigation}/>
-            : item?.hashKey 
-              ? <FoodEventCard event={item} navigation={navigation}/>
-              : <></>} 
-      extraData={socialEvents.length} 
-      keyExtractor={(post, index) => index}
-      onRefresh={onRefresh}
-      refreshing={isFetching}/>
+        data={posts}
+        renderItem={({item}) => 
+          item?.eid 
+            ? <SocialEventCard event={item} navigation={navigation}/>
+            : item?.uid
+              ? <TutorProfileCard tutorProfile={item} navigation={navigation}/>
+              : item?.hashKey 
+                ? <FoodEventCard event={item} navigation={navigation}/>
+                : <></>} 
+        extraData={socialEvents.length} 
+        keyExtractor={(post, index) => index}
+        onRefresh={onRefresh}
+        refreshing={isFetching}/>
     </View>
   );
 

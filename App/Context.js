@@ -1,6 +1,4 @@
-import { createContext, React, useContext, useState } from "react";
-import { Auth } from "@aws-amplify/auth";
-import axios from "axios";
+import { createContext, React, useState } from "react";
 
 const UserContext = createContext();
 
@@ -21,6 +19,8 @@ const UserProvider = ({ children }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [chatroomCids, setChatroomCids] = useState([]);
+  const [fetchUserTrigger, setFetchuserTrigger] = useState(false);
+  const triggerUserFetch = () => setFetchuserTrigger(!fetchUserTrigger);
 
   return (
     <UserContext.Provider
@@ -56,7 +56,9 @@ const UserProvider = ({ children }) => {
         username,
         setUsername,
         password,
-        setPassword
+        setPassword,
+        fetchUserTrigger,
+        triggerUserFetch
       }}
     >
       {children}

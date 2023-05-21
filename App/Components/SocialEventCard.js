@@ -1,10 +1,9 @@
 import { Text, Card, Button, IconButton, Avatar } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
-import { getStringDateTimeFromUnix, getStandardPlural } from '../utilities';
+import { getStringDateTimeFromUnix, getStandardPlural, parseStringSet } from '../utilities';
 import { useState, useContext, useEffect} from 'react';
 import { UserContext } from '../Context';
 import { BASE_API_URL } from '../constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 
@@ -33,109 +32,61 @@ const styles = StyleSheet.create({
 })
 
 
-const SendRSVP = async (uid, eid, tentative, uidRemoved) => {
+const SendRSVP = async (uid, eid, tentative) => {
   try {
     const baseUrl = `${BASE_API_URL}/socialEvent/rsvp`
     const body = {
         "uid": uid,
         "eid": eid,
-        "tentative": tentative,
-        "uidRemoved": uidRemoved
+        "tentative": tentative
     };
 
     const config = { "content-type": "application/json" };
-    const response = await axios.post(baseUrl, body, config);
+    await axios.post(baseUrl, body, config);
   } catch (error) {
-    console.error(error);
+    if (error.response == undefined) throw error;
+    const { response } = error;
+    console.log(`${response.status}: `, response.data);
   }
 };
 
 export const SocialEventCard = ({event, navigation}) => {
-  const numGoing = event.uidsRsvp.length;
-  const numInterested = event.uidsInterested.length;
   const numComments = event.comments.length;
+  const [isGoingSelected, setIsGoingSelected] = useState(false);
+  const [goingCount, setGoingCount] = useState(parseStringSet(event.uidsRsvp).length);
+  const [isInterestedSelected, setIsInterestedSelected] = useState(false);
+  const [interestedCount, setInterestedCount] = useState(parseStringSet(event.uidsInterested).length);
   const eid = event.eid 
   const uri = (event.bannerUrl && event.bannerUrl.length > 0)
     ? event.bannerUrl 
     : "https://squad-app-s3.s3.amazonaws.com/VOKOLOS.png";
-    const [yesButtonMode, setYesButtonMode] = useState("outlined");
-    const [maybeButtonMode, setMaybeButtonMode] = useState("outlined");
-    const { uid } = useContext(UserContext);
-    const [yesRemoval, setYesRemoval] = useState(false);
-    const [maybeRemoval, setMaybeRemoval] = useState(false);
-    
-    useEffect(() => {
-      uid;
-    }, [uid]);
+  const { uid } = useContext(UserContext);
+  
+  useEffect(() => {
+    setIsGoingSelected(event.uidsRsvp.includes(uid));
+    setIsInterestedSelected(event.uidsInterested.includes(uid));
+  }, [uid]);
 
-    useEffect(() => {
-      const checkIfEidInRsvp = async () => {
-        try {
-          const valueYes = await AsyncStorage.getItem(eid + "_Yes");
-          const valueMaybe = await AsyncStorage.getItem(eid + "_Maybe");
-          if (valueYes == "contained") {
-            setYesButtonMode("contained")
-            setYesRemoval(true); 
-          } else if (valueMaybe == "contained") {
-            setMaybeButtonMode("contained")
-            setMaybeRemoval(true); 
-          } 
-          else {
-            setYesButtonMode("outlined")
-            setYesRemoval(false); 
-            setMaybeButtonMode("outlined")
-            setMaybeRemoval(false); 
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      
-      checkIfEidInRsvp();
-    }, [eid]);
+  const handleGoingPress = async () => {
+    // Update UI for crisp response time, then post to update server
+    setIsGoingSelected(!isGoingSelected);
+    setIsInterestedSelected(false);
 
-    
-    const handleYesButtonPress = async () => {
-      SendRSVP(uid, eid, tentative = false, uidRemoved = yesRemoval)
-      if (yesButtonMode == "outlined" && maybeButtonMode == "outlined") { // if yes button and maybe button are not selected
-        setYesButtonMode("contained");
-        setMaybeButtonMode("outlined");
-        setYesRemoval(true);
-        await AsyncStorage.setItem(eid + "_Yes", "contained");
-      } else if (maybeButtonMode == "contained") {                       // if maybe is selected and user shifts to yes  
-          setMaybeButtonMode("outlined");
-          setYesButtonMode("contained");
-          setYesRemoval(true);
-          setMaybeRemoval(false); 
-          await AsyncStorage.setItem(eid + "_Yes", "contained");
-          await AsyncStorage.removeItem(eid + "_Maybe");
-      } else {                                                          // if user wants to remove their yes rsvp
-        setYesButtonMode("outlined");
-        setYesRemoval(false); 
-        await AsyncStorage.removeItem(eid + "_Yes");
-      };      
-    };
-    
-    const handleMaybeButtonPress = async () => {
-      SendRSVP(uid, eid, tentative = true, uidRemoved = maybeRemoval)
-      if (maybeButtonMode == "outlined" && yesButtonMode == "outlined") {  // if yes button and maybe button are not selected
-        setYesButtonMode("outlined");
-        setMaybeButtonMode("contained");
-        setMaybeRemoval(true);
-        await AsyncStorage.setItem(eid + "_Maybe", "contained");
-      } else if (yesButtonMode == "contained") {                           // if yes is selected and user shifts to maybe 
-        setMaybeButtonMode("contained");
-        setYesButtonMode("outlined");
-        setYesRemoval(false);
-        setMaybeRemoval(true); 
-        await AsyncStorage.removeItem(eid + "_Yes");
-        await AsyncStorage.setItem(eid + "_Maybe", "contained");
-    } else {                                                               // if user wants to remove their maybe rsvp          
-        setMaybeButtonMode("outlined");
-        setMaybeRemoval(false);
-        await AsyncStorage.removeItem(eid + "_Maybe"); 
-      };  
-    };
+    setGoingCount(isGoingSelected ? goingCount - 1 : goingCount + 1);
+    if (isInterestedSelected) setInterestedCount(interestedCount - 1);
+
+    SendRSVP(uid, eid, tentative = false);
+  };
+  
+  const handleInterestedPress = async () => {
+    setIsInterestedSelected(!isInterestedSelected);
+    setIsGoingSelected(false);
+
+    setInterestedCount(isInterestedSelected ? interestedCount - 1 : interestedCount + 1);
+    if (isGoingSelected) setGoingCount(goingCount - 1);
+
+    SendRSVP(uid, eid, tentative = true);
+  };
 
   return (
   <Card style={styles.card} onPress={() =>
@@ -145,11 +96,11 @@ export const SocialEventCard = ({event, navigation}) => {
     <Card.Content style={styles.cardContent}>
       <Text style={{width: 120}}>
         {bullet}
-        <Text variant={ACTION_TEXT_VARIANT} style={styles.coloredText}>{numGoing} student{getStandardPlural(numGoing)} going</Text>
+        <Text variant={ACTION_TEXT_VARIANT} style={styles.coloredText}>{goingCount} student{getStandardPlural(goingCount)} going</Text>
       </Text>
       <Text style={{width: 100}}>
         {bullet}
-        <Text variant={ACTION_TEXT_VARIANT} style={styles.coloredText}>{numInterested} interested</Text>
+        <Text variant={ACTION_TEXT_VARIANT} style={styles.coloredText}>{interestedCount} interested</Text>
       </Text>
       <Text style={{width: 100}}>
         {bullet}
@@ -157,8 +108,8 @@ export const SocialEventCard = ({event, navigation}) => {
       </Text>
     </Card.Content>
     <Card.Actions>
-        <Button mode = {yesButtonMode} onPress={handleYesButtonPress} icon="calendar-check" > Going </Button>
-        <Button mode = {maybeButtonMode} onPress={handleMaybeButtonPress} icon="calendar-minus"> Maybe</Button>
+        <Button style={{ borderWidth: 1 }} mode={isGoingSelected ? "contained" : "outlined"} onPress={handleGoingPress} icon="calendar-check" > Going </Button>
+        <Button style={{ borderWidth: 1 }} mode={isInterestedSelected ? "contained" : "outlined"} onPress={handleInterestedPress} icon="calendar-minus"> Maybe</Button>
     </Card.Actions>
   </Card>
 )};
