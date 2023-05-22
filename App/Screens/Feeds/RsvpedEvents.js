@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text } from 'react-native-paper';
+import { Text, IconButton } from 'react-native-paper';
 import { View, FlatList } from 'react-native';
 import { UserContext } from '../../Context';
 import { BASE_API_URL } from '../../constants';
@@ -66,6 +66,13 @@ const RsvpPostsFeed = ({navigation}) => (
     <View style={styles.container}>
       <View style={styles.topBar}>
         <Text variant="headlineMedium" style={styles.topBarText}>Rsvp Events for {univ}</Text>
+        <View style={styles.plusButton}>
+        <IconButton 
+        icon="plus" 
+        size={40} 
+        iconColor='#000000' 
+        onPress={() => navigation.navigate("ChooseEventType")}/>
+        </View>
       </View>
       <FlatList 
       data={RsvpEvents}

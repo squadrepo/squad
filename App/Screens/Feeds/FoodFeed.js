@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { TextInput, Button, Text, Modal, Portal } from "react-native-paper";
+import { TextInput, Button, Text, Modal, Portal, IconButton } from "react-native-paper";
 import { SafeAreaView, View, StyleSheet, ActivityIndicator } from "react-native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MapView, {Marker, PROVIDER_GOOGLE, Callout, MarkerAnimated} from 'react-native-maps';
@@ -8,10 +8,14 @@ import axios from 'axios';
 import * as Location from 'expo-location';
 import { FoodPostScreen } from '../Food/foodPost.screen';
 import { getStringDateTimeFromUnix } from '../../utilities';
+import { UserContext } from '../../Context';
 
 
 export const FoodFeed = () => {
   const Stack = createNativeStackNavigator();
+  const {
+    univ,
+  } = useContext(UserContext);
 
   const FoodMap = ({navigation}) => {
     const [location, setLocation] = useState();
@@ -101,6 +105,16 @@ export const FoodFeed = () => {
     
     return (
       <View style={styles.container}>
+        <View style={styles.topBar}>
+          <Text variant="headlineMedium" style={styles.topBarText}>Food Events at {univ} </Text>
+          <View style={styles.plusButton}>
+        <IconButton 
+        icon="plus" 
+        size={40} 
+        iconColor='#000000' 
+        onPress={() => navigation.navigate("ChooseEventType")}/>
+        </View>
+      </View>
       {initialRegion ? (
         <MapView style={styles.map} initialRegion={initialRegion} provider={PROVIDER_GOOGLE} >
           {markers &&
@@ -177,6 +191,8 @@ export const FoodFeed = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop:50,
+    backgroundColor: "#DDDDDD",
   },
   map: {
     width: '100%',
@@ -212,5 +228,34 @@ const styles = StyleSheet.create({
   activityIndicator: {
     position: "absolute",
     alignSelf: "center",
-    top: "50%",
-  }})
+    top: "50%",  
+  }, 
+  plusButton: {
+    marginRight:-15, 
+    marginLeft:'auto'
+  },
+  topBar: {
+    backgroundColor:'#EADDFF',
+    padding: 8,
+    borderBottomWidth: 0.1,
+    borderTopWidth: 0.1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    height: 56, 
+    elevation: 4, 
+  },
+  topBarText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 20,
+    // textShadowColor: "#00000075",
+    // textShadowOffset: {width: -1, height: 1},
+    // textShadowRadius: 10
+  },
+  topBarButton:{
+    marginLeft: "auto",
+  }, 
+
+})

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Text, Card, Avatar } from 'react-native-paper';
+import { Button, Text, Card, Avatar, IconButton } from 'react-native-paper';
 import { View, FlatList } from 'react-native';
 import { UserContext } from '../../Context';
 import { Auth } from '@aws-amplify/auth';
@@ -13,6 +13,7 @@ import { feedStyles as styles } from './FeedStyles';
 import { TutorProfileCard } from '../../Components/TutorProfileCard';
 import { FoodPostScreen } from '../Food/foodPost.screen';
 import { TutorProfile } from '../Tutoring/TutorProfile';
+import { color } from 'react-native-reanimated';
 
 export const HomeFeed = () => {
   const {
@@ -32,7 +33,8 @@ export const HomeFeed = () => {
     setUniv,
     setUnivExclExp,
     setUsername,
-    fetchUserTrigger
+    fetchUserTrigger, 
+    triggerUserFetch
   } = useContext(UserContext);
 
   // This will get the user's information and store the info in the correct states
@@ -103,7 +105,6 @@ export const HomeFeed = () => {
         if (!univ) return;
         const response = await axios.get(`${BASE_API_URL}/foodEvent?coords=${39.95380477768779},${-75.18490433692932}&radius=${2}`);
         const foodEvents = response.data;
-        console.log(foodEvents);
         setFoodEvents(foodEvents);
       } catch (error) {
         setFoodEvents([]);
@@ -164,7 +165,13 @@ const AllPostsFeed = ({navigation}) => (
     <View style={styles.container}>
       <View style={styles.topBar}>
         <Text variant="headlineMedium" style={styles.topBarText}> Posts for {univ}</Text>
-        <Button style={styles.topBarButton} onPress={() => navigation.navigate('RsvpFeed')}>RSVP's</Button>
+        <View style={styles.plusButton}>
+        <IconButton 
+        icon="plus" 
+        size={40} 
+        iconColor='#000000' 
+        onPress={() => navigation.navigate("ChooseEventType")}/>
+        </View>
       </View>
       <FlatList 
         data={posts}
@@ -180,6 +187,14 @@ const AllPostsFeed = ({navigation}) => (
         keyExtractor={(post, index) => index}
         onRefresh={onRefresh}
         refreshing={isFetching}/>
+        <View style={styles.buttonContainer}>
+        <Button
+            mode="contained"
+            onPress={() => navigation.navigate('RsvpFeed')}
+            style={styles.rsvpButton}>
+            RSVP's
+          </Button>
+        </View>
     </View>
   );
 
