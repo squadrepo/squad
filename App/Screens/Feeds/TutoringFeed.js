@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from 'react';
 import { UserContext } from '../../Context';
 import { BASE_API_URL } from '../../constants';
 import axios from 'axios';
-import { Button, Text } from "react-native-paper";
+import { Button, Text, IconButton } from "react-native-paper";
 import { FlatList, ScrollView, View, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { feedStyles as styles } from './FeedStyles';
@@ -59,6 +59,13 @@ export const TutoringFeed = () => {
     <View style={styles.container}>
       <View style={styles.topBar}>
         <Text variant="headlineMedium" style={styles.topBarText}> Pick a Subject for Tutoring</Text>
+        <View style={styles.plusButton}>
+        <IconButton 
+        icon="plus" 
+        size={40} 
+        iconColor='#000000' 
+        onPress={() => navigation.navigate("ChooseEventType")}/>
+      </View>
       </View>
       <ScrollView>
         {subjects.map((subject, index) => (<Button key={index} labelStyle={{fontSize: 20}}onPress={() => handleSubjectPress(subject)}>{subject}</Button>))}
@@ -104,6 +111,13 @@ export const TutoringFeed = () => {
         <View style={{flexDirection: "column"}}>
           <Text variant="headlineMedium" style={styles.topBarText}>Pick a Tutor for {subject}</Text>
           <Text variant="headlineMedium" style={{...styles.topBarText, paddingLeft: 18}}>at {univ}</Text>
+        </View>
+        <View style={styles.plusButton}>
+        <IconButton 
+        icon="plus" 
+        size={40} 
+        iconColor='#000000' 
+        onPress={() => navigation.navigate("ChooseEventType")}/>
         </View>
       </View>
       { !isFetching && tutorProfiles.length === 0 

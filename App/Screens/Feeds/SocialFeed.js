@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, Button} from 'react-native-paper';
+import { Text, Button, IconButton} from 'react-native-paper';
 import { View, FlatList } from 'react-native';
 import { UserContext } from '../../Context';
 import { BASE_API_URL } from '../../constants';
@@ -45,7 +45,13 @@ const SocialPostsFeed = ({navigation}) => (
     <View style={styles.container}>
       <View style={styles.topBar}>
         <Text variant="headlineMedium" style={styles.topBarText}>Social Events for {univ}</Text>
-        <Button style={styles.topBarButton} onPress={RsvpFeed}>RSVP's</Button>
+        <View style={styles.plusButton}>
+        <IconButton 
+        icon="plus" 
+        size={40} 
+        iconColor='#000000' 
+        onPress={() => navigation.navigate("ChooseEventType")}/>
+        </View>
       </View>
       <FlatList 
       data={socialEvents}
@@ -54,6 +60,14 @@ const SocialPostsFeed = ({navigation}) => (
       keyExtractor={event => event?.eid}
       onRefresh={onRefresh}
       refreshing={isFetching}/>
+      <View style={styles.buttonContainer}>
+        <Button
+            mode="contained"
+            onPress={() => navigation.navigate('RsvpFeed')}
+            style={styles.rsvpButton}>
+            RSVP's
+          </Button>
+        </View>
     </View>
   );
 
