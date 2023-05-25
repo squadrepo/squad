@@ -1,20 +1,27 @@
-  import React, { useState, useContext, useEffect } from "react";
+  import React, { useState, useContext, useEffect, useCallback } from "react";
 import {
   Text,
-  TextInput,
-  ScrollView,
   Button,
   Appbar
 } from "react-native-paper";
 import { SafeAreaView, StyleSheet, Image, View, Pressable } from "react-native";
 import { UserContext } from "../../Context";
 import axios from "axios";
+import { useFocusEffect } from '@react-navigation/native';
 
 export const Chats = ({ navigation, route }) => {
   const {eventDataSocial, eventDataFood} = route.params ?? {};
   const getChatsUrl =
     "https://ca8vo445sl.execute-api.us-east-1.amazonaws.com/test/messages/getids";
-  const { uid, chatroomCids, pfpUr } = useContext(UserContext);
+  const { uid, chatroomCids, triggerUserFetch, pfpUr } = useContext(UserContext);
+
+
+  useFocusEffect(
+    useCallback(() => {
+      triggerUserFetch();
+      return () => {};
+    }, [])
+  );
 
   useEffect(() => {
     //console.log(chatroomCids);

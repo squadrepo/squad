@@ -19,8 +19,10 @@ const UserProvider = ({ children }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [chatroomCids, setChatroomCids] = useState([]);
-  const [fetchUserTrigger, setFetchuserTrigger] = useState(false);
-  const triggerUserFetch = () => setFetchuserTrigger(!fetchUserTrigger);
+  const [fetchUserTrigger, setFetchUserTrigger] = useState(0);
+  const triggerUserFetch = () => {
+    setFetchUserTrigger(Math.random());
+  };
 
   return (
     <UserContext.Provider

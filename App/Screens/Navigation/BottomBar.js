@@ -4,15 +4,11 @@ import { HomeFeed } from "../Feeds/HomeFeed";
 import { SocialFeed } from "../Feeds/SocialFeed";
 import { FoodFeed } from "../Feeds/FoodFeed";
 import { TutoringFeed } from "../Feeds/TutoringFeed";
-import { GigWorkFeed } from "../Feeds/GigworkFeed";
-import { Portal, FAB } from "react-native-paper";
-import { UserContext } from "../../Context";
 import { Chats } from "../Messaging/chats";
 
 const Tab = createMaterialBottomTabNavigator();
 
 export const Tabs = ({ navigation }) => {
-  const { triggerUserFetch } = React.useContext(UserContext);
   return (
     <React.Fragment>
       <Tab.Navigator shifting={true} sceneAnimationEnabled={true}>
