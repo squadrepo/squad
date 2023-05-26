@@ -32,7 +32,7 @@ export const CommentsSection = ({comments, postFunction}) => {
   const numComments = comments?.length ?? 0;
 
   return (
-    <View style={{ display: "flex", flexDirection: "column", paddingTop: 40, width: "100%"}}>
+    <View style={{ display: "flex", flexDirection: "column", paddingTop: 40, paddingBottom: 50, width: "100%"}}>
         <Text style={{ fontSize: 20, color: "black", borderBottomWidth: 1, borderColor: "#999999", borderStyle: "solid"}}>
             {numComments} Comment{getStandardPlural(numComments)}
         </Text>
