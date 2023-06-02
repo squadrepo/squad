@@ -3,5 +3,5 @@ Hi! Squad is a mobile application for Android and iOS that builds a community fo
 
 # Getting Started
 
-                                                                   Contributors
-                                Brett Daley | Evan Dinh | Ghadah Ghuzayz | Vegan Lroy | Tapasya Sharma | Dominick White
+                                         Contributors
+      Brett Daley | Evan Dinh | Ghadah Ghuzayz | Vegan Lroy | Tapasya Sharma | Dominick White
