@@ -75,6 +75,13 @@ Clone the https://github.com/squadrepo/squad repository.  Copy the `aws-exports.
 
 
 ### Expo on Android Emulator
+Follow [Expo's documentation](https://docs.expo.dev/workflow/android-studio-emulator/) for downloading and setting up a virtual Android device with Android Studio. If you have never used Android Studio before, you can ignore the `Multiple adb versions` section.
+
+Before [running the app](#running-the-app), open the Virtual Device Manager in Android Studio as described in the documentation, then press the Play button next to your configured virtual device as shown below:
+
+![image](https://github.com/squadrepo/squad/assets/60754963/4a525b3f-8fbf-40f5-a5a3-da66a227e934)
+
+This will start the Android emulator.  While [running the app](#running-the-app), choose option `a` to automatically open the app on this virtual device.  It may take a few minutes to load.
 
 ### Expo on iOS Devices or Emulator
 
@@ -86,10 +93,13 @@ After you have successfully installed Expo one of the above devices or emulators
 
 ![image](https://github.com/squadrepo/squad/assets/45207318/9cdfb594-1735-4dfb-97d9-e42cfdcc28e3)
 
-After the project starts in Expo, follow the instructions to either the scan the QR code provided or click the the appropriate development server as shown below:
+After the project starts in Expo, follow the instructions in the terminal to either the scan the QR code provided or click the the appropriate development server as shown below:
+
+![image](https://github.com/squadrepo/squad/assets/60754963/9a212cbd-ae79-4162-8b2f-12941f5a8ac4)
+
+
+You can also connect to the development server directly from the Expo app on your phone:
 
 ![image](https://github.com/squadrepo/squad/assets/45207318/d1f9aa9d-7663-4cde-a6c4-0eb064d4e137)
 
-
-                                               Contributors
-            Brett Daley | Evan Dinh | Ghadah Ghuzayz | Vegan Lroy | Tapasya Sharma | Dominick White
+The application may take a few minutes to load on your device.
