@@ -60,7 +60,7 @@ Clone the https://github.com/squadrepo/squad repository.  Copy the `aws-exports.
 
 The following step requires Node.js and the npm command line interface installed before continuing. Refer to [npm Docs](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) for downloading and installing Node.js and the npm command line interface.
 
-In Visual Studio Code, open the cloned Squad repository folder. Once the folder has been opened, open a terminal in Visual Studio Code in the root of the folder and enter the command `npm install -g expo-cli`. Once completed, enter the command `npm install` to install the project's required dependencies.
+In Visual Studio Code, open the cloned Squad repository folder. Once the folder has been opened, open a terminal in Visual Studio Code in the root of the folder and enter the command `npm install`. 
 
 ## 2. Downloading Expo
 
