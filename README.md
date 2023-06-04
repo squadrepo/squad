@@ -53,8 +53,12 @@ The Squad project consists of:
 
 # Getting Started with the App
 
-## 1. Visual Studio Code Setup 
-Mention bringing in the aws-exports.js file from the submission, since it isn't in the repo
+## 1. Setup 
+Clone the https://github.com/squadrepo/squad repository.  Copy the `aws-exports.js` file from the project submission into the root directory of the repository.  This file contains the necessary configuration to connect to our AWS-hosted back-end.
+
+### Visual Studio Code
+(include link to instructions for installing npm before telling them to npm install?) 
+
 
 ## 2. Downloading Expo
 
