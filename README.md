@@ -89,9 +89,9 @@ Before [running the app](#running-the-app), open the Virtual Device Manager in A
 
 This will start the Android emulator.  While [running the app](#running-the-app), choose option `a` to automatically open the app on this virtual device.  It may take a few minutes to load.
 
-### Expo on iOS Devices or Emulator
-
-Add iOS stuff here
+### Expo on iOS Devices
+1. To download Expo on iOS devices, install the [Expo Go](https://apps.apple.com/us/app/expo-go/id982107779) from the Apple App Store.
+2. (Optional) After Expo has been installed, login to the app with same Expo credentials that you have used in previous steps.
 
 # Running the App
 
