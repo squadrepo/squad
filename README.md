@@ -5,7 +5,7 @@ Hi! Squad is a mobile application for Android and iOS that builds a community fo
 
 ## 1. Visual Studio Code Setup 
 
-# Running the App
+# Downloading Expo
 
 ## 1. Expo on Android Devices
 
@@ -22,6 +22,10 @@ Hi! Squad is a mobile application for Android and iOS that builds a community fo
 ## 2. Expo on Android Emulator
 
 ## 3. Expo on iOS Devices or Emulator
+
+Add iOS stuff here
+
+# Running the App
 
 After you have successfully installed Expo one of the above devices or emulators, start a terminal in VS Code in the root of your folder and then enter the command ` npx expo start ` . 
 
