@@ -62,6 +62,10 @@ The following step requires Node.js and the npm command line interface installed
 
 In Visual Studio Code, open the cloned Squad repository folder. Once the folder has been opened, open a terminal in Visual Studio Code in the root of the folder and enter the command `npm install`. 
 
+The following steps, while optional, are recommended for flexibility in running the app in later steps.
+1. Either enter the command `npx expo register` in the same terminal used previously or navigate to the [Expo Dev Page](https://expo.dev/) and register an account.
+2. Once an account has been made, enter the command `npx expo login` and enter the credentials used for signing up.
+
 ## 2. Downloading Expo
 
 ### Expo on Android Devices
